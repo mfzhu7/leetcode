@@ -1,3 +1,6 @@
+
+// 使用数组一定要记得边界值的变化
+
 class Solution {
 public:
 void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
