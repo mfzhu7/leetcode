@@ -20,3 +20,22 @@ public:
 
     }
 };
+
+
+
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        string res = "";
+        for (auto i:s){
+            if(isalnum(i)){
+                res += tolower(i);
+            }
+        }
+        string old = res;
+        reverse(res.begin(), res.end());
+        return old == res;
+
+
+    }
+};
