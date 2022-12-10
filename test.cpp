@@ -5,40 +5,31 @@
 
 using namespace std;
 
+void print(vector<int> nums){
+    for (auto i: nums){
+        cout << i << " ";
+    }
+    cout << endl;
+    return;
+}
+
 
 class Solution {
 public:
-    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
-        int curr = nums1.size() - 1;
-        int index1 = m - 1;
-        int index2 = n - 1;
-        while(curr >= 0 && index2 >= 0){
-            if(nums2[index2] > nums1[index1]){
-                nums1[curr] = nums2[index2];
-                index2 = index2 - 1;
-            } else {
-                nums1[curr] = nums1[index1];
-                index1 = index1 - 1;
-            }
-            curr = curr - 1;
+    int maxProfit(vector<int>& prices) {
+        int min_price = INT_MAX;
+        int max_profit = 0;
+        for (int i = 0; i <= prices.size() - 1; i++){
+            max_profit = ((prices[i] - min_price) > max_profit) ? (prices[i] - min_price): max_profit;
+            min_price = (prices[i] > min_price) ? min_price : prices[i];
         }
-
+        return max_profit;
     }
 };
 
 int main(){
-    vector<int> num1 = {1,2,3,0,0,0};
-    vector<int> num2 = {2,5,6};
-    int m = 3;
-    int n = 3;
-    Solution test;
-    test.merge(num1,m, num2,n);
-    for (auto i: num1){
-        cout << i << endl;
-    }
-    vector<int> a(10,0);
-    for (auto i:a){
-        cout <<i << endl;
-    }
-    
+    vector<int> test = {7,1,5,3,6,4};  
+    Solution t;
+    t.maxProfit(test);
+   
 }
