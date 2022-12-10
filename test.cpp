@@ -2,6 +2,7 @@
 #include<vector>
 #include<string>
 #include<algorithm>
+#include<map>
 
 using namespace std;
 
@@ -16,20 +17,25 @@ void print(vector<int> nums){
 
 class Solution {
 public:
-    int maxProfit(vector<int>& prices) {
-        int min_price = INT_MAX;
-        int max_profit = 0;
-        for (int i = 0; i <= prices.size() - 1; i++){
-            max_profit = ((prices[i] - min_price) > max_profit) ? (prices[i] - min_price): max_profit;
-            min_price = (prices[i] > min_price) ? min_price : prices[i];
+    string convertToTitle(int columnNumber) {
+        string res = "";
+        map<int, char> hash;
+        hash[0] = 'Z';
+        for (int i = 1; i <= 25; i++){
+            hash[i] = i + 64;
         }
-        return max_profit;
+
+        while(columnNumber){
+            res = hash[columnNumber % 26] + res;
+            columnNumber = (columnNumber - columnNumber % 26) / 26;
+        }
+        return res;
+
     }
 };
 
 int main(){
-    vector<int> test = {7,1,5,3,6,4};  
-    Solution t;
-    t.maxProfit(test);
+    Solution test;
+    test.convertToTitle(701);
    
 }
