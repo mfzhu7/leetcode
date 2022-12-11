@@ -19,44 +19,23 @@ void print(vector<int> nums){
 
 class Solution {
 public:
-    void helper(vector<int>& candidates, int target, int begin, vector<int>& path, vector<vector<int>>& res, int pathSum){
-        if (pathSum == target){
-            res.push_back(path);
-            return;
-        }
+    int combinationSum4(vector<int>& nums, int target) {
 
-        set<int> layNum;
-        for (int i = begin; i < candidates.size(); i++){
-            if ((pathSum + candidates[i] <= target) && layNum.find(candidates[i]) == layNum.end()){
-                layNum.insert(candidates[i]);
-                pathSum = pathSum + candidates[i];
-                path.push_back(candidates[i]);
-                helper(candidates,target, i + 1,path,res,pathSum);
-                pathSum = pathSum - candidates[i];
-                path.pop_back();
+        vector<int> dp(target + 1);
+        dp[0] = 1;
+        for (int j = 1; j <= target; j++){
+        for (auto num: nums){
+            if (j - num >= 0){
+                dp[j] = dp[j] + dp[j - num];
             }
         }
-        return;
-    }
-
-
-    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        vector<vector<int>> res;
-        vector<int> path;
-        int pathSum = 0;
-        helper(candidates,target,0,path,res,pathSum);
-        return res;
-
+        }
+        return *(dp.end() - 1);
+ 
     }
 };
-
 int main(){
-    vector<int> vec1 = {1,2,2,2,5};
-    vector<int> vec2 = {2,5,2,1,2};
-
+    vector<int> vec1 = {10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250,260,270,280,290,300,310,320,330,340,350,360,370,380,390,400,410,420,430,440,450,460,470,480,490,500,510,520,530,540,550,560,570,580,590,600,610,620,630,640,650,660,670,680,690,700,710,720,730,740,750,760,770,780,790,800,810,820,830,840,850,860,870,880,890,900,910,920,930,940,950,960,970,980,990,111};
     Solution test;
-   vector<vector<int>> res =  test.combinationSum2(vec2,5);
-    for (auto i : res){
-        print(i);
-    }
+   int cout =  test.combinationSum4(vec1, 999);
 }
