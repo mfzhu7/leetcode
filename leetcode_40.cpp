@@ -1,22 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<algorithm>
-#include<map>
-#include<set>
-
-
-using namespace std;
-
-void print(vector<int> nums){
-    for (auto i: nums){
-        cout << i << " ";
-    }
-    cout << endl;
-    return;
-}
-
-
 class Solution {
 public:
     void helper(vector<int>& candidates, int target, int begin, vector<int>& path, vector<vector<int>>& res, int pathSum){
@@ -24,7 +5,6 @@ public:
             res.push_back(path);
             return;
         }
-
         set<int> layNum;
         for (int i = begin; i < candidates.size(); i++){
             if ((pathSum + candidates[i] <= target) && layNum.find(candidates[i]) == layNum.end()){
@@ -41,6 +21,7 @@ public:
 
 
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end());
         vector<vector<int>> res;
         vector<int> path;
         int pathSum = 0;
@@ -49,14 +30,3 @@ public:
 
     }
 };
-
-int main(){
-    vector<int> vec1 = {1,2,2,2,5};
-    vector<int> vec2 = {2,5,2,1,2};
-
-    Solution test;
-   vector<vector<int>> res =  test.combinationSum2(vec2,5);
-    for (auto i : res){
-        print(i);
-    }
-}
