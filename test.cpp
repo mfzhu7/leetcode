@@ -56,6 +56,7 @@ int main(){
     vector<vector<int>> vec = {
         {1,3,5,7},{10,11,16,20},{23,30,34,60}
     };
+    cout << 4 / 7 << endl;
     Solution test;
     test.searchMatrix(vec, 23);
 }
