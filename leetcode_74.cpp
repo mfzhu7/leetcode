@@ -1,22 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<algorithm>
-#include<map>
-#include<set>
-
-
-using namespace std;
-
-void print(vector<int> nums){
-    for (auto i: nums){
-        cout << i << " ";
-    }
-    cout << endl;
-    return;
-}
-
-
 class Solution {
 public:
     bool searchMatrix(vector<vector<int>>& matrix, int target) {
@@ -43,19 +24,9 @@ public:
                     j = j + 1;
                 }
             }
-            cout << i << " " <<  j << endl;
 
         }
         return false;
 
     }
 };
-
-
-int main(){
-    vector<vector<int>> vec = {
-        {1,3,5,7},{10,11,16,20},{23,30,34,60}
-    };
-    Solution test;
-    test.searchMatrix(vec, 23);
-}
