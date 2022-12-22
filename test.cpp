@@ -19,11 +19,8 @@ void print(vector<int> nums){
 
 
 int main(){
-    string s = " 123";
-    cout << s[0] << endl;
-    if(s[0] == ' ')
-    {
-        cout << "true" << endl;
+    map<int, string> hash =  {{1, "add"}, {2, "ddd"}};
+    for (auto it: hash){
+        cout << it.first << endl;
     }
-
 }
