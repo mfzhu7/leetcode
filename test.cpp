@@ -19,8 +19,9 @@ void print(vector<int> nums){
 
 
 int main(){
-    map<int, string> hash =  {{1, "add"}, {2, "ddd"}};
-    for (auto it: hash){
-        cout << it.first << endl;
-    }
+
+    int a = 1000000000;
+    int b = 2000000000;
+    long long c = a + b;
+    cout << c << endl;
 }
