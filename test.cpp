@@ -38,11 +38,18 @@ public:
 
 
 int main(){
-    vector<int> a{1,2,3};
-    vector<vector<int>> ret(3,a);
-    for (auto i : ret){
-        for (auto j:i){
-            cout << j << endl;
+
+        set<string> hash;
+        vector<string> last{"()()", "(())"};
+        for (int i = 0; i < last.size(); i++){
+            for (int j = 0; j < last[i].size();j++){
+                string temp = last[i].substr(0, j) + "()" + last[i].substr(j);
+                cout << temp << endl;
+                hash.insert(temp);
+            }
         }
-    }
+
+    // set<int> hash{12,3,4};
+    // vector<int> test(hash.begin(), hash.end());
+    // print(test);
 }
