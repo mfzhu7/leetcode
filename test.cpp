@@ -38,18 +38,9 @@ public:
 
 
 int main(){
-
-        set<string> hash;
-        vector<string> last{"()()", "(())"};
-        for (int i = 0; i < last.size(); i++){
-            for (int j = 0; j < last[i].size();j++){
-                string temp = last[i].substr(0, j) + "()" + last[i].substr(j);
-                cout << temp << endl;
-                hash.insert(temp);
-            }
+    for (int i = 0; i < 9; i = i + 3){
+        for (int j = 0; j < 9; j = j + 3){
+            cout << i << "," << j << endl;
         }
-
-    // set<int> hash{12,3,4};
-    // vector<int> test(hash.begin(), hash.end());
-    // print(test);
+    }
 }
