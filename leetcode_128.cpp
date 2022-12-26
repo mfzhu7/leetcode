@@ -28,33 +28,25 @@ public:
 class Solution {
 public:
     int longestConsecutive(vector<int>& nums) {
-        if (nums.empty()) return 0;
-        int ret = 1;
-        set<int> hash;
+        int ret = 0;
         for (int i = 0; i < nums.size(); i++){
-            if (hash.find(nums[i]) != hash.end()) continue;
-            set<int> currHash;
-            int curr = nums[i];
-            currHash.insert(curr);
+            int curr = nums[i] + 1;
             while(true){
                 bool flag = false;
-                for(int j = 0; j < nums.size(); j++){
-                    if (nums[j] == curr + 1){
-                        hash.insert(nums[j]);
-                        currHash.insert(nums[j]);
-                        curr = nums[j];
+                for (int j = 0;j < nums.size();j++){          
+                    if (nums[j] == curr){
                         flag = true;
                         break;
                     }
                 }
+                curr = curr + 1;
                 if (!flag) break;
             }
-            if(currHash.size() > ret){
-                ret = currHash.size();
-            }
-            currHash.clear();
+            
+            ret = max(ret, curr - nums[i] - 1);
         }
         return ret;
+
     }
 };
 //OOT

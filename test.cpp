@@ -18,29 +18,34 @@ void print(vector<int> nums){
 
 class Solution {
 public:
-    void helper(vector<vector<int>>& triangle, int& ret, int pathSum, int row, int col){
-        if(row >= triangle.size()){
-            cout << pathSum << endl;
-            ret = pathSum > ret ? pathSum : ret;
-            return;
+    int helper(string str1, char curr, int tag){
+        long long ret = 0;
+        long long add = 1;
+        int num = curr - '0';
+        for (int i = str1.size() - 1; i >= 0; i--){
+            int temp = str1[i] - '0';
+            ret = ret + temp * add * num;
+            add = add * 10;
         }
-        helper(triangle, ret, pathSum + triangle[row][col], row + 1, col);
-        helper(triangle, ret, pathSum + triangle[row][col], row + 1, col + 1);
-        return;
+        return ret * tag;
     }
-    int minimumTotal(vector<vector<int>>& triangle) {
-        int ret = 0;
-        helper(triangle,ret,0,0,0);
-        return ret;
+    string multiply(string num1, string num2) {
+        long long ret = 0;
+        long long tag = 1;
+        for (int i = num2.size() - 1; i >= 0; i--){
+            int temp = helper(num1, num2[i], tag);
+            ret = ret + temp;
+            tag = tag * 10;
+        }
+        return to_string(ret);
     }
 };
 
 
-
 int main(){
-    for (int i = 0; i < 9; i = i + 3){
-        for (int j = 0; j < 9; j = j + 3){
-            cout << i << "," << j << endl;
-        }
-    }
+    string a = "123456789";
+    string b = "987654321";
+    Solution test;
+    test.multiply(a,b);
+
 }
