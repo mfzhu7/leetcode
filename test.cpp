@@ -16,36 +16,85 @@ void print(vector<int> nums){
     return;
 }
 
+
 class Solution {
 public:
-    int helper(string str1, char curr, int tag){
-        long long ret = 0;
-        long long add = 1;
+    string add(string num1, string num2){
+        reverse(num1.begin(), num1.end());
+        reverse(num2.begin(), num2.end());
+        string ret = "";
+        int length = max(num1.size(), num2.size());
+        int add = 0;
+        for (int i = 0; i < length; i++){
+            char temp1,temp2;
+            if (i >= num1.size()) {
+                temp1 = '0';
+            } else {
+                temp1 = num1[i];
+            }
+            if (i >= num2.size()) {
+                temp2 = '0';
+            } else {
+                temp2 = num2[i];
+            }
+            int temp = (temp1 - '0') + (temp2 - '0') + add;
+            if (temp > 9){
+                add = 1;
+                temp = temp % 10;
+            } else {
+                add = 0;
+            }
+            ret.push_back('0' + temp);
+        }
+        if (add) ret.push_back('1');
+        reverse(ret.begin(), ret.end());
+        return ret;
+    }
+    string helper(string str1, char curr, int tag){
+        string ret = "";
+        int add = 0;
         int num = curr - '0';
         for (int i = str1.size() - 1; i >= 0; i--){
-            int temp = str1[i] - '0';
-            ret = ret + temp * add * num;
-            add = add * 10;
+            int temp = (str1[i] - '0') * num + add;
+            if(temp > 9){
+                add = temp / 10;
+                temp = temp % 10;
+            } else {
+                add = 0;
+            }
+            ret.push_back(temp + '0');
         }
-        return ret * tag;
+        if (add > 0) ret.push_back(add + '0');
+        reverse(ret.begin(), ret.end());
+        for (int i = 0; i < tag; i++){
+            ret.push_back('0');
+        }
+        return ret;
     }
     string multiply(string num1, string num2) {
-        long long ret = 0;
-        long long tag = 1;
+        if(num1 == "0" or num2 == "0")  return "0";
+
+        vector<string>vec;
+        string ret = "0";
+        int tag = 0;
         for (int i = num2.size() - 1; i >= 0; i--){
-            int temp = helper(num1, num2[i], tag);
-            ret = ret + temp;
-            tag = tag * 10;
+            string temp = helper(num1, num2[i], tag);
+            vec.push_back(temp);
+            tag = tag + 1;
         }
-        return to_string(ret);
+        for (int i = 0; i < vec.size(); i++){
+            // cout << vec[i] << "  " << ret << endl;
+
+            ret = add(ret, vec[i]);
+            // cout << ret << endl;
+        }
+        return ret;
     }
 };
 
-
 int main(){
-    string a = "123456789";
-    string b = "987654321";
     Solution test;
-    test.multiply(a,b);
-
+    string a = test.add("9876543120000000", "944977892635269");
+    cout << a << endl;
+    
 }
