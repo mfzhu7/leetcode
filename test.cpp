@@ -93,8 +93,8 @@ public:
 };
 
 int main(){
-    Solution test;
-    string a = test.add("9876543120000000", "944977892635269");
-    cout << a << endl;
+    string test = "123";
+    test.insert(0, 0,'0');
+    cout << test << endl;
     
 }
