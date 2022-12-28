@@ -1,25 +1,31 @@
 class Solution {
 public:
-    void helper(vector<int>& nums, int begin, vector<int> path, vector<vector<int>>& ret){
-        if (path.size() <= nums.size()) ret.push_back(path);
-        
-        set<int> layer;
-        for (int i = begin; i < nums.size(); i++){
-            if (layer.find(nums[i]) == layer.end()){
-                layer.insert(nums[i]);
-                path.push_back(nums[i]);
-                helper(nums, i + 1, path, ret);
-                path.pop_back();
-            }
+    bool helper(vector<vector<char>>& board, string word, int x, int y, int index, vector<vector<int>>& record){
+        if (x < 0 or y < 0 or x >= board.size() or y >= board[0].size() or record[x][y] == 1) return false;
+        if (word[index] != board[x][y]) return false;
+        if (word[index] == board[x][y] && index == word.size() - 1) return true;
 
-        }
-        return;
+        record[x][y] = 1;
+        bool up = helper(board,word,x - 1,y,index + 1,record);
+        bool down = helper(board,word,x + 1,y,index + 1,record);
+        bool left = helper(board,word,x,y - 1,index + 1,record);
+        bool right = helper(board,word,x,y + 1,index + 1,record);
+        record[x][y] = 0;
+
+        return up||down||left||right;
+
     }
-    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        vector<int> path;
-        vector<vector<int>> ret;
-        helper(nums, 0, path, ret);
-        return ret;
+    bool exist(vector<vector<char>>& board, string word) {
+        vector<int> row(board[0].size(), 0);
+        vector<vector<int>> record(board.size(), row);
+
+        for(int i = 0; i < board.size(); i++){
+            for (int j = 0;j < board[0].size();j++){
+                bool res = helper(board,word,i,j,0,record);
+                if(res) return res;
+            }
+        }
+        return false;
+
     }
 };

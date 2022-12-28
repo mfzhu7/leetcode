@@ -53,8 +53,10 @@ public:
     }
 };
 int main(){
-    vector<int> vec = {0,0,1,1,1,1,2,3,3};
-    Solution test;
-    test.removeDuplicates(vec);
+    vector<int> vec{0,1};
+    string test = "1234";
+    test.pop_back();
+    test.push_back('4');
+    cout << test << endl;
     
 }
