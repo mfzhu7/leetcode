@@ -41,3 +41,50 @@ public:
         return IP;
     }
 };
+
+
+
+
+class Solution {
+public:
+    bool check(string s){
+        if (s[0] == '0' && s.size() >= 2){
+            return false;
+        }
+        return stoi(s) <= 255;
+    }
+    string join(vector<string> vec){
+        string ret = "";
+        for (auto str : vec){
+            ret = ret + str + ".";
+        }
+        return ret.substr(0, ret.size() - 1);
+    }
+    void helper(string s, vector<string>& ret, vector<string>& path, int index){
+        if (path.size() == 4){
+            
+            if (index == s.size()){
+                string ip = join(path);
+                ret.push_back(ip);
+            }
+            return;
+        }
+        for (int i = index; i < index + 3 && i < s.size(); i++){
+            string temp = s.substr(index, i - index + 1);
+            if (check(temp)){
+                path.push_back(temp);
+                helper(s,ret,path,i + 1);
+                path.pop_back();
+            }
+        }
+        return;
+    }
+    vector<string> restoreIpAddresses(string s) {
+        vector<string> ret;
+        vector<string> path;
+        int index = 0;
+        helper(s,ret,path,index);
+        return ret;
+
+    }
+};
