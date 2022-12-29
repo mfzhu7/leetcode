@@ -1,22 +1,5 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<algorithm>
-#include<map>
-#include<set>
-
-
-using namespace std;
-
-void print(vector<int> nums){
-    for (auto i: nums){
-        cout << i << " ";
-    }
-    cout << endl;
-    return;
-}
-
-
+class Solution {
+public:
 void helper(vector<vector<int>>& matrix, int x1, int y1, int x2, int y2, vector<int>& path){
         if (x1 > x2 || y1 > y2) return;
 
@@ -50,10 +33,9 @@ void helper(vector<vector<int>>& matrix, int x1, int y1, int x2, int y2, vector<
         return;
 
     };
-int main(){
-    vector<vector<int>> vec{{1,2,3,4},{5,6,7,8},{9,10,11,12}};
-    vector<int> path;
-    helper(vec,0,0,2,3,path);
-    print(path);
-    
-}
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int>path;
+        helper(matrix,0,0,matrix.size() - 1, matrix[0].size() - 1,path);
+        return path;
+    }
+};
