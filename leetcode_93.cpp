@@ -1,21 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<algorithm>
-#include<map>
-#include<set>
-
-
-using namespace std;
-
-void print(vector<int> nums){
-    for (auto i: nums){
-        cout << i << " ";
-    }
-    cout << endl;
-    return;
-}
-
 class Solution {
 public:
     void helper(string s, vector<vector<string>>& ret, vector<string>& path, int index){
@@ -28,6 +10,7 @@ public:
         if (s[index] == '0'){
             path.push_back("0");
             helper(s,ret,path,index + 1);
+            path.pop_back();
             return;
         } else {
             path.push_back(s.substr(index,1));
@@ -58,11 +41,3 @@ public:
         return IP;
     }
 };
-
-
-int main(){
-    string test = "101023";
-    Solution a;
-    a.restoreIpAddresses(test);
-    
-}
