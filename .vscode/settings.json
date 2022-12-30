@@ -3,6 +3,9 @@
         "string": "cpp",
         "deque": "cpp",
         "vector": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "cmath": "cpp",
+        "*.tcc": "cpp",
+        "cstdlib": "cpp"
     }
 }
