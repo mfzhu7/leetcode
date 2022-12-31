@@ -1,25 +1,17 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<algorithm>
-#include<map>
-#include<set>
-
-using namespace std;
 class Solution {
 public:
     int count(int n){
         int ret = 0;
         while(n != 0 && n % 5 == 0){
             ret = ret + 1;
-            n = n % 5;
+            n = n / 5;
         }
         return ret;
     }
     int trailingZeroes(int n) {
         int ret = 0;
         for (int i = 0; i <= n; i++){
-            if (n % 5 == 0){
+            if (i % 5 == 0){
                 int temp = count(i);
                 cout << temp << endl;
                 ret = ret + temp;
@@ -28,9 +20,3 @@ public:
         return ret;
     }
 };
-
-int main(){
-    Solution test;
-    int a = test.trailingZeroes(6);
-    cout << a << endl;
-}
