@@ -8,29 +8,24 @@
 using namespace std;
 class Solution {
 public:
-    int count(int n){
-        int ret = 0;
-        while(n != 0 && n % 5 == 0){
-            ret = ret + 1;
-            n = n % 5;
-        }
-        return ret;
-    }
-    int trailingZeroes(int n) {
-        int ret = 0;
-        for (int i = 0; i <= n; i++){
-            if (n % 5 == 0){
-                int temp = count(i);
-                cout << temp << endl;
-                ret = ret + temp;
+    bool isIsomorphic(string s, string t) {
+        vector<int> src(128, 0);
+        if (s.size() != t.size()) return false;
+
+        for (int i = 0; i < s.size(); i++){
+            if (src[s[i]] == 0){
+                src[s[i]] = t[i];
+            } else {
+                if (src[s[i]] != t[i]) return false;
             }
+
         }
-        return ret;
+        return true;
+
     }
 };
 
 int main(){
     Solution test;
-    int a = test.trailingZeroes(6);
-    cout << a << endl;
+    test.isIsomorphic("foo", "bar");
 }
