@@ -4,28 +4,19 @@
 #include<algorithm>
 #include<map>
 #include<set>
+#include<queue>
 
 using namespace std;
-class Solution {
-public:
-    bool isIsomorphic(string s, string t) {
-        vector<int> src(128, 0);
-        if (s.size() != t.size()) return false;
 
-        for (int i = 0; i < s.size(); i++){
-            if (src[s[i]] == 0){
-                src[s[i]] = t[i];
-            } else {
-                if (src[s[i]] != t[i]) return false;
-            }
-
-        }
-        return true;
-
-    }
-};
 
 int main(){
-    Solution test;
-    test.isIsomorphic("foo", "bar");
+    queue<int> q;
+    q.push(1);
+    q.push(2);
+    q.push(3);
+    cout << q.front() << endl;
+    cout << q.back() << endl;
+    q.pop();
+    cout << q.front() << endl;
+    cout << q.back() << endl;
 }
