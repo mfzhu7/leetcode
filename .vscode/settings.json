@@ -6,6 +6,7 @@
         "typeinfo": "cpp",
         "cmath": "cpp",
         "*.tcc": "cpp",
-        "cstdlib": "cpp"
+        "cstdlib": "cpp",
+        "iostream": "cpp"
     }
 }
