@@ -1,15 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<algorithm>
-#include<map>
-#include<set>
-#include<queue>
-#include<sstream>
-
-using namespace std;
-
-
 class Solution {
 public:
     void helper(vector<vector<int>>& matrix, int left, int right){
@@ -29,31 +17,20 @@ public:
         }
         int n = ans.size();
         int idx = ans.size() - (right - left);
-        for (auto i : ans){
-            cout << i << " ";
-        }
-        cout << endl;
 
-        for (int i = 0; i <= right; i++){
-            // cout << ans[idx % n] << endl;
+        for (int i = left; i <= right; i++){
             matrix[left][i] = ans[idx % n];
             idx = idx + 1;
         }
         for (int i = left + 1; i <= right; i++){
-            // cout << ans[idx % n] << endl;
-
             matrix[i][right] = ans[idx % n];
             idx = idx + 1;
         }
-        for (int i = right - 1; i >= 0; i--){
-            // cout << ans[idx % n] << endl;
-
+        for (int i = right - 1; i >= left; i--){
             matrix[right][i] = ans[idx % n];
             idx = idx + 1;
         }
         for (int i = right - 1; i > left; i--){
-            // cout << ans[idx % n] << endl;
-
             matrix[i][left] = ans[idx % n];
             idx = idx + 1;
         }
@@ -71,10 +48,38 @@ public:
     }
 };
 
-int main(){
-    vector<vector<int>> vec {{5,1,9,11},{2,4,8,10},{13,3,6,7},{15,14,12,16}};
-    Solution test;
-    test.rotate(vec);
+
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int n = matrix.size() - 1;
+        auto  matrix_new = matrix;
+        for (int i = 0; i <= n; i++){
+            for (int j = 0; j <= n; j++){
+                matrix_new[j][n - i] = matrix[i][j];
+            }
+        }
+        matrix = matrix_new;
+        return;
+
+    }
+};
 
 
-}
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        for (int i = 0; i < n / 2; i++){
+            for (int j = 0; j < (n + 1)/ 2; j++){
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[n - j - 1][i];
+                matrix[n - j - 1][i] = matrix[n - i - 1][n - j - 1];
+                matrix[n - i - 1][n - j - 1] = matrix[j][n - i - 1];
+                matrix[j][n - i - 1] = temp;
+            }
+        }
+        return;
+
+    }
+};
