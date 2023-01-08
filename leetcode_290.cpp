@@ -1,18 +1,3 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<algorithm>
-#include<map>
-#include<set>
-#include<queue>
-#include<sstream>
-#include<stack>
-#include<unordered_map>
-
-using namespace std;
-
-
-
 class Solution {
 public:
     bool wordPattern(string pattern, string s) {
@@ -26,7 +11,7 @@ public:
         while(getline(ss, str, ' ')){
             vec.push_back(str);
         }
-        if (s.size() != vec.size()) return false;
+        if (pattern.size() != vec.size()) return false;
         for (int i = 0; i < vec.size(); i++){
             if (hash1.find(pattern[i]) == hash1.end()){
                 if (hash2.find(vec[i]) != hash2.end()) return false;
@@ -39,13 +24,3 @@ public:
         return true;
     }
 };
-
-int main(){
-    string pattern = "abba";
-    string s = "dog cat cat dog";
-    Solution test;
-    test.wordPattern(pattern, s);
-    
-
-
-}
