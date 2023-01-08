@@ -6,75 +6,65 @@
 #include<set>
 #include<queue>
 #include<sstream>
+#include<stack>
 
 using namespace std;
 
 
-class Solution {
+class MyQueue {
 public:
-    void helper(vector<vector<int>>& matrix, int left, int right){
-        if (left == right) return;
-        vector<int> ans;
-        for (int i = left; i <= right; i++){
-            ans.push_back(matrix[left][i]);
-        }
-        for (int i = left + 1; i <= right; i++){
-            ans.push_back(matrix[i][right]);
-        }
-        for (int i = right - 1; i >= left; i--){
-            ans.push_back(matrix[right][i]);
-        }
-        for (int i = right - 1; i > left; i--){
-            ans.push_back(matrix[i][left]);
-        }
-        int n = ans.size();
-        int idx = ans.size() - (right - left);
-        for (auto i : ans){
-            cout << i << " ";
-        }
-        cout << endl;
+    stack<int> stk1;
+    stack<int> stk2;
+    MyQueue() {
 
-        for (int i = 0; i <= right; i++){
-            // cout << ans[idx % n] << endl;
-            matrix[left][i] = ans[idx % n];
-            idx = idx + 1;
-        }
-        for (int i = left + 1; i <= right; i++){
-            // cout << ans[idx % n] << endl;
-
-            matrix[i][right] = ans[idx % n];
-            idx = idx + 1;
-        }
-        for (int i = right - 1; i >= 0; i--){
-            // cout << ans[idx % n] << endl;
-
-            matrix[right][i] = ans[idx % n];
-            idx = idx + 1;
-        }
-        for (int i = right - 1; i > left; i--){
-            // cout << ans[idx % n] << endl;
-
-            matrix[i][left] = ans[idx % n];
-            idx = idx + 1;
-        }
-        return;
     }
-    void rotate(vector<vector<int>>& matrix) {
-        int left = 0;
-        int right = matrix.size() - 1;
-        while(left <= right){
-            helper(matrix, left, right);
-            left = left + 1;
-            right = right - 1;
-        }
-        return;
+    
+    void push(int x) {
+        stk1.push(x);
     }
+
+    
+    int pop() {
+        while(!stk1.empty()){
+            stk2.push(stk1.top());
+            stk1.pop();
+        }
+        int ret = stk2.top();
+        stk2.pop();
+        while(!stk2.empty()){
+            stk1.push(stk1.top());
+            stk2.pop();
+        }
+        return ret;
+    }
+    
+    // int peek() {
+    //     while(!stk1.empty()){
+    //         stk2.push(stk1.top());
+    //         stk1.pop();
+    //     }
+    //     int ret = stk2.top();
+    //     while(!stk2.empty()){
+    //         stk1.push(stk1.top());
+    //         stk2.pop();
+    //     }
+    //     return ret;
+    // }
+    
+    // bool empty() {
+    //     return stk1.empty();
+    // }
 };
 
 int main(){
-    vector<vector<int>> vec {{5,1,9,11},{2,4,8,10},{13,3,6,7},{15,14,12,16}};
-    Solution test;
-    test.rotate(vec);
+    MyQueue* obj = new MyQueue();
+    obj->push(5);
+    obj->push(4);
+    obj->push(5);
+    obj->push(4);
+    obj->push(55);
+    obj->pop();
+    obj->pop();
 
 
 }
