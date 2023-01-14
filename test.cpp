@@ -12,40 +12,31 @@
 using namespace std;
 
 
-
 class Solution {
 public:
-    bool wordPattern(string pattern, string s) {
-        vector<string> vec;
-        stringstream ss;
-        string str;
-        ss << s;
-        unordered_map<char, string> hash1;
-        unordered_map<string, char> hash2;
+    void nextPermutation(vector<int>& nums) {
+        int n = nums.size();
+        int idx1 = n - 2;
+        while(idx1 >= 0 && nums[idx1] > nums[idx1 + 1]){
+            idx1 = idx1 - 1;
+        }
+        int idx2 = n - 1;
+        while(idx2 > idx1 && nums[idx2] < nums[idx1]){
+            idx2--;
+        }
+        int temp = nums[idx1];
+        nums[idx1] = nums[idx2];
+        nums[idx2] = temp;
 
-        while(getline(ss, str, ' ')){
-            vec.push_back(str);
-        }
-        if (s.size() != vec.size()) return false;
-        for (int i = 0; i < vec.size(); i++){
-            if (hash1.find(pattern[i]) == hash1.end()){
-                if (hash2.find(vec[i]) != hash2.end()) return false;
-                hash1[pattern[i]] = vec[i];
-                hash2[vec[i]] = pattern[i];
-            } else {
-                if (hash1[pattern[i]] != vec[i]) return false;
-            }
-        }
-        return true;
+        reverse(nums.begin() + idx1 + 1, nums.end());
+        return;
+
     }
 };
 
 int main(){
-    string pattern = "abba";
-    string s = "dog cat cat dog";
     Solution test;
-    test.wordPattern(pattern, s);
-    
-
+    vector<int> vec{1,5,1};
+    test.nextPermutation(vec);
 
 }
