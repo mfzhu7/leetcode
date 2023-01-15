@@ -14,38 +14,32 @@ using namespace std;
 
 class Solution {
 public:
-    bool isInterleave(string s1, string s2, string s3) {
-        auto f = vector < vector <int> > (s1.size() + 1, vector <int> (s2.size() + 1, false));
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        if(intervals.size() == 0) return {};
+        sort(intervals.begin(), intervals.end());
 
-        int n = s1.size(), m = s2.size(), t = s3.size();
-
-        if (n + m != t) {
-            return false;
-        }
-
-        f[0][0] = true;
-        for (int i = 0; i <= n; ++i) {
-            for (int j = 0; j <= m; ++j) {
-                int p = i + j - 1;
-                if (i > 0) {
-                    f[i][j] |= (f[i - 1][j] && s1[i - 1] == s3[p]);
-                }
-                if (j > 0) {
-                    f[i][j] |= (f[i][j - 1] && s2[j - 1] == s3[p]);
-                }
+        vector<vector<int>> ans;
+        vector<int> curr = intervals[0];
+        for (int i = 1; i < intervals.size(); i++){
+            if (intervals[i][0] <= curr[1]){
+                curr[1] = intervals[i][1];
+            } else {
+                ans.push_back(curr);
+                curr = intervals[i];
             }
         }
+        return intervals;
 
-        return f[n][m];
     }
 };
 
 
 
 int main(){
-    Solution test;
-    string str1 = "aabcc";
-    string str2 = "dbbca";
-    string str3 = "aadbbcbcac";
-    test.isInterleave(str1, str2, str3);
+    vector<vector<int>> a = {{1,3}, {2,6}, {8,10}, {15,18}};
+    vector<int> test = {3, 5};
+    a.insert(a.begin() + 4, test);
+    for (auto i : a){
+        cout << i[0] << " " << i[1] << endl;
+    }
 }
