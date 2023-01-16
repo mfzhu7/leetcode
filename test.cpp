@@ -14,32 +14,30 @@ using namespace std;
 
 class Solution {
 public:
-    vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        if(intervals.size() == 0) return {};
-        sort(intervals.begin(), intervals.end());
-
-        vector<vector<int>> ans;
-        vector<int> curr = intervals[0];
-        for (int i = 1; i < intervals.size(); i++){
-            if (intervals[i][0] <= curr[1]){
-                curr[1] = intervals[i][1];
-            } else {
-                ans.push_back(curr);
-                curr = intervals[i];
-            }
+    double myPow(double x, int n) {
+        double ret = 1;
+        bool tag = false;
+        if (n < 0){
+            n = (-1 * n);
+            tag = true;
         }
-        return intervals;
-
+        while(n > 0){
+            if (n & 1){
+                ret = ret * x;
+            }
+            x *= x;
+            n >>= 1;
+        }
+        if (tag){
+            ret = 1 / ret;
+        }
+        return ret;
     }
 };
 
 
-
 int main(){
-    vector<vector<int>> a = {{1,3}, {2,6}, {8,10}, {15,18}};
-    vector<int> test = {3, 5};
-    a.insert(a.begin() + 4, test);
-    for (auto i : a){
-        cout << i[0] << " " << i[1] << endl;
-    }
+    Solution test;
+    double a = test.myPow(2,10);
+    cout << a << endl;
 }
