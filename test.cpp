@@ -8,13 +8,17 @@
 #include<sstream>
 #include<stack>
 #include<unordered_map>
+#include<stdlib.h>
 
 using namespace std;
 
 
 int main() {
-    string s = "1234";
-    cout << s.back() << endl;
+    const char* name = "zhu";
+    char* name1 = "猪";
+    // name[2] = 'd';
+    cout << name << endl;
+    cout << name1 << endl;
 }
 
  
