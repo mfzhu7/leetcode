@@ -132,3 +132,54 @@ public:
 
 
 
+leetcode5
+
+[最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring/description/)
+
+```c++
+输入：s = "babad"
+输出："bab"
+解释："aba" 同样是符合题意的答案。
+```
+
+```c++
+class Solution {
+public:
+    string help(string s, int i){
+        int odd = 1;
+        while(i - odd >= 0 && i + odd < s.size() && s[i - odd] == s[i + odd]){
+            odd = odd + 1;
+        }
+        string str1 = s.substr(i - odd + 1, 2*(odd - 1) + 1);
+       	//回文子串长度为奇数的情况
+        int even = 1;
+        string str2 = "";
+        if (i + 1 < s.size() && s[i] == s[i + 1]){
+        while(i - even >= 0 && i + even + 1 < s.size() && s[i - even] == s[i + even + 1]){
+            even = even + 1;
+        }
+        str2 = s.substr(i - even + 1, 2*(even));
+        } else {
+            str2 = s.substr(i,even);
+        }
+        //回文子串长度为偶数的情况
+        return str1.size() > str2.size() ? str1 : str2;
+    }
+    string longestPalindrome(string s) {
+        string max_string = "";
+        for (int i = 0 ; i < s.size(); i++){
+            string temp = help(s,i);
+            max_string = max_string.size() < temp.size() ? temp:max_string;
+            //循环的过程是以当前字符为中心，直到最长的回文子串的过程
+        }
+        return max_string;
+    }
+};
+```
+
+
+
+
+
+
+
