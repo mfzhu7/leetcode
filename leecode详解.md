@@ -541,7 +541,304 @@ public:
 
 
 
+leetcode14
+
+[最长公共前缀](https://leetcode.cn/problems/longest-common-prefix/description/)
+
+```c++
+输入：strs = ["flower","flow","flight"]
+输出："fl"
+```
+
+```cpp
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+            int length = 0;
+            for (int i = 0; i < strs[0].size(); i++){
+                int count = 0;
+                for (int j = 1; j < strs.size();j++){
+                    if(strs[j][i] != strs[0][i]) break;
+                    else count = count + 1;
+                }
+                if(count == strs.size() - 1) length = length+1;
+                else break;
+            }
+            return strs[0].substr(0,length);
+    }
+};
+//垂直扫描，暴力解法
+```
+
+leetcode15
+
+[三数之和](https://leetcode.cn/problems/3sum/)
+
+排序+双指针解法
+
+```cpp
+输入：nums = [-1,0,1,2,-1,-4]
+输出：[[-1,-1,2],[-1,0,1]]
+解释：
+nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0 。
+nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0 。
+nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0 。
+不同的三元组是 [-1,0,1] 和 [-1,-1,2] 。
+注意，输出的顺序和三元组的顺序并不重要。
+```
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        int index = 0;
+        vector<vector<int>> ret; //存储结果
+        sort(nums.begin(), nums.end()); //进行排序
+        while(index < nums.size() - 2){ //因为是三元组，所以只要计算到倒数第二个
+            if (nums[index] > 0) return ret; //如果固定的数已经>0了，那么就无须继续遍历了
+            if (index > 0 && nums[index] == nums[index - 1]) {
+                index = index + 1;
+                continue;
+            }; //如果当前数和之前的数一样，则表明已经遍历过了，无须重复遍历
+            int L = index + 1; 
+            int R = nums.size() - 1; //定义左右双指针
+            while(L < R){
+                if (nums[L] + nums[R] + nums[index] == 0){
+                    ret.push_back({nums[L],nums[R],nums[index]});
+                    //如果已经找到了目标值，则存储结果
+                    while(L < R && nums[L] == nums[L + 1]) L = L + 1;
+                    while(L < R && nums[R] == nums[R - 1]) R = R - 1;
+                    //对相同的数进行过滤判断，可能存在多个结果为0的组合
+                    L = L + 1;
+                    R = R - 1;
+                    //改变双指针
+                } else if (nums[L] + nums[R] + nums[index] > 0){
+                    R = R - 1;
+                    //过大的情况
+                } else {
+                    L = L + 1;
+                    //太小的情况
+                }
+            }
+            index = index + 1;
+            //改变固定值
+        }
+        return ret;
+
+    }
+};
+```
+
+leetcode16
+
+[最接近的三数之和](https://leetcode.cn/problems/3sum-closest/)
+
+排序+双指针                                                                                        
+
+```c++
+输入：nums = [-1,2,1,-4], target = 1
+输出：2
+解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
+```
+
+```c++
+class Solution {
+public:
+
+    int threeSumClosest(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        int ret = 1e7;
+
+        for (int i = 0; i < nums.size() - 2; i++){
+            if (i > 0 && nums[i] == nums[i - 1]) continue;
+
+            int l = i + 1;
+            int r = nums.size() - 1;
+            while(l < r){
+                int sum = nums[i] + nums[l] + nums[r];
+                if (abs(sum - target) < abs(ret - target)) ret = sum;
+                if (sum == target) return sum;
+                if (sum > target){
+                    r = r - 1;
+                } else { 
+                    l = l + 1;
+                }
+            }
+        } // 不同于15题，这边就不用做多重判断了
+        return ret;
+
+    }
+};
+```
+
+​                 
+
+leetcode17
+
+[电话号码的字母组合](https://leetcode.cn/problems/letter-combinations-of-a-phone-number/)
+
+深度优先搜索(DFS)
+
+```c++
+输入：digits = "23"
+输出：["ad","ae","af","bd","be","bf","cd","ce","cf"]
+```
+
+```c++
+class Solution {
+public:
+    void helper(string digits, map<int, string> hash, int index, vector<string>& res, string path){
+        if(path.size() == digits.size()) {
+            res.push_back(path);
+            return; // 如果已经和代排除的数组一样长了，说明已经搜索到头
+        }
+        for (int i = 0; i < hash[digits[index] - 48].size(); i++){
+            path.push_back(hash[digits[index] - 48][i]);
+            helper(digits, hash, index + 1, res, path);
+            path.pop_back(); //需要pop掉
+        }
+        return;
+    }
+    vector<string> letterCombinations(string digits) {
+        map<int, string> hash{
+            {2, "abc"},
+            {3, "def"},
+            {4, "ghi"},
+            {5, "jkl"},
+            {6, "mno"},
+            {7, "pqrs"},
+            {8, "tuv"},
+            {9, "wxyz"},
+        };
+        vector<string> res;
+        if (digits.size() == 0) return res;
+        string path = "";
+        helper(digits,hash,0,res,path);
+        return res;
+
+    }
+};
+```
+
+​                        
+
+leetcode18
+
+[四数之和](https://leetcode.cn/problems/4sum/)
+
+排序+双指针
+
+```c++
+输入：nums = [1,0,-1,0,-2,2], target = 0
+输出：[[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+```
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int>> ret;
+        if (nums.size() < 4) return ret;
+        sort(nums.begin(), nums.end()); //排序
+        for (int i = 0; i < nums.size() - 3; i++){ //固定掉一个数，只要搜索到倒数第三个
+            if (i > 0 && nums[i] == nums[i - 1]) continue; //重复数不在搜索
+            for (int j = i + 1; j < nums.size() - 2; j++){ //再固定一个数，搜索到倒数第二个
+                if (j > i + 1 && nums[j] == nums[j-1]) continue;//重复数不在搜索
+                int l = j + 1;
+                int r = nums.size() - 1; //设定左右指针
+                while(l < r){
+                     long sum = (long)nums[i] + nums[j] + nums[l] + nums[r];
+                    if (sum == target){
+                        ret.push_back({nums[i],nums[j],nums[l], nums[r]});
+                        while(l < r && nums[l] == nums[l + 1]) l++;
+                        while(l < r && nums[r] == nums[r - 1]) r--;
+                        l = l + 1;
+                        r = r - 1;
+                    } else if (sum > target){
+                        r = r - 1;
+                    } else {
+                        l = l + 1; //双指针变化
+                    }
+                }
+            }
+        }
+        return ret;
+
+    }
+};
+```
 
 
 
+leetcode19
+
+[删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/)
+
+快慢指针
+
+```cpp
+输入：head = [1,2,3,4,5], n = 2
+输出：[1,2,3,5]
+```
+
+```c++
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* dummy = new ListNode(-1);
+        dummy->next = head;
+        ListNode* first = dummy;
+        ListNode* second = dummy->next;
+        //注意虚拟节点的设置
+        while(n - 1 > 0){
+            second = second->next;
+            n = n - 1;
+        } //快慢指针写法，快指针先走n-1步
+        while(second->next){
+            second = second->next;
+            first = first->next;
+        }//快慢指针同时走，直到快指针到对尾巴
+        first->next = first->next->next;
+        //改变节点连接
+        return dummy->next;
+        //返回头结点
+
+    }
+};
+```
+
+leetcode20
+
+[有效的括号](https://leetcode.cn/problems/valid-parentheses/)
+
+用堆来判断括号的有效性，堆的使用
+
+```cpp
+输入：s = "()[]{}"
+输出：true
+```
+
+```cpp
+class Solution {
+    public:
+        bool isValid(string s) {
+            if (s.size() % 2 != 0) return false;
+            stack<char> stk;
+            for(int i = 0 ; i < s.size(); i++){
+                if(s[i] == '(' or s[i] == '[' or s[i] == '{'){
+                    stk.push(s[i]);
+                } else {
+                    if (stk.empty()) return false; //堆为空，且当前为右括号
+                    if ((s[i] == ')' && stk.top() == '(') || (s[i] == ']' && stk.top() == '[') || (s[i] == '}' && stk.top() == '{')){
+                        stk.pop();//有效的状态
+                    } else {
+                        return false;
+                    }
+                }
+            }
+            return stk.empty();
+    
+        }
+    };
+```
 
