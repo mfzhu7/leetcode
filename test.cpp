@@ -12,35 +12,36 @@
 
 using namespace std;
 
-class Example {
+class Entity {
 public:
-    Example() {
-        cout << "created Entity" << endl;
+    Entity(){
+        cout << "created entity" << endl;
     }
-    Example(int x) {
-        cout << "created entity with" << x << endl;
+    ~Entity(){
+        cout << "destroy entity" << endl;
     }
 }
 ;
 
-class Entity {
-    private:
-    string m_name;
+class ScopePtr{
+private:
+    Entity* m_ptr;
 
-    public:
-    Entity(): m_name("unknown"){};
-    Entity(const string& name){
-        m_name = name;
+public:
+    ScopePtr(Entity* e)
+        :m_ptr(e) {};
+    
+    ~ScopePtr(){
+        delete m_ptr;
     }
-    const string& getName() const { return m_name;}
 }
 ;
 
 int main() {
-    cout<< INT_MIN << endl;
-    cout << INT_MIN / 10 << endl;
-    cout << INT_MIN % 10 << endl;
-
+    {
+        ScopePtr e = new Entity();
+    }
 }
+;
 
  

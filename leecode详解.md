@@ -842,3 +842,306 @@ class Solution {
     };
 ```
 
+leetcode21 
+
+[合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/)
+
+```c++
+输入：l1 = [1,2,4], l2 = [1,3,4]
+输出：[1,1,2,3,4,4]
+```
+
+```cpp
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        if (!list1 || !list2) return list1?list1:list2; //判空处理
+        ListNode* res = list1->val > list2->val ? list2 : list1;
+        //保存头结点，把数据保存在头结点较小的链表中
+        ListNode* curr1 = res; 
+        ListNode* curr2 = list1->val > list2->val ? list1:list2;
+		//遍历过程的2个链表的指针
+        while(curr1 && curr1->next && curr2){
+            //保证curr1和curr1的下一个节点不为空
+            if (curr1->next->val >= curr2->val){
+                //如果curr1的下一个节点的数值较大，即curr2要插入其中
+                ListNode* temp = curr1->next;
+                //记录curr1的下一个节点
+                curr1->next = curr2;
+                //重新指向curr1->next
+                curr2 = curr2->next;
+               	//curr2进行移动
+                curr1->next->next = temp;
+                //curr1的next的next节点进行移动
+                curr1 = curr1->next;
+                //curr1移动
+            } else {
+                curr1 = curr1->next;
+            }
+        }
+        if (curr2){
+            curr1->next = curr2; //需要判断curr2是否已经结束
+        }
+        return res;
+    }
+};
+
+//递归写法
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if (l1 == nullptr) {
+            return l2;
+        } else if (l2 == nullptr) {
+            return l1;
+        } else if (l1->val < l2->val) {
+            l1->next = mergeTwoLists(l1->next, l2);
+            return l1;
+        } else {
+            l2->next = mergeTwoLists(l1, l2->next);
+            return l2;
+        }
+    }
+};
+
+
+```
+
+leetcode22
+
+[括号生成](https://leetcode.cn/problems/generate-parentheses/)
+
+```c++
+输入：n = 3
+输出：["((()))","(()())","(())()","()(())","()()()"]
+```
+
+```c++
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        if (n == 1){
+            vector<string> ret = {"()"};
+            return ret;
+        }
+        set<string> hash;
+        vector<string> last = generateParenthesis(n - 1);
+        for (int i = 0; i < last.size(); i++){
+            for (int j = 0; j < last[i].size();j++){
+                string temp = last[i].substr(0, j) + "()" + last[i].substr(j);
+                hash.insert(temp);
+            }
+        }
+        vector<string> ret(hash.begin(), hash.end());
+        return ret;
+        //核心思想在于上一轮的有效字符串的任意位置加上"()"即成为新的有效字符串
+        //利用set进行去重即可
+    }
+}
+```
+
+leetcode24
+
+[两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/)
+
+```c++
+输入：head = [1,2,3,4]
+输出：[2,1,4,3]
+```
+
+```cpp
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        if(!head || !head->next) return head;//判空处理
+        ListNode* dummy = new ListNode(-1);
+        dummy->next = head; //虚拟节点设置
+        ListNode* pre = dummy;
+        ListNode* curr = dummy->next; //设置先后节点
+
+        while(curr && curr->next) {
+            ListNode* temp = curr->next;
+            curr->next = curr->next->next;
+            pre->next = temp;
+            temp->next = curr;
+            pre = curr; //节点变更操作，主要在于要有prev节点的记录，便于链表进行操作
+            curr = curr->next;
+        }
+        return dummy->next;
+    }
+};
+
+//递归的官方解法
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) {
+            return head;
+        }
+        ListNode* newHead = head->next;
+        head->next = swapPairs(newHead->next);
+        newHead->next = head;
+        return newHead;
+    }
+};
+
+```
+
+leetcode26
+
+[删除有序数组中的重复项](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/)
+
+```c++
+输入：nums = [0,0,1,1,1,2,2,3,3,4]
+输出：5, nums = [0,1,2,3,4]
+解释：函数应该返回新的长度 5 ， 并且原数组 nums 的前五个元素被修改为 0, 1, 2, 3, 4 。不需要考虑数组中超出新长度后面的元素。
+```
+
+```c++
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        if(nums.size() <= 1) return 1;
+        int slow = 0;
+        int fast = 0; 
+        //快慢指针
+        while(fast < nums.size()){
+            if (nums[slow] != nums[fast]){
+                nums[slow + 1] = nums[fast];
+                slow = slow + 1;//slow记录当前非重复数字的位置
+            }
+            fast = fast + 1; //充当遍历指针
+        }
+        return slow + 1;
+
+    }
+};
+```
+
+leetcode27
+
+[移除元素](https://leetcode.cn/problems/remove-element/)
+
+```c++
+输入：nums = [0,1,2,2,3,0,4,2], val = 2
+输出：5, nums = [0,1,4,0,3]
+解释：函数应该返回新的长度 5, 并且 nums 中的前五个元素为 0, 1, 3, 0, 4。注意这五个元素可为任意顺序。你不需要考虑数组中超出新长度后面的元素。
+```
+
+```c++
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int left = 0;
+        for (int right = 0; right < nums.size(); right++){
+            if (nums[right] != val){
+                nums[left] = nums[right];
+                left = left + 1;
+            }
+        }
+        return left; //和26题类似的想法，利用快慢指针，一个记录非目标值位置的数据当前位置，一个遍历数组
+
+    }
+};
+```
+
+
+
+leetcode28
+
+[找出字符串中第一个匹配项的下标](https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/)
+
+```c++
+输入：haystack = "sadbutsad", needle = "sad"
+输出：0
+解释："sad" 在下标 0 和 6 处匹配。
+第一个匹配项的下标是 0 ，所以返回 0 。
+```
+
+```c++
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        vector<int> index;
+        int ret = 0;
+        for (int i = 0; i < haystack.size(); i++){
+            if (haystack[i] == needle[0]) index.push_back(i);
+            //首先记录在字符串中，和目标首字母一直的位置
+        }
+        for (auto i: index){
+            if (haystack.substr(i, needle.size()) == needle){
+                ret = i;
+                return ret;
+                //在这些位置上进行判断是否和目标值一致
+            }
+        }
+        return -1;
+
+    }
+};
+```
+
+leetcode29
+
+[两数相除](https://leetcode.cn/problems/divide-two-integers/)
+
+```c++
+输入: dividend = 10, divisor = 3
+输出: 3
+解释: 10/3 = 3.33333.. ，向零截断后得到 3 。
+```
+
+```c++
+class Solution {
+public:
+    bool helper(int x, int y, int z){
+        int res = 0;
+        for (; z != 0; z >>= 1){
+            if (z & 1){
+                if (res < x - y) {
+                    return false;
+                }
+                res += y;
+            }
+            if (z != 1){
+                if (y < x - y) return false;
+                y += y;
+            }
+        }
+        return true;
+    }
+    int divide(int dividend, int divisor) {
+        cout << dividend << divisor << endl;
+        if (dividend == INT_MIN){
+            if (divisor == 1) return INT_MIN;
+            if (divisor == -1) return INT_MAX;
+        }
+        bool tag = false;
+        if(dividend > 0){
+            dividend = -1 * dividend;
+            tag = !tag;
+        }
+        if (divisor > 0){
+            divisor = -1 * divisor;
+            tag = !tag;
+        }
+        int left  = 1;
+        int right = INT_MAX;
+        int ret = 0;
+        while(left <= right){
+            int mid = left + ((right - left) >> 1);
+            bool check = helper(dividend, divisor, mid);
+            if (check){
+                ret = mid;
+                if (ret == INT_MAX) break;
+                left = mid + 1;
+            } else {
+                right = mid -1;
+            }
+        }
+        return tag ? -1 * ret : ret;
+
+    }
+};
+```
+
