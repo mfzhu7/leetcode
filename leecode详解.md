@@ -1145,3 +1145,462 @@ public:
 };
 ```
 
+## leecode 31
+
+[下一个排列](https://leetcode.cn/problems/next-permutation/)
+
+```c++
+输入：nums = [1,1,5]
+输出：[1,5,1]
+```
+
+```c++
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+        int n = nums.size();
+        int idx1 = n - 2;
+        while(idx1 >= 0 && nums[idx1] >= nums[idx1 + 1]){
+            idx1 = idx1 - 1;
+        }
+        if (idx1 < 0){
+            reverse(nums.begin(), nums.end());
+            return;
+        }
+        int idx2 = n - 1;
+        while(idx2 > idx1 && nums[idx2] <= nums[idx1]){
+            idx2--;
+        }
+        int temp = nums[idx1];
+        nums[idx1] = nums[idx2];
+        nums[idx2] = temp;
+
+        reverse(nums.begin() + idx1 + 1, nums.end());
+        return;
+
+    }
+};
+```
+
+leetcode33
+
+[搜索旋转排序数组](https://leetcode.cn/problems/search-in-rotated-sorted-array/)
+
+```c++
+输入：nums = [4,5,6,7,0,1,2], target = 0
+输出：4
+```
+
+```c++
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int ret = -1;
+        int l = 0;
+        int r = nums.size() - 1;
+        while(l <= r){
+            int mid = (l + r) / 2;
+            if (nums[mid] == target) return mid;
+            if (nums[mid] >= nums[0]){
+                if (target >= nums[0] && target < nums[mid]){ //处于有序序列中
+                    r = mid - 1;
+                } else {
+                    l = mid + 1;
+                }
+            } else {
+                if (nums[mid] < target && target <= nums[nums.size() - 1]) { //处于有序序列中
+                    l = mid + 1;
+                } else {
+                    r = mid - 1;
+                }
+            } //变相的二分法，因为原始的数组有序，旋转之后数组在旋转点左右2侧各自有序
+              //所以找到中间点后，判断是否处在有序部分，利用有序的性质进行二分
+        }
+        return ret;
+    }
+};
+```
+
+leetcode34
+
+[在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+> 二分查找变形
+
+```c++
+输入：nums = [5,7,7,8,8,10], target = 8
+输出：[3,4]
+```
+
+```c++
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        vector<int> ret{-1, -1};
+        int l = 0;
+        int r = nums.size() - 1;
+        while(l <= r){
+            int mid = l + (r - l) / 2;
+            if (nums[mid] == target){
+                ret[0] = mid;
+                r = mid - 1;} //找到左边界
+            else {
+                if (nums[mid] > target) r = mid - 1;
+                if (nums[mid] < target) l = mid  + 1;
+            }
+        }
+        l = 0;
+        r = nums.size() - 1;
+
+        while(l <= r){
+            int mid = l + (r - l) / 2;
+            if (nums[mid] == target){
+                ret[1] = mid;
+                l = mid + 1; //找到右边界
+            }
+            else {
+                if (nums[mid] > target) r = mid - 1;
+                if (nums[mid] < target) l = mid  + 1;
+            }
+        }
+
+        return ret;
+    }
+};
+```
+
+leetcode35 
+
+[搜索插入位置](https://leetcode.cn/problems/search-insert-position/description/)
+
+> 二分查找
+
+```c++
+输入: nums = [1,3,5,6], target = 2
+输出: 1
+```
+
+```c++
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        int start = 0; 
+        int end = nums.size() - 1;
+        while(start <= end) {
+            int mid = (start + end) / 2;
+            if (nums[mid] == target) return mid;
+            if (nums[mid] > target){
+                end = mid - 1;
+            }else {
+                start = mid + 1;
+            }
+        }
+        return start;
+    }
+};
+```
+
+leetcode36 
+
+[有效的数独](https://leetcode.cn/problems/valid-sudoku/)
+
+> 矩阵操作
+
+```c++
+输入：board = 
+[["5","3",".",".","7",".",".",".","."]
+,["6",".",".","1","9","5",".",".","."]
+,[".","9","8",".",".",".",".","6","."]
+,["8",".",".",".","6",".",".",".","3"]
+,["4",".",".","8",".","3",".",".","1"]
+,["7",".",".",".","2",".",".",".","6"]
+,[".","6",".",".",".",".","2","8","."]
+,[".",".",".","4","1","9",".",".","5"]
+,[".",".",".",".","8",".",".","7","9"]]
+输出：true
+```
+
+
+
+```c++
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        int row[9][10] = {0}; //记录行信息
+        int col[9][10] = {0}; //记录列信息
+        int box[9][10] = {0}; //记录斜对角信息，当然也可以用3*3*9
+        
+        for (int i = 0; i < 9; i++){
+            for (int j = 0; j < 9; j++){
+                if (board[i][j] == '.') continue; //空格跳过
+                int currNum = board[i][j] - '0';
+                if(row[i][currNum]) return false; //i行信息判断是否已经出现相同数字
+                if(col[j][currNum]) return false; //j列信息判断是否已经出现相同信息
+                if(box[j/3+ (i/3)*3][currNum]) return false;
+                //关键点在于此次，j/3+ (i/3)*3表示第几个9*9的子矩阵
+                row[i][currNum] = 1;
+                col[j][currNum] = 1;
+                box[j/3+ (i/3)*3][currNum] = 1; //如果不曾出现，赋值对应位置，记录表明已经出现
+            }
+        }
+        return true;
+    }
+};
+```
+
+leetcode38
+
+[外观数列](https://leetcode.cn/problems/count-and-say/)
+
+```c++
+输入：n = 4
+输出："1211"
+解释：
+countAndSay(1) = "1"
+countAndSay(2) = 读 "1" = 一 个 1 = "11"
+countAndSay(3) = 读 "11" = 二 个 1 = "21"
+countAndSay(4) = 读 "21" = 一 个 2 + 一 个 1 = "12" + "11" = "1211"
+```
+
+
+
+```c++
+class Solution {
+public:
+    string getNext(string num){
+        string next = "";
+        int index = 0;
+        while(index < num.size()){
+            int count = 1;
+            while(index + 1 < num.size() && num[index] == num[index + 1]){
+                //重点在于此次，判断是否已经到达字符串末尾，并且判断和后面字符相等
+                count = count + 1;
+                index = index + 1;
+            }
+            next += to_string(count) + num[index];
+            //此处的字符串相加操作
+            index = index + 1;    
+        }
+        return next;
+    }
+    string countAndSay(int n) {
+        int index = 1;
+        string res = "1";
+        while(index < n){
+            res = getNext(res);
+            index = index + 1;
+        }
+        return res;
+    }
+};
+```
+
+
+
+leetcode 39 
+
+> 深度优先搜索+回溯+剪枝
+
+[组合总数](https://leetcode.cn/problems/combination-sum/)
+
+```c++
+输入：candidates = [2,3,6,7], target = 7
+输出：[[2,2,3],[7]]
+解释：
+2 和 3 可以形成一组候选，2 + 2 + 3 = 7 。注意 2 可以使用多次。
+7 也是一个候选， 7 = 7 。
+仅有这两种组合。
+```
+
+
+
+```c++
+class Solution {
+public:
+    void helper(vector<int>&candidates, int target, int begin, vector<vector<int>>& res, vector<int>& path, int pathSum){
+        if (pathSum == target){
+            res.push_back(path);
+            return; //当前路径之和等于目标值则存入结果，并且返回
+        }
+        for (int i = begin; i < candidates.size(); i++){
+            if (pathSum + candidates[i] <= target){ //此次过滤掉大于目标值的搜索
+                pathSum = pathSum + candidates[i];
+                path.push_back(candidates[i]); //推入当前路径记录
+                helper(candidates,target,i,res,path,pathSum);
+                path.pop_back(); //记得弹出
+                pathSum = pathSum - candidates[i];//记得将路径和进行还原
+            }
+        }
+        return;
+    }
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<vector<int>> res;
+        vector<int> path;
+        int pathSum = 0;
+        int begin = 0;
+        helper(candidates,target,begin,res,path,pathSum);
+        return res;
+        //要点在于(1)搜索结束的还原 (2) 非必要搜索的过滤，降低搜索的复杂度
+    }
+};
+```
+
+leetcode40 
+
+[组合总和 II](https://leetcode.cn/problems/combination-sum-ii/)
+
+> 深度优先搜索+回溯剪枝
+
+```c++
+输入: candidates = [10,1,2,7,6,1,5], target = 8,
+输出:
+[
+[1,1,6],
+[1,2,5],
+[1,7],
+[2,6]
+]
+```
+
+
+
+```c++
+class Solution {
+public:
+    void helper(vector<int>& candidates, int target, int begin, vector<int>& path, vector<vector<int>>& res, int pathSum){
+        if (pathSum == target){
+            res.push_back(path);
+            return; //目标值记录并且返回
+        }
+        set<int> layNum;
+        //每一层的搜索进行去重
+        for (int i = begin; i < candidates.size(); i++){
+            if ((pathSum + candidates[i] <= target) && layNum.find(candidates[i]) == layNum.end()){
+                //剪枝，包含是否操作目标值和是否在当前层搜索过的剪枝
+                layNum.insert(candidates[i]); //层信息的更新
+                pathSum = pathSum + candidates[i];
+                path.push_back(candidates[i]);
+                helper(candidates,target, i + 1,path,res,pathSum);
+                pathSum = pathSum - candidates[i];
+                path.pop_back(); //路径的恢复
+            }
+        }
+        return;
+    }
+
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        sort(candidates.begin(), candidates.end()); //排序
+        vector<vector<int>> res;
+        vector<int> path;
+        int pathSum = 0;
+        helper(candidates,target,0,path,res,pathSum);
+        return res;
+
+    }
+};
+```
+
+leetcode 43 
+
+[字符串相乘](https://leetcode.cn/problems/multiply-strings/)
+
+```c++
+输入: num1 = "123", num2 = "456"
+输出: "56088"
+```
+
+```c++
+class Solution {
+public:
+    string add(string num1, string num2){
+        string ret = "";
+        int length = max(num1.size(), num2.size());
+        int add = 0;
+        for (int i = 0; i < length; i++){
+            int first,second;
+            first = (i >= num1.size()) ? 0 : num1[i] - '0';
+            second = (i >= num2.size()) ? 0 : num2[i] - '0';
+            int sum = first + second + add;
+            add = (sum > 9) ? 1: 0;
+            sum = (add == 1) ? sum % 10 : sum;
+            ret.push_back('0' + sum);
+        }
+        if (add) ret.push_back('1');
+        return ret;
+        // 定义字符串的加法 
+    }
+    string helper(string str1, char curr, int tag){
+        string ret = "";
+        int add = 0;
+        int num = curr - '0';
+        for (int i = str1.size() - 1; i >= 0; i--){
+            int sum = (str1[i] - '0') * num + add;
+            add = (sum > 9) ? sum / 10 : 0;
+            sum = (add >= 1) ? sum % 10: sum;
+            ret.push_back(sum + '0');
+        }
+        if (add) ret.push_back(add + '0');
+        
+        ret.insert(0, tag, '0');
+        return ret;
+        //定义字符串的乘法 
+    }
+    string multiply(string num1, string num2) {
+        if(num1 == "0" or num2 == "0")  return "0";
+        vector<string>vec;
+        string ret = "0";
+        int tag = 0;
+        for (int i = num2.size() - 1; i >= 0; i--){
+            string num = helper(num1, num2[i], tag);
+            vec.push_back(num);
+            tag = tag + 1;
+        }
+        for (int i = 0; i < vec.size(); i++){
+            ret = add(ret, vec[i]);
+        }
+        reverse(ret.begin(), ret.end());
+        //将每个单字符的结果记录下来，而后进行相加
+        return ret;
+    }
+};
+```
+
+leetcode45 
+
+[跳跃游戏 II](https://leetcode.cn/problems/jump-game-ii/)
+
+> 动态规划/贪心
+
+```c++
+输入: nums = [2,3,1,1,4]
+输出: 2
+解释: 跳到最后一个位置的最小跳跃数是 2。
+     从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。
+```
+
+
+
+```c++
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int n = nums.size();
+        int maxpos = 0;
+        int end = 0;
+        int step = 0;
+        for (int i = 0; i < n - 1; i++){
+            if (i <= maxpos){
+                maxpos = max(maxpos, i + nums[i]);
+            }
+            if (i == end){
+                end = maxpos;
+                step = step + 1;
+            }
+        }
+        return step;
+        //维护一个当前能够到达的最远边界
+        //如果遍历已经到达边界，更新边界值
+    }
+};
+```
+
