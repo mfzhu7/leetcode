@@ -1705,8 +1705,110 @@ public:
                 matrix[n - i - 1][n - j - 1] = matrix[j][n - i - 1];
                 matrix[j][n - i - 1] = temp;
             }
-        }
+        } 
+ 		// 通过分析旋转的规律，可以知道(i,j)->(j, n-i-1)
         return;
+    }
+};
+```
+
+leetcode49 
+
+[字母异位词分组](https://leetcode.cn/problems/group-anagrams/)
+
+```c++
+输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+输出: [["bat"],["nat","tan"],["ate","eat","tea"]]
+```
+
+```c++
+class Solution {
+public:
+
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> hash;
+        for (auto str: strs){
+            string key = str;
+            sort(key.begin(), key.end());
+            //对每个单词都进行了排序，这样具有相同字母数量排序不同的字符串会变成一样
+            hash[key].emplace_back(str);
+            //输入到字典中
+        }
+        vector<vector<string>> ans;
+        for (auto it: hash){
+            ans.push_back(it.second);
+            //将字典中的结果数组进行保存后返回
+        }
+        return ans;
+    }
+};
+```
+
+leetcode50
+
+> 位运算相关题目
+
+[Pow(x,n)](https://leetcode.cn/problems/powx-n/)
+
+```c++
+输入：x = 2.00000, n = -2
+输出：0.25000
+解释：2-2 = 1/22 = 1/4 = 0.25
+```
+
+```c++
+class Solution {
+public:
+    double myPow(double x, int n) {
+        double ret = 1;
+        bool tag = false;
+        long long n1 = n;
+        if (n1 < 0){
+            n1 = (long)(-1 * n1);
+            tag = true;
+        }
+        while(n1 > 0){
+            if (n1 & 1){
+                ret = ret * x;
+            }
+            x *= x;
+            n1 >>= 1;
+        }
+        if (tag){
+            ret = 1 / ret;
+        }
+        return ret;
+    }
+};
+```
+
+leetcode51
+
+[最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
+
+> 动态规划，定义为以num[i]为结尾的最大子数组和作为寻优目标。
+
+```c++
+输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+输出：6
+解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
+```
+
+
+
+```c++
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) { 
+        vector<int> dp(nums.size(), 0);
+        dp[0] = nums[0];
+        int ret = nums[0]; 
+        for (int i = 1; i < nums.size(); i++){
+            dp[i] = max(dp[i - 1] + nums[i], nums[i]); //必须取num[i]
+            //只有2种情况，一种前面大于0，一种前面小于0 
+            ret = max(ret, dp[i]);
+        }
+        return ret;
     }
 };
 ```
