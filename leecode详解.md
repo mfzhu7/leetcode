@@ -1604,3 +1604,110 @@ public:
 };
 ```
 
+leetcode46 
+
+[全排列](https://leetcode.cn/problems/permutations/description/)
+
+> 深度优先搜索
+
+```c++
+输入：nums = [1,2,3]
+输出：[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+```
+
+```c++
+class Solution {
+public:
+    void dfs(vector<int>& nums, vector<int>& path, vector<vector<int>>& res, vector<int>& flag){
+        if(path.size() == nums.size()){
+            res.emplace_back(path);
+            return;
+        }
+        for (int i = 0; i < nums.size(); i++){
+            if(flag[i]) continue;
+            path.push_back(nums[i]);
+            flag[i] = 1;
+            dfs(nums,path,res,flag);
+            path.pop_back();
+            flag[i] = 0; //用flag数组来记录数据是否被访问过，和之前的层去重有相同的作用
+            			//因为已经排序过了，无须再进行排序
+        }
+    }
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> res;
+        vector<int> path;
+        vector<int> flag(nums.size(),0);
+        dfs(nums, path, res, flag);
+        return res;
+    }
+};
+```
+
+leetcode47 
+
+[全排列 II](https://leetcode.cn/problems/permutations-ii/)
+
+```c++
+输入：nums = [1,1,2]
+输出：
+[[1,1,2],
+ [1,2,1],
+ [2,1,1]]
+```
+
+```c++
+class Solution {
+public:
+    void dfs(vector<int>& nums, vector<int>& path, vector<vector<int>>& res, vector<int>& flag){
+        if(path.size() == nums.size()){
+            res.emplace_back(path);
+            return;
+        }
+        for (int i = 0 ; i < nums.size(); i++){
+            if(flag[i] == 1|| (i > 0 && nums[i] == nums[i - 1] && flag[i - 1])) continue;
+            //除去判断是否已经被使用过以外，并且需要判断和前一个值是否相同
+            path.push_back(nums[i]);
+            flag[i] = 1;
+            dfs(nums,path,res,flag);
+            flag[i] = 0;
+            path.pop_back();
+        }
+    }
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector<vector<int>> res;
+        vector<int> path;
+        vector<int> flag(nums.size(), 0);
+        sort(nums.begin(), nums.end()); //先进行排序
+        dfs(nums,path,res,flag);
+        return res;
+    }
+```
+
+leetcode 48 
+
+[旋转图像](https://leetcode.cn/problems/rotate-image/)
+
+```c++
+输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+输出：[[7,4,1],[8,5,2],[9,6,3]]
+```
+
+```c++
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        int n = matrix.size();
+        for (int i = 0; i < n / 2; i++){
+            for (int j = 0; j < (n + 1)/ 2; j++){
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[n - j - 1][i];
+                matrix[n - j - 1][i] = matrix[n - i - 1][n - j - 1];
+                matrix[n - i - 1][n - j - 1] = matrix[j][n - i - 1];
+                matrix[j][n - i - 1] = temp;
+            }
+        }
+        return;
+    }
+};
+```
+
