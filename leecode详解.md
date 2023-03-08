@@ -1782,7 +1782,7 @@ public:
 };
 ```
 
-leetcode51
+leetcode53
 
 [最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
 
@@ -1809,6 +1809,127 @@ public:
             ret = max(ret, dp[i]);
         }
         return ret;
+    }
+};
+```
+
+leetcode 54 
+
+[螺旋矩阵](https://leetcode.cn/problems/spiral-matrix/)
+
+> 矩阵遍历
+
+```c++
+输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+输出：[1,2,3,6,9,8,7,4,5]
+```
+
+```c++
+class Solution {
+public:
+void helper(vector<vector<int>>& matrix, int x1, int y1, int x2, int y2, vector<int>& path){
+        if (x1 > x2 || y1 > y2) return;
+
+        if (x1 == x2 && y1 != y2){
+            for (int i = y1; i <= y2; i++){
+            path.push_back(matrix[x1][i]);
+            }
+        } 
+        else if (x1 != x2 && y1 == y2){
+            for (int i = x1; i <= x2; i++){
+                path.push_back(matrix[i][y1]);
+                }   
+        } 
+        else if (x1 == x1 && y1 == y2){
+            path.push_back(matrix[x1][y1]);
+        } else {
+            for (int i = y1; i <= y2; i++){
+                path.push_back(matrix[x1][i]);
+            }
+            for (int i = x1 + 1; i <= x2; i++){
+                path.push_back(matrix[i][y2]);
+            }
+            for (int i = y2 - 1; i >= y1; i--){
+                path.push_back(matrix[x2][i]);
+            }
+            for (int i = x2 - 1; i > x1; i--){
+                path.push_back(matrix[i][y1]);
+            }
+        }
+        helper(matrix, x1 + 1,y1 + 1,x2 - 1, y2 - 1, path);
+        return;
+    };
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector<int>path;
+        helper(matrix,0,0,matrix.size() - 1, matrix[0].size() - 1,path);
+        return path;
+    }
+};
+```
+
+leetcode 55
+
+[跳跃游戏](https://leetcode.cn/problems/jump-game/)
+
+> 动态规划，参考跳跃游戏II的做法
+
+```c++
+输入：nums = [2,3,1,1,4]
+输出：true
+解释：可以先跳 1 步，从下标 0 到达下标 1, 然后再从下标 1 跳 3 步到达最后一个下标。
+```
+
+```c++
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int rightmost = 0;
+        for (int i = 0; i < nums.size(); i++){
+            if (i <= rightmost){
+                rightmost = max(rightmost, i + nums[i]);
+            }
+            if (rightmost >= nums.size() - 1) return true;
+        }
+        return false;
+
+    }
+};
+```
+
+leetcode 56
+
+[合并区间](https://leetcode.cn/problems/merge-intervals/)
+
+> 用sort排序后，判断头尾相连的可能性
+
+```c++
+输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+输出：[[1,6],[8,10],[15,18]]
+解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+```
+
+
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        if(intervals.size() == 0) return {};
+        sort(intervals.begin(), intervals.end());
+
+        vector<vector<int>> ans;
+        vector<int> curr = intervals[0];
+        for (int i = 1; i < intervals.size(); i++){
+            if (intervals[i][0] <= curr[1]){
+                if (intervals[i][1] >= curr[1]) curr[1] = intervals[i][1];
+            } else {
+                ans.push_back(curr);
+                curr = intervals[i];
+            }
+        }
+        ans.push_back(curr);
+        return ans;
+
     }
 };
 ```
