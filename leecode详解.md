@@ -1934,3 +1934,201 @@ public:
 };
 ```
 
+## leetcode57
+
+[插入区间](https://leetcode.cn/problems/insert-interval/solutions/)
+
+```c++
+输入：intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
+输出：[[1,2],[3,10],[12,16]]
+解释：这是因为新的区间 [4,8] 与 [3,5],[6,7],[8,10] 重叠。
+```
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        int left = newInterval[0];
+        int right = newInterval[1];
+        vector<vector<int>> ans;
+        bool place = false;
+
+        for (auto interval: intervals){
+            if (interval[0] > right){
+                if (!place){
+                    ans.push_back({left, right});
+                    place = true;
+                }
+                ans.push_back(interval);
+            } else if (interval[1] < left){
+                ans.push_back(interval);
+            } else {
+                left = min(left, interval[0]); 
+                right = max(right, interval[1]);
+            }
+        }
+        if (!place){
+            ans.push_back({left, right});
+        }
+        return ans;
+
+    }
+};
+```
+
+
+
+## leetcode58
+
+[最后一个单词长度](https://leetcode.cn/problems/length-of-last-word/description/)
+
+```c++
+输入：s = "   fly me   to   the moon  "
+输出：4
+解释：最后一个单词是“moon”，长度为4。
+```
+
+
+
+```c++
+class Solution {
+public:
+    int lengthOfLastWord(string s) {
+            int end = s.size() - 1;
+            int start = 0;
+            while(s[end] == ' '){
+                end = end - 1; 
+            }
+            start = end;
+            while(start >= 0){
+                if (s[start] != ' ') 
+                {
+                start = start - 1;
+                }
+                else{
+                        break;
+                }
+            }
+            return end - start;
+
+    }
+};
+```
+
+## leetcode59 
+
+[螺旋矩阵 II](https://leetcode.cn/problems/spiral-matrix-ii/)
+
+> 矩阵遍历操作
+
+```c++
+输入：n = 3
+输出：[[1,2,3],[8,9,4],[7,6,5]]
+```
+
+```c++
+class Solution {
+public:
+void helper(vector<vector<int>>& matrix, int x1, int y1, int x2, int y2, int& curr){
+        if (x1 > x2 || y1 > y2) return;
+        
+        if (x1 == x1 && y1 == y2){
+            matrix[x1][y1] = curr;
+            return;
+        } else {
+            for (int i = y1; i <= y2; i++){
+                matrix[x1][i] = curr;
+                curr = curr + 1;
+            }
+            for (int i = x1 + 1; i <= x2; i++){
+                matrix[i][y2] = curr;
+                curr = curr + 1;
+            }
+            for (int i = y2 - 1; i >= y1; i--){
+                matrix[x2][i] = curr;
+                curr =curr + 1;
+            }
+            for (int i = x2 - 1; i > x1; i--){
+                matrix[i][y1] = curr;
+                curr = curr + 1;
+            }
+        }
+        helper(matrix,x1+1,y1+1,x2-1,y2-1,curr);
+        return;
+
+    };
+    vector<vector<int>> generateMatrix(int n) {
+        vector<int> row(n,0);
+        vector<vector<int>> ret(n, row);
+        int curr = 1;
+        helper(ret,0,0,n-1,n-1,curr);
+        return ret;
+    }
+};
+```
+
+
+
+## leetcode61 
+
+[旋转链表](https://leetcode.cn/problems/rotate-list/)
+
+> 链表操作
+
+```c++
+输入：head = [1,2,3,4,5], k = 2
+输出：[4,5,1,2,3]
+```
+
+
+
+```c++
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if (!head||!head->next) return head;
+        ListNode* curr = head;
+        int length = 1;
+        while(curr->next){
+            length += 1;
+            curr = curr->next;
+        } // 计算链表长度，为了求余k
+        curr->next = head; //链表末尾连接头部
+        k = length -  k % length;
+        curr = head;
+        while(k > 1){
+            curr = curr->next;
+            k = k - 1;
+        }  //找到位置断开
+        ListNode* res = curr->next;
+        curr->next = nullptr;
+        return res;
+
+    }
+};
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

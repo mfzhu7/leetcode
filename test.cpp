@@ -1,39 +1,30 @@
 #include<iostream>
 #include<vector>
-#include<string>
 #include<algorithm>
-#include<map>
-#include<set>
-#include<queue>
-#include<sstream>
-#include<stack>
-#include<unordered_map>
-#include<stdlib.h>
+#include<chrono>
 #include<memory>
-#include<string.h>
+#include<array>
 #include<tuple>
-#include<functional>
+#include<string>
 
 
+std::tuple<std::string, int> createPerson(){
 
-namespace apple {
-    void print(const std::string& text){
-        std::cout << text << std::endl;
-    }
+    return { "zhu", 31 };
 }
-namespace orange {
-    void print(const char* text){
-        std::string temp = text;
-        reverse(temp.begin(), temp.end());
-        std::cout << temp << std::endl;
-    }
-}
-
 
 int main() {
-    using namespace orange;
-    using namespace apple;
-    apple::print("HELLO");
+    auto person = createPerson();
+    std::string& name = std::get<0>(person);
+    int age = std::get<1>(person);
+
+    std::string name1;
+    int age1;
+    std::tie(name1, age1) = createPerson();
+
+    auto [name, age] = createPerson();
+    std::cout << name << age << std::endl;
+
 }
 ;
 
