@@ -2108,27 +2108,194 @@ public:
 };
 ```
 
+## LeetCode62 
+
+[不同路径](https://leetcode.cn/problems/unique-paths/)
+
+> 动态规划
+
+```c++
+输入：m = 3, n = 2
+输出：3
+解释：
+从左上角开始，总共有 3 条路径可以到达右下角。
+1. 向右 -> 向下 -> 向下
+2. 向下 -> 向下 -> 向右
+3. 向下 -> 向右 -> 向下
+```
 
 
 
+```c++
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        int matrix[m][n];
+        for (int i = 0; i < m; i++){
+            for (int j = 0; j < n; j++){
+                matrix[i][j] = 1;
+            }
+        } // 这步其实只要把第一行和第一列的数据设置为1，方便后面的计算
+        
+        for (int i = 1; i < m; i++){
+            for (int j = 1; j < n; j++){
+                matrix[i][j] = matrix[i-1][j] + matrix[i][j-1];
+                //动态规划，即到达当前点的路径数量 = 到达当前点的上方的路径数量 + 到达当前点左侧的路径的数量
+            }
+        }
+        return matrix[m-1][n-1];
+    }
+```
+
+## leetcode63 
+
+[不同路径 II](https://leetcode.cn/problems/unique-paths-ii/)
+
+> 和62题类似的动态规划
+
+```c++
+输入：obstacleGrid = [[0,0,0],[0,1,0],[0,0,0]]
+输出：2
+解释：3x3 网格的正中间有一个障碍物。
+从左上角到右下角一共有 2 条不同的路径：
+1. 向右 -> 向右 -> 向下 -> 向下
+2. 向下 -> 向下 -> 向右 -> 向右
+```
 
 
 
+```c++
+class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        int row = obstacleGrid.size();
+        int col = obstacleGrid[0].size();
+
+        vector<vector<int>> matrix(row, vector<int>(col, 0));
+        for(int i = 0; i < row; i++){
+            for(int j = 0; j < col; j++){
+                if(obstacleGrid[i][j] == 1){ matrix[i][j] = 0; continue; }
+                // 判断是不是被堵住了
+                if(i + j == 0) {matrix[0][0] = 1; continue;}
+                //设定初始值
+                int left = (i - 1 >= 0 ? matrix[i - 1][j] : 0);
+                int up = (j - 1 >= 0 ? matrix[i][j - 1] : 0);
+                //计算左侧和上方的路径数，记得判断边界值
+                matrix[i][j] = left + up;
+            }
+        }
+        return matrix[row - 1][col - 1];
+    }
+};
+```
 
 
 
+## LeetCode64
+
+[最小路径和](https://leetcode.cn/problems/minimum-path-sum/)
+
+> 动态规划 + 贪心
+
+```c++
+输入：grid = [[1,3,1],[1,5,1],[4,2,1]]
+输出：7
+解释：因为路径 1→3→1→1→1 的总和最小。
+```
+
+```c++
+class Solution {
+public:
+    int minPathSum(vector<vector<int>>& grid) {
+        for(int i = 1; i < grid.size(); i++){
+            grid[i][0] = grid[i][0] + grid[i - 1][0];
+        }
+        for(int j = 1; j < grid[0].size(); j++){
+            grid[0][j] = grid[0][j] + grid[0][j - 1];
+        } // 上述分别计算了第一行和第一列的最小值，第一行和第一列只存在一个路径
+        for (int i = 1; i < grid.size(); i++){
+            for(int j = 1; j < grid[0].size(); j++){
+                grid[i][j] = min(grid[i-1][j], grid[i][j - 1]) + grid[i][j];
+            }
+        } //贪心，到达当前点的方法只有从上方和左侧，计算其最小值即可
+        int row = grid.size() - 1;
+        int col = grid[0].size() - 1;
+        return grid[row][col];
+    }
+};
+```
 
 
 
+## Leetcode66
+
+[ 加一](https://leetcode.cn/problems/plus-one/)
+
+```c++
+输入：digits = [1,2,3]
+输出：[1,2,4]
+解释：输入数组表示数字 123。
+```
+
+```c++
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        for (int i = digits.size() - 1; i >= 0; i--){
+            if (digits[i] == 9){
+                digits[i] = 0;
+                // 从末尾开始遍历，逢9变0
+            }else {
+                digits[i] = digits[i] + 1;
+                return digits;
+                //非9加1返回
+            }
+        }
+        digits.emplace(digits.begin(), 1);
+        //上述遍历过程未返回，说明全是9，需要补进位
+        return digits;
+    }
+};
+```
 
 
 
+## leetcode67
 
+[二进制求和](https://leetcode.cn/problems/add-binary/)
 
+```c++
+输入：a = "1010", b = "1011"
+输出："10101"
+```
 
+```c++
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        int l_a = a.size() - 1;
+        int l_b = b.size() - 1;
+        int add = 0;
+        string res = "";
+        while(l_a >= 0 || l_b >= 0){
+            int a1 = l_a >= 0 ? a[l_a] : '0';
+            int b1 = l_b >= 0 ? b[l_b] : '0';
 
+            int temp = a1 + b1 - 96 + add;
+            add = temp >= 2 ? 1 : 0;
+            if (temp == 3){ res = "1" + res;}
+            if (temp == 2){ res = "0" + res;}
+            if (temp == 1){ res = "1" + res;}
+            if (temp == 0){ res = "0" + res;}
+            l_a = l_a - 1;
+            l_b = l_b - 1;
+        }
+        if (add) {
+            return "1" + res;
+        }
+        return res;
 
-
-
-
+    }
+};
+```
 
