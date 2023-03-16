@@ -2496,3 +2496,192 @@ public:
 };
 ```
 
+## leetcode75 (没看懂)
+
+[颜色分类](https://leetcode.cn/problems/sort-colors/)
+
+
+
+```c++
+输入：nums = [2,0,2,1,1,0]
+输出：[0,0,1,1,2,2]
+```
+
+
+
+```c++
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int  temp = 0;
+        int  size2 = 0;
+        for (int i = nums.size() - 1; i >= 0; i--){
+            int place2 = - 1;
+            for (int j = 0; j < i; j++){
+                if (nums[j] == 2) {place2 = j;break;}
+            }
+            if (place2 == - 1) {size2 = i; break;}
+            else {
+                temp = nums[i];
+                nums[i] = nums[place2];
+                nums[place2] = temp; 
+            }
+        }
+        for (int i = 0; i <= size2; i++){
+            int place0 = -1;
+            for (int j = i; j <= size2; j++){
+                if (nums[j] == 0) {place0 = j; break;}
+            }
+            if (place0 == - 1) {break;}
+            else {
+                temp = nums[i];
+                nums[i] = nums[place0];
+                nums[place0] = temp;
+            }
+        }
+        return;
+    }
+};
+```
+
+
+
+## leetcode77
+
+[组合](https://leetcode.cn/problems/combinations/)
+
+> 深度优先遍历+回溯
+
+```c++
+输入：n = 4, k = 2
+输出：
+[
+  [2,4],
+  [3,4],
+  [2,3],
+  [1,2],
+  [1,3],
+  [1,4],
+]
+```
+
+
+
+```c++
+class Solution {
+public:
+    void helper(int n, int k, int begin, vector<vector<int>>& res, vector<int>& path){
+        if (path.size() == k){
+            res.push_back(path);
+            return;
+        }
+        for (int i = begin; i <= n; i++){
+            if (path.size() <= k){
+                path.push_back(i);
+                helper(n, k, i + 1, res, path);
+                path.pop_back();
+            }
+        }
+        return;
+    }
+    vector<vector<int>> combine(int n, int k) {
+        vector<vector<int>> res;
+        vector<int> path;
+        helper(n,k,1,res,path);
+        return res;
+
+    }
+};
+
+```
+
+
+
+## leetcode78
+
+[子集](https://leetcode.cn/problems/subsets/)
+
+> 深度优先遍历+条件终止
+
+```c++
+输入：nums = [1,2,3]
+输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+```
+
+
+
+````c++
+class Solution {
+public:
+    void helper(vector<int>& nums, int begin, vector<int> path, vector<vector<int>>& ret){
+        if(path.size() <= nums.size()) ret.push_back(path);
+            
+        for(int i = begin; i < nums.size(); i++){
+            path.push_back(nums[i]);
+            helper(nums, i + 1, path, ret);
+            path.pop_back();
+        }
+        return;
+    }
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<int> path;
+        vector<vector<int>> ret;
+        helper(nums, 0, path,ret);
+        return ret;
+
+    }
+};
+````
+
+
+
+## leetcode79
+
+[单词搜索](https://leetcode.cn/problems/word-search/)
+
+> 深度优先遍历+条件终止
+
+```c++
+输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+输出：true
+```
+
+
+
+```c++
+class Solution {
+public:
+    bool helper(vector<vector<char>>& board, string word, int x, int y, int index, vector<vector<int>>& record){
+        if (x < 0 or y < 0 or x >= board.size() or y >= board[0].size() or record[x][y] == 1) return false;
+        if (word[index] != board[x][y]) return false;
+        if (word[index] == board[x][y] && index == word.size() - 1) return true;
+
+        record[x][y] = 1;
+        bool up = helper(board,word,x - 1,y,index + 1,record);
+        bool down = helper(board,word,x + 1,y,index + 1,record);
+        bool left = helper(board,word,x,y - 1,index + 1,record);
+        bool right = helper(board,word,x,y + 1,index + 1,record);
+        record[x][y] = 0;
+
+        return up||down||left||right;
+
+    }
+    bool exist(vector<vector<char>>& board, string word) {
+        vector<int> row(board[0].size(), 0);
+        vector<vector<int>> record(board.size(), row);
+
+        for(int i = 0; i < board.size(); i++){
+            for (int j = 0;j < board[0].size();j++){
+                bool res = helper(board,word,i,j,0,record);
+                if(res) return res;
+            }
+        }
+        return false;
+
+    }
+};
+```
+
+
+
+## leetcode
