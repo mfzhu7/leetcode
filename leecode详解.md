@@ -2264,6 +2264,8 @@ public:
 
 [二进制求和](https://leetcode.cn/problems/add-binary/)
 
+> 字符串加法模拟
+
 ```c++
 输入：a = "1010", b = "1011"
 输出："10101"
@@ -2294,6 +2296,201 @@ public:
             return "1" + res;
         }
         return res;
+
+    }
+};
+```
+
+
+
+## leetcode69 
+
+[ x 的平方根](https://leetcode.cn/problems/sqrtx/)
+
+> 二分法找到平方根
+
+```c++
+输入：x = 8
+输出：2
+解释：8 的算术平方根是 2.82842..., 由于返回类型是整数，小数部分将被舍去。
+```
+
+```c++
+class Solution {
+public:
+    int mySqrt(int x) {
+        int l = 0;
+        int r = x ;
+        int ans = -1;
+        while(l <= r){
+            long long mid = l + (r - l) / 2 ;
+            if (mid * mid <= x){
+                l = mid + 1;
+                ans = mid;
+            } else {
+                 r = mid - 1;
+            }
+        }
+        return ans ;
+    }
+};
+```
+
+## LeetCode70 
+
+[爬楼梯](https://leetcode.cn/problems/climbing-stairs/)
+
+> 动态规划
+
+```c++
+输入：n = 3
+输出：3
+解释：有三种方法可以爬到楼顶。
+1. 1 阶 + 1 阶 + 1 阶
+2. 1 阶 + 2 阶
+3. 2 阶 + 1 阶
+```
+
+```c++
+class Solution {
+public:
+    int climbStairs(int n) {
+        if (n == 1) return 1;
+        if (n == 2) return 2;
+        int a_1 = 1;
+        int a_2 = 2;
+        int res = 0;
+        while(n - 3 >= 0){
+            res = a_1 + a_2;
+            a_1 = a_2;
+            a_2 = res;
+            n = n - 1;
+        }
+        return res;
+    }
+};
+```
+
+
+
+## leetcode71
+
+[简化路径](https://leetcode.cn/problems/simplify-path/)
+
+> 堆栈+字符串分割
+
+```c++
+输入：path = "/a/./b/../../c/"
+输出："/c"
+```
+
+
+
+```c++
+class Solution {
+public:
+    string simplifyPath(string path) {
+        stringstream ss;
+        stack<string> stk;
+        string str;
+        ss << path;
+        while(getline(ss, str, '/')){ //重点在于通过getline和stringstream函数对字符串按照/进行分割
+            if (str == ".."){
+                if (!stk.empty()) stk.pop(); //此处要判断栈内此时是否为空
+            } else if (str == "." || str == ""){
+                continue;
+            } else {
+                stk.push(str);
+            }
+        }
+        if (stk.empty()) return "/";
+        string ans;
+        while(!stk.empty()){
+            ans = "/" + stk.top() + ans;
+            stk.pop();
+        }
+        return ans;
+    }
+};
+```
+
+
+
+## leetcode73
+
+[矩阵置零](https://leetcode.cn/problems/set-matrix-zeroes/)
+
+> 矩阵操作
+
+```c++
+输入：matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
+输出：[[0,0,0,0],[0,4,5,0],[0,3,1,0]]
+```
+
+
+
+```c++
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        set<int> row;
+        set<int> col;
+        for (int i = 0; i < matrix.size(); i++){
+            for (int j = 0; j < matrix[0].size(); j++){
+                if (matrix[i][j] == 0){
+                    row.insert(i);
+                    col.insert(j);
+                }
+            } //找到所有出现过0的行和列
+        }
+        for (int i = 0; i < matrix.size(); i++){
+            for (int j = 0; j < matrix[0].size(); j++){
+                if (row.find(i) != row.end() || col.find(j) != col.end()){
+                    matrix[i][j] = 0;
+                }
+            }
+        } //对行和列进行置0操作
+        return;
+    }
+};
+```
+
+## LeetCode74 
+
+[搜索二维矩阵](https://leetcode.cn/problems/search-a-2d-matrix/)
+
+> 矩阵操作
+
+```c++
+输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13
+输出：false
+```
+
+
+
+```c++
+class Solution {
+public:
+
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int row = matrix.size();
+        int col = matrix[0].size();
+
+        int start = 0;
+        int end = matrix.size() * matrix[0].size() - 1;
+
+        while(start <= end){
+            int mid = start + (end - start) / 2;
+            int i = mid / col;
+            int j = mid % col;
+            if (matrix[i][j] == target) return true;
+            if (matrix[i][j] > target){
+                end = mid - 1;
+            } else {
+                start = mid + 1; //二分查找，主要是行和列的变化
+            }
+        }
+        return false;
 
     }
 };
