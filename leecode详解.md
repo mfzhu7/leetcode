@@ -2684,4 +2684,214 @@ public:
 
 
 
-## leetcode
+## leetcode80(待研究)
+
+[删除有序数组中的重复项 II](https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/)
+
+> 快慢指针
+
+```c++
+输入：nums = [0,0,1,1,1,1,2,3,3]
+输出：7, nums = [0,0,1,1,2,3,3]
+解释：函数应返回新长度 length = 7, 并且原数组的前五个元素被修改为 0, 0, 1, 1, 2, 3, 3 。 不需要考虑数组中超出新长度后面的元素
+```
+
+
+
+```c++
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int n = nums.size();
+        if (n <= 2) {
+            return n;
+        } //如果只有2个元素的情况下，直接返回 
+        int slow = 2, fast = 2;
+        while (fast < n) {
+            if (nums[slow - 2] != nums[fast]) {
+                nums[slow] = nums[fast];
+                ++slow;
+            }
+            ++fast;
+        }
+        return slow;
+    }
+};
+```
+
+
+
+## leetcode81
+
+[搜索旋转排序数组 II](https://leetcode.cn/problems/search-in-rotated-sorted-array-ii/)
+
+> 二分法变形
+
+```c++
+输入：nums = [2,5,6,0,0,1,2], target = 0
+输出：true
+```
+
+
+
+```c++
+class Solution {
+public:
+    bool search(vector<int>& nums, int target) {
+        int l = 0;
+        int r = nums.size() - 1;
+        while(l <= r){
+            int mid = l + (r - l) / 2;
+            if (nums[mid] == target) return true;
+            if (nums[mid] == nums[l]) {
+                l = l + 1;
+                continue;
+            } //因为存在重复值，需要过滤
+            if (nums[mid] > nums[0]) {
+                if (target >= nums[0] && target <nums[mid]){
+                    r = mid - 1;
+                } else {
+                    l = mid + 1; //找到部分有序的地方，对这段序列进行二分查找，确保目标值在序列内
+                }
+            } else {
+                if (target > nums[mid] && target <= nums[nums.size() - 1]){
+                    // 同理
+                    l = mid + 1;
+                } else {
+                    r = mid - 1;
+                }
+            }
+        }
+        return false;
+
+    }
+};
+```
+
+
+
+## leetcode82
+
+[删除排序链表中的重复元素 II](https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/)
+
+> 链表操作
+
+```c++
+输入：head = [1,2,3,3,4,4,5]
+输出：[1,2,5]
+```
+
+
+
+```c++
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        if (!head || !head->next) return head;
+        ListNode* dummy = new ListNode(-1000);
+        dummy->next = head; //创建虚拟头节点
+        ListNode* pre = dummy;
+        ListNode* curr = head;
+        while(curr && curr->next){
+            //边界条件的设置
+            if (curr->val == curr->next->val){
+                int temp = curr->val;
+                while(curr && curr->val == temp){
+                    curr = curr->next;
+                    // 如果存在相同的，一直遍历到最后一个，然后进行更改节点
+                }
+                pre->next = curr;
+            } else {
+                pre = pre->next;
+                curr = curr->next;
+                //不相同的情况的处理
+            }
+        }
+        return dummy->next;
+
+    }
+};
+```
+
+
+
+## leetcode83
+
+[删除排序链表中的重复元素](https://leetcode.cn/problems/remove-duplicates-from-sorted-list/)
+
+> 链表操作
+
+```c++
+输入：head = [1,1,2,3,3]
+输出：[1,2,3]
+```
+
+
+
+```c++
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        if (!head || !head->next) return head;
+        ListNode* pre = head;
+        ListNode* curr = head->next;
+        while(curr){
+            if (pre->val == curr->val){
+                pre->next = curr->next;
+                curr = curr->next;
+            } else {
+                pre = pre->next;
+                curr = curr->next;
+            }
+        }
+        return head;
+        //同上一题，相同做法。
+    }
+};
+```
+
+
+
+## LeetCode86(待完善新的做法)
+
+[分割链表](https://leetcode.cn/problems/partition-list/)
+
+> 链表操作
+
+```c++
+输入：head = [1,4,3,2,5,2], x = 3
+输出：[1,2,2,4,3,5]
+```
+
+```c++
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        if (!head || !head->next) return head;
+        ListNode* dummy = new ListNode(-1);
+        dummy->next = head; //虚拟头结点设置
+        ListNode* pre = dummy;
+        ListNode* next = pre->next; //先后节点设置
+        while(next && next->val < x){
+            next = next->next;
+            pre = pre->next;
+        } //找到第一个大于x的链表节点
+        if (!next) return head;
+        while(next->next){
+            if (next->next->val >= x){
+                next = next->next;
+            }else {
+                ListNode* temp1 = next->next;
+                next->next = temp1->next;
+                ListNode* temp2 = pre->next;
+                pre->next = temp1;
+                temp1->next = temp2;
+                pre = pre->next;
+            }
+        }
+        return dummy->next;
+
+    }
+};
+```
+
