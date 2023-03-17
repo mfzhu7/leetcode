@@ -45,52 +45,6 @@ public:
 
 
 
-leetcode2 
-
-[两数相加](https://leetcode.cn/problems/add-two-numbers/)
-
-题干信息
-
-```c++
-输入：l1 = [2,4,3], l2 = [5,6,4]
-输出：[7,0,8]
-解释：342 + 465 = 807.
-```
-
-题解如下：
-
-```c++
-class Solution {
-public:
-    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        ListNode* n1 = l1;
-        ListNode* n2 = l2;
-        ListNode* dummy = new ListNode(-1); //虚拟头节点的处理
-        ListNode* temp = dummy;
-        int carry = 0;
-        int l1_val = 0;
-        int l2_val = 0;
-        while(n1 || n2){
-            l1_val = n1?n1->val:0;
-            l2_val = n2?n2->val:0;
-            ListNode* tmp = new ListNode((l1_val+l2_val+carry) % 10);
-            carry = (l1_val+l2_val+carry) / 10; //进位的处理
-            temp->next = tmp;
-            temp = temp->next;
-            n1 = n1?n1->next:n1;
-            n2 = n2?n2->next:n2;
-        }
-        if (carry){
-            ListNode* tmp = new ListNode(1);
-            temp->next = tmp;
-            return dummy->next;
-        }else {
-            return dummy->next; //最后是否进位的判断
-        }
-    
-    }
-};
-```
 
 
 
@@ -673,52 +627,6 @@ public:
 
 ​                 
 
-leetcode17
-
-[电话号码的字母组合](https://leetcode.cn/problems/letter-combinations-of-a-phone-number/)
-
-深度优先搜索(DFS)
-
-```c++
-输入：digits = "23"
-输出：["ad","ae","af","bd","be","bf","cd","ce","cf"]
-```
-
-```c++
-class Solution {
-public:
-    void helper(string digits, map<int, string> hash, int index, vector<string>& res, string path){
-        if(path.size() == digits.size()) {
-            res.push_back(path);
-            return; // 如果已经和代排除的数组一样长了，说明已经搜索到头
-        }
-        for (int i = 0; i < hash[digits[index] - 48].size(); i++){
-            path.push_back(hash[digits[index] - 48][i]);
-            helper(digits, hash, index + 1, res, path);
-            path.pop_back(); //需要pop掉
-        }
-        return;
-    }
-    vector<string> letterCombinations(string digits) {
-        map<int, string> hash{
-            {2, "abc"},
-            {3, "def"},
-            {4, "ghi"},
-            {5, "jkl"},
-            {6, "mno"},
-            {7, "pqrs"},
-            {8, "tuv"},
-            {9, "wxyz"},
-        };
-        vector<string> res;
-        if (digits.size() == 0) return res;
-        string path = "";
-        helper(digits,hash,0,res,path);
-        return res;
-
-    }
-};
-```
 
 ​                        
 
@@ -770,42 +678,7 @@ public:
 
 
 
-leetcode19
 
-[删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/)
-
-快慢指针
-
-```cpp
-输入：head = [1,2,3,4,5], n = 2
-输出：[1,2,3,5]
-```
-
-```c++
-class Solution {
-public:
-    ListNode* removeNthFromEnd(ListNode* head, int n) {
-        ListNode* dummy = new ListNode(-1);
-        dummy->next = head;
-        ListNode* first = dummy;
-        ListNode* second = dummy->next;
-        //注意虚拟节点的设置
-        while(n - 1 > 0){
-            second = second->next;
-            n = n - 1;
-        } //快慢指针写法，快指针先走n-1步
-        while(second->next){
-            second = second->next;
-            first = first->next;
-        }//快慢指针同时走，直到快指针到对尾巴
-        first->next = first->next->next;
-        //改变节点连接
-        return dummy->next;
-        //返回头结点
-
-    }
-};
-```
 
 leetcode20
 
@@ -842,70 +715,7 @@ class Solution {
     };
 ```
 
-leetcode21 
 
-[合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/)
-
-```c++
-输入：l1 = [1,2,4], l2 = [1,3,4]
-输出：[1,1,2,3,4,4]
-```
-
-```cpp
-class Solution {
-public:
-    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
-        if (!list1 || !list2) return list1?list1:list2; //判空处理
-        ListNode* res = list1->val > list2->val ? list2 : list1;
-        //保存头结点，把数据保存在头结点较小的链表中
-        ListNode* curr1 = res; 
-        ListNode* curr2 = list1->val > list2->val ? list1:list2;
-		//遍历过程的2个链表的指针
-        while(curr1 && curr1->next && curr2){
-            //保证curr1和curr1的下一个节点不为空
-            if (curr1->next->val >= curr2->val){
-                //如果curr1的下一个节点的数值较大，即curr2要插入其中
-                ListNode* temp = curr1->next;
-                //记录curr1的下一个节点
-                curr1->next = curr2;
-                //重新指向curr1->next
-                curr2 = curr2->next;
-               	//curr2进行移动
-                curr1->next->next = temp;
-                //curr1的next的next节点进行移动
-                curr1 = curr1->next;
-                //curr1移动
-            } else {
-                curr1 = curr1->next;
-            }
-        }
-        if (curr2){
-            curr1->next = curr2; //需要判断curr2是否已经结束
-        }
-        return res;
-    }
-};
-
-//递归写法
-class Solution {
-public:
-    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        if (l1 == nullptr) {
-            return l2;
-        } else if (l2 == nullptr) {
-            return l1;
-        } else if (l1->val < l2->val) {
-            l1->next = mergeTwoLists(l1->next, l2);
-            return l1;
-        } else {
-            l2->next = mergeTwoLists(l1, l2->next);
-            return l2;
-        }
-    }
-};
-
-
-```
 
 leetcode22
 
@@ -940,52 +750,7 @@ public:
 }
 ```
 
-leetcode24
 
-[两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/)
-
-```c++
-输入：head = [1,2,3,4]
-输出：[2,1,4,3]
-```
-
-```cpp
-class Solution {
-public:
-    ListNode* swapPairs(ListNode* head) {
-        if(!head || !head->next) return head;//判空处理
-        ListNode* dummy = new ListNode(-1);
-        dummy->next = head; //虚拟节点设置
-        ListNode* pre = dummy;
-        ListNode* curr = dummy->next; //设置先后节点
-
-        while(curr && curr->next) {
-            ListNode* temp = curr->next;
-            curr->next = curr->next->next;
-            pre->next = temp;
-            temp->next = curr;
-            pre = curr; //节点变更操作，主要在于要有prev节点的记录，便于链表进行操作
-            curr = curr->next;
-        }
-        return dummy->next;
-    }
-};
-
-//递归的官方解法
-class Solution {
-public:
-    ListNode* swapPairs(ListNode* head) {
-        if (head == nullptr || head->next == nullptr) {
-            return head;
-        }
-        ListNode* newHead = head->next;
-        head->next = swapPairs(newHead->next);
-        newHead->next = head;
-        return newHead;
-    }
-};
-
-```
 
 leetcode26
 
@@ -1300,53 +1065,6 @@ public:
 };
 ```
 
-leetcode36 
-
-[有效的数独](https://leetcode.cn/problems/valid-sudoku/)
-
-> 矩阵操作
-
-```c++
-输入：board = 
-[["5","3",".",".","7",".",".",".","."]
-,["6",".",".","1","9","5",".",".","."]
-,[".","9","8",".",".",".",".","6","."]
-,["8",".",".",".","6",".",".",".","3"]
-,["4",".",".","8",".","3",".",".","1"]
-,["7",".",".",".","2",".",".",".","6"]
-,[".","6",".",".",".",".","2","8","."]
-,[".",".",".","4","1","9",".",".","5"]
-,[".",".",".",".","8",".",".","7","9"]]
-输出：true
-```
-
-
-
-```c++
-class Solution {
-public:
-    bool isValidSudoku(vector<vector<char>>& board) {
-        int row[9][10] = {0}; //记录行信息
-        int col[9][10] = {0}; //记录列信息
-        int box[9][10] = {0}; //记录斜对角信息，当然也可以用3*3*9
-        
-        for (int i = 0; i < 9; i++){
-            for (int j = 0; j < 9; j++){
-                if (board[i][j] == '.') continue; //空格跳过
-                int currNum = board[i][j] - '0';
-                if(row[i][currNum]) return false; //i行信息判断是否已经出现相同数字
-                if(col[j][currNum]) return false; //j列信息判断是否已经出现相同信息
-                if(box[j/3+ (i/3)*3][currNum]) return false;
-                //关键点在于此次，j/3+ (i/3)*3表示第几个9*9的子矩阵
-                row[i][currNum] = 1;
-                col[j][currNum] = 1;
-                box[j/3+ (i/3)*3][currNum] = 1; //如果不曾出现，赋值对应位置，记录表明已经出现
-            }
-        }
-        return true;
-    }
-};
-```
 
 leetcode38
 
@@ -1397,108 +1115,8 @@ public:
 
 
 
-leetcode 39 
-
-> 深度优先搜索+回溯+剪枝
-
-[组合总数](https://leetcode.cn/problems/combination-sum/)
-
-```c++
-输入：candidates = [2,3,6,7], target = 7
-输出：[[2,2,3],[7]]
-解释：
-2 和 3 可以形成一组候选，2 + 2 + 3 = 7 。注意 2 可以使用多次。
-7 也是一个候选， 7 = 7 。
-仅有这两种组合。
-```
 
 
-
-```c++
-class Solution {
-public:
-    void helper(vector<int>&candidates, int target, int begin, vector<vector<int>>& res, vector<int>& path, int pathSum){
-        if (pathSum == target){
-            res.push_back(path);
-            return; //当前路径之和等于目标值则存入结果，并且返回
-        }
-        for (int i = begin; i < candidates.size(); i++){
-            if (pathSum + candidates[i] <= target){ //此次过滤掉大于目标值的搜索
-                pathSum = pathSum + candidates[i];
-                path.push_back(candidates[i]); //推入当前路径记录
-                helper(candidates,target,i,res,path,pathSum);
-                path.pop_back(); //记得弹出
-                pathSum = pathSum - candidates[i];//记得将路径和进行还原
-            }
-        }
-        return;
-    }
-    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        vector<vector<int>> res;
-        vector<int> path;
-        int pathSum = 0;
-        int begin = 0;
-        helper(candidates,target,begin,res,path,pathSum);
-        return res;
-        //要点在于(1)搜索结束的还原 (2) 非必要搜索的过滤，降低搜索的复杂度
-    }
-};
-```
-
-leetcode40 
-
-[组合总和 II](https://leetcode.cn/problems/combination-sum-ii/)
-
-> 深度优先搜索+回溯剪枝
-
-```c++
-输入: candidates = [10,1,2,7,6,1,5], target = 8,
-输出:
-[
-[1,1,6],
-[1,2,5],
-[1,7],
-[2,6]
-]
-```
-
-
-
-```c++
-class Solution {
-public:
-    void helper(vector<int>& candidates, int target, int begin, vector<int>& path, vector<vector<int>>& res, int pathSum){
-        if (pathSum == target){
-            res.push_back(path);
-            return; //目标值记录并且返回
-        }
-        set<int> layNum;
-        //每一层的搜索进行去重
-        for (int i = begin; i < candidates.size(); i++){
-            if ((pathSum + candidates[i] <= target) && layNum.find(candidates[i]) == layNum.end()){
-                //剪枝，包含是否操作目标值和是否在当前层搜索过的剪枝
-                layNum.insert(candidates[i]); //层信息的更新
-                pathSum = pathSum + candidates[i];
-                path.push_back(candidates[i]);
-                helper(candidates,target, i + 1,path,res,pathSum);
-                pathSum = pathSum - candidates[i];
-                path.pop_back(); //路径的恢复
-            }
-        }
-        return;
-    }
-
-    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        sort(candidates.begin(), candidates.end()); //排序
-        vector<vector<int>> res;
-        vector<int> path;
-        int pathSum = 0;
-        helper(candidates,target,0,path,res,pathSum);
-        return res;
-
-    }
-};
-```
 
 leetcode 43 
 
@@ -1565,152 +1183,11 @@ public:
 };
 ```
 
-leetcode45 
-
-[跳跃游戏 II](https://leetcode.cn/problems/jump-game-ii/)
-
-> 动态规划/贪心
-
-```c++
-输入: nums = [2,3,1,1,4]
-输出: 2
-解释: 跳到最后一个位置的最小跳跃数是 2。
-     从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。
-```
 
 
 
-```c++
-class Solution {
-public:
-    int jump(vector<int>& nums) {
-        int n = nums.size();
-        int maxpos = 0;
-        int end = 0;
-        int step = 0;
-        for (int i = 0; i < n - 1; i++){
-            if (i <= maxpos){
-                maxpos = max(maxpos, i + nums[i]);
-            }
-            if (i == end){
-                end = maxpos;
-                step = step + 1;
-            }
-        }
-        return step;
-        //维护一个当前能够到达的最远边界
-        //如果遍历已经到达边界，更新边界值
-    }
-};
-```
 
-leetcode46 
 
-[全排列](https://leetcode.cn/problems/permutations/description/)
-
-> 深度优先搜索
-
-```c++
-输入：nums = [1,2,3]
-输出：[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
-```
-
-```c++
-class Solution {
-public:
-    void dfs(vector<int>& nums, vector<int>& path, vector<vector<int>>& res, vector<int>& flag){
-        if(path.size() == nums.size()){
-            res.emplace_back(path);
-            return;
-        }
-        for (int i = 0; i < nums.size(); i++){
-            if(flag[i]) continue;
-            path.push_back(nums[i]);
-            flag[i] = 1;
-            dfs(nums,path,res,flag);
-            path.pop_back();
-            flag[i] = 0; //用flag数组来记录数据是否被访问过，和之前的层去重有相同的作用
-            			//因为已经排序过了，无须再进行排序
-        }
-    }
-    vector<vector<int>> permute(vector<int>& nums) {
-        vector<vector<int>> res;
-        vector<int> path;
-        vector<int> flag(nums.size(),0);
-        dfs(nums, path, res, flag);
-        return res;
-    }
-};
-```
-
-leetcode47 
-
-[全排列 II](https://leetcode.cn/problems/permutations-ii/)
-
-```c++
-输入：nums = [1,1,2]
-输出：
-[[1,1,2],
- [1,2,1],
- [2,1,1]]
-```
-
-```c++
-class Solution {
-public:
-    void dfs(vector<int>& nums, vector<int>& path, vector<vector<int>>& res, vector<int>& flag){
-        if(path.size() == nums.size()){
-            res.emplace_back(path);
-            return;
-        }
-        for (int i = 0 ; i < nums.size(); i++){
-            if(flag[i] == 1|| (i > 0 && nums[i] == nums[i - 1] && flag[i - 1])) continue;
-            //除去判断是否已经被使用过以外，并且需要判断和前一个值是否相同
-            path.push_back(nums[i]);
-            flag[i] = 1;
-            dfs(nums,path,res,flag);
-            flag[i] = 0;
-            path.pop_back();
-        }
-    }
-    vector<vector<int>> permuteUnique(vector<int>& nums) {
-        vector<vector<int>> res;
-        vector<int> path;
-        vector<int> flag(nums.size(), 0);
-        sort(nums.begin(), nums.end()); //先进行排序
-        dfs(nums,path,res,flag);
-        return res;
-    }
-```
-
-leetcode 48 
-
-[旋转图像](https://leetcode.cn/problems/rotate-image/)
-
-```c++
-输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
-输出：[[7,4,1],[8,5,2],[9,6,3]]
-```
-
-```c++
-class Solution {
-public:
-    void rotate(vector<vector<int>>& matrix) {
-        int n = matrix.size();
-        for (int i = 0; i < n / 2; i++){
-            for (int j = 0; j < (n + 1)/ 2; j++){
-                int temp = matrix[i][j];
-                matrix[i][j] = matrix[n - j - 1][i];
-                matrix[n - j - 1][i] = matrix[n - i - 1][n - j - 1];
-                matrix[n - i - 1][n - j - 1] = matrix[j][n - i - 1];
-                matrix[j][n - i - 1] = temp;
-            }
-        } 
- 		// 通过分析旋转的规律，可以知道(i,j)->(j, n-i-1)
-        return;
-    }
-};
-```
 
 leetcode49 
 
@@ -1782,119 +1259,10 @@ public:
 };
 ```
 
-leetcode53
-
-[最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
-
-> 动态规划，定义为以num[i]为结尾的最大子数组和作为寻优目标。
-
-```c++
-输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
-输出：6
-解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
-```
 
 
 
-```c++
-class Solution {
-public:
-    int maxSubArray(vector<int>& nums) { 
-        vector<int> dp(nums.size(), 0);
-        dp[0] = nums[0];
-        int ret = nums[0]; 
-        for (int i = 1; i < nums.size(); i++){
-            dp[i] = max(dp[i - 1] + nums[i], nums[i]); //必须取num[i]
-            //只有2种情况，一种前面大于0，一种前面小于0 
-            ret = max(ret, dp[i]);
-        }
-        return ret;
-    }
-};
-```
 
-leetcode 54 
-
-[螺旋矩阵](https://leetcode.cn/problems/spiral-matrix/)
-
-> 矩阵遍历
-
-```c++
-输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
-输出：[1,2,3,6,9,8,7,4,5]
-```
-
-```c++
-class Solution {
-public:
-void helper(vector<vector<int>>& matrix, int x1, int y1, int x2, int y2, vector<int>& path){
-        if (x1 > x2 || y1 > y2) return;
-
-        if (x1 == x2 && y1 != y2){
-            for (int i = y1; i <= y2; i++){
-            path.push_back(matrix[x1][i]);
-            }
-        } 
-        else if (x1 != x2 && y1 == y2){
-            for (int i = x1; i <= x2; i++){
-                path.push_back(matrix[i][y1]);
-                }   
-        } 
-        else if (x1 == x1 && y1 == y2){
-            path.push_back(matrix[x1][y1]);
-        } else {
-            for (int i = y1; i <= y2; i++){
-                path.push_back(matrix[x1][i]);
-            }
-            for (int i = x1 + 1; i <= x2; i++){
-                path.push_back(matrix[i][y2]);
-            }
-            for (int i = y2 - 1; i >= y1; i--){
-                path.push_back(matrix[x2][i]);
-            }
-            for (int i = x2 - 1; i > x1; i--){
-                path.push_back(matrix[i][y1]);
-            }
-        }
-        helper(matrix, x1 + 1,y1 + 1,x2 - 1, y2 - 1, path);
-        return;
-    };
-    vector<int> spiralOrder(vector<vector<int>>& matrix) {
-        vector<int>path;
-        helper(matrix,0,0,matrix.size() - 1, matrix[0].size() - 1,path);
-        return path;
-    }
-};
-```
-
-leetcode 55
-
-[跳跃游戏](https://leetcode.cn/problems/jump-game/)
-
-> 动态规划，参考跳跃游戏II的做法
-
-```c++
-输入：nums = [2,3,1,1,4]
-输出：true
-解释：可以先跳 1 步，从下标 0 到达下标 1, 然后再从下标 1 跳 3 步到达最后一个下标。
-```
-
-```c++
-class Solution {
-public:
-    bool canJump(vector<int>& nums) {
-        int rightmost = 0;
-        for (int i = 0; i < nums.size(); i++){
-            if (i <= rightmost){
-                rightmost = max(rightmost, i + nums[i]);
-            }
-            if (rightmost >= nums.size() - 1) return true;
-        }
-        return false;
-
-    }
-};
-```
 
 leetcode 56
 
@@ -2015,215 +1383,9 @@ public:
 };
 ```
 
-## leetcode59 
-
-[螺旋矩阵 II](https://leetcode.cn/problems/spiral-matrix-ii/)
-
-> 矩阵遍历操作
-
-```c++
-输入：n = 3
-输出：[[1,2,3],[8,9,4],[7,6,5]]
-```
-
-```c++
-class Solution {
-public:
-void helper(vector<vector<int>>& matrix, int x1, int y1, int x2, int y2, int& curr){
-        if (x1 > x2 || y1 > y2) return;
-        
-        if (x1 == x1 && y1 == y2){
-            matrix[x1][y1] = curr;
-            return;
-        } else {
-            for (int i = y1; i <= y2; i++){
-                matrix[x1][i] = curr;
-                curr = curr + 1;
-            }
-            for (int i = x1 + 1; i <= x2; i++){
-                matrix[i][y2] = curr;
-                curr = curr + 1;
-            }
-            for (int i = y2 - 1; i >= y1; i--){
-                matrix[x2][i] = curr;
-                curr =curr + 1;
-            }
-            for (int i = x2 - 1; i > x1; i--){
-                matrix[i][y1] = curr;
-                curr = curr + 1;
-            }
-        }
-        helper(matrix,x1+1,y1+1,x2-1,y2-1,curr);
-        return;
-
-    };
-    vector<vector<int>> generateMatrix(int n) {
-        vector<int> row(n,0);
-        vector<vector<int>> ret(n, row);
-        int curr = 1;
-        helper(ret,0,0,n-1,n-1,curr);
-        return ret;
-    }
-};
-```
 
 
 
-## leetcode61 
-
-[旋转链表](https://leetcode.cn/problems/rotate-list/)
-
-> 链表操作
-
-```c++
-输入：head = [1,2,3,4,5], k = 2
-输出：[4,5,1,2,3]
-```
-
-
-
-```c++
-class Solution {
-public:
-    ListNode* rotateRight(ListNode* head, int k) {
-        if (!head||!head->next) return head;
-        ListNode* curr = head;
-        int length = 1;
-        while(curr->next){
-            length += 1;
-            curr = curr->next;
-        } // 计算链表长度，为了求余k
-        curr->next = head; //链表末尾连接头部
-        k = length -  k % length;
-        curr = head;
-        while(k > 1){
-            curr = curr->next;
-            k = k - 1;
-        }  //找到位置断开
-        ListNode* res = curr->next;
-        curr->next = nullptr;
-        return res;
-
-    }
-};
-```
-
-## LeetCode62 
-
-[不同路径](https://leetcode.cn/problems/unique-paths/)
-
-> 动态规划
-
-```c++
-输入：m = 3, n = 2
-输出：3
-解释：
-从左上角开始，总共有 3 条路径可以到达右下角。
-1. 向右 -> 向下 -> 向下
-2. 向下 -> 向下 -> 向右
-3. 向下 -> 向右 -> 向下
-```
-
-
-
-```c++
-class Solution {
-public:
-    int uniquePaths(int m, int n) {
-        int matrix[m][n];
-        for (int i = 0; i < m; i++){
-            for (int j = 0; j < n; j++){
-                matrix[i][j] = 1;
-            }
-        } // 这步其实只要把第一行和第一列的数据设置为1，方便后面的计算
-        
-        for (int i = 1; i < m; i++){
-            for (int j = 1; j < n; j++){
-                matrix[i][j] = matrix[i-1][j] + matrix[i][j-1];
-                //动态规划，即到达当前点的路径数量 = 到达当前点的上方的路径数量 + 到达当前点左侧的路径的数量
-            }
-        }
-        return matrix[m-1][n-1];
-    }
-```
-
-## leetcode63 
-
-[不同路径 II](https://leetcode.cn/problems/unique-paths-ii/)
-
-> 和62题类似的动态规划
-
-```c++
-输入：obstacleGrid = [[0,0,0],[0,1,0],[0,0,0]]
-输出：2
-解释：3x3 网格的正中间有一个障碍物。
-从左上角到右下角一共有 2 条不同的路径：
-1. 向右 -> 向右 -> 向下 -> 向下
-2. 向下 -> 向下 -> 向右 -> 向右
-```
-
-
-
-```c++
-class Solution {
-public:
-    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
-        int row = obstacleGrid.size();
-        int col = obstacleGrid[0].size();
-
-        vector<vector<int>> matrix(row, vector<int>(col, 0));
-        for(int i = 0; i < row; i++){
-            for(int j = 0; j < col; j++){
-                if(obstacleGrid[i][j] == 1){ matrix[i][j] = 0; continue; }
-                // 判断是不是被堵住了
-                if(i + j == 0) {matrix[0][0] = 1; continue;}
-                //设定初始值
-                int left = (i - 1 >= 0 ? matrix[i - 1][j] : 0);
-                int up = (j - 1 >= 0 ? matrix[i][j - 1] : 0);
-                //计算左侧和上方的路径数，记得判断边界值
-                matrix[i][j] = left + up;
-            }
-        }
-        return matrix[row - 1][col - 1];
-    }
-};
-```
-
-
-
-## LeetCode64
-
-[最小路径和](https://leetcode.cn/problems/minimum-path-sum/)
-
-> 动态规划 + 贪心
-
-```c++
-输入：grid = [[1,3,1],[1,5,1],[4,2,1]]
-输出：7
-解释：因为路径 1→3→1→1→1 的总和最小。
-```
-
-```c++
-class Solution {
-public:
-    int minPathSum(vector<vector<int>>& grid) {
-        for(int i = 1; i < grid.size(); i++){
-            grid[i][0] = grid[i][0] + grid[i - 1][0];
-        }
-        for(int j = 1; j < grid[0].size(); j++){
-            grid[0][j] = grid[0][j] + grid[0][j - 1];
-        } // 上述分别计算了第一行和第一列的最小值，第一行和第一列只存在一个路径
-        for (int i = 1; i < grid.size(); i++){
-            for(int j = 1; j < grid[0].size(); j++){
-                grid[i][j] = min(grid[i-1][j], grid[i][j - 1]) + grid[i][j];
-            }
-        } //贪心，到达当前点的方法只有从上方和左侧，计算其最小值即可
-        int row = grid.size() - 1;
-        int col = grid[0].size() - 1;
-        return grid[row][col];
-    }
-};
-```
 
 
 
@@ -2336,41 +1498,6 @@ public:
 };
 ```
 
-## LeetCode70 
-
-[爬楼梯](https://leetcode.cn/problems/climbing-stairs/)
-
-> 动态规划
-
-```c++
-输入：n = 3
-输出：3
-解释：有三种方法可以爬到楼顶。
-1. 1 阶 + 1 阶 + 1 阶
-2. 1 阶 + 2 阶
-3. 2 阶 + 1 阶
-```
-
-```c++
-class Solution {
-public:
-    int climbStairs(int n) {
-        if (n == 1) return 1;
-        if (n == 2) return 2;
-        int a_1 = 1;
-        int a_2 = 2;
-        int res = 0;
-        while(n - 3 >= 0){
-            res = a_1 + a_2;
-            a_1 = a_2;
-            a_2 = res;
-            n = n - 1;
-        }
-        return res;
-    }
-};
-```
-
 
 
 ## leetcode71
@@ -2416,85 +1543,9 @@ public:
 
 
 
-## leetcode73
 
-[矩阵置零](https://leetcode.cn/problems/set-matrix-zeroes/)
-
-> 矩阵操作
-
-```c++
-输入：matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
-输出：[[0,0,0,0],[0,4,5,0],[0,3,1,0]]
 ```
 
-
-
-```c++
-class Solution {
-public:
-    void setZeroes(vector<vector<int>>& matrix) {
-        set<int> row;
-        set<int> col;
-        for (int i = 0; i < matrix.size(); i++){
-            for (int j = 0; j < matrix[0].size(); j++){
-                if (matrix[i][j] == 0){
-                    row.insert(i);
-                    col.insert(j);
-                }
-            } //找到所有出现过0的行和列
-        }
-        for (int i = 0; i < matrix.size(); i++){
-            for (int j = 0; j < matrix[0].size(); j++){
-                if (row.find(i) != row.end() || col.find(j) != col.end()){
-                    matrix[i][j] = 0;
-                }
-            }
-        } //对行和列进行置0操作
-        return;
-    }
-};
-```
-
-## LeetCode74 
-
-[搜索二维矩阵](https://leetcode.cn/problems/search-a-2d-matrix/)
-
-> 矩阵操作
-
-```c++
-输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13
-输出：false
-```
-
-
-
-```c++
-class Solution {
-public:
-
-    bool searchMatrix(vector<vector<int>>& matrix, int target) {
-        int row = matrix.size();
-        int col = matrix[0].size();
-
-        int start = 0;
-        int end = matrix.size() * matrix[0].size() - 1;
-
-        while(start <= end){
-            int mid = start + (end - start) / 2;
-            int i = mid / col;
-            int j = mid % col;
-            if (matrix[i][j] == target) return true;
-            if (matrix[i][j] > target){
-                end = mid - 1;
-            } else {
-                start = mid + 1; //二分查找，主要是行和列的变化
-            }
-        }
-        return false;
-
-    }
-};
-```
 
 ## leetcode75 (没看懂)
 
@@ -2546,140 +1597,15 @@ public:
 
 
 
-## leetcode77
-
-[组合](https://leetcode.cn/problems/combinations/)
-
-> 深度优先遍历+回溯
-
-```c++
-输入：n = 4, k = 2
-输出：
-[
-  [2,4],
-  [3,4],
-  [2,3],
-  [1,2],
-  [1,3],
-  [1,4],
-]
 ```
 
 
 
-```c++
-class Solution {
-public:
-    void helper(int n, int k, int begin, vector<vector<int>>& res, vector<int>& path){
-        if (path.size() == k){
-            res.push_back(path);
-            return;
-        }
-        for (int i = begin; i <= n; i++){
-            if (path.size() <= k){
-                path.push_back(i);
-                helper(n, k, i + 1, res, path);
-                path.pop_back();
-            }
-        }
-        return;
-    }
-    vector<vector<int>> combine(int n, int k) {
-        vector<vector<int>> res;
-        vector<int> path;
-        helper(n,k,1,res,path);
-        return res;
 
-    }
-};
-
-```
-
-
-
-## leetcode78
-
-[子集](https://leetcode.cn/problems/subsets/)
-
-> 深度优先遍历+条件终止
-
-```c++
-输入：nums = [1,2,3]
-输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
-```
-
-
-
-````c++
-class Solution {
-public:
-    void helper(vector<int>& nums, int begin, vector<int> path, vector<vector<int>>& ret){
-        if(path.size() <= nums.size()) ret.push_back(path);
-            
-        for(int i = begin; i < nums.size(); i++){
-            path.push_back(nums[i]);
-            helper(nums, i + 1, path, ret);
-            path.pop_back();
-        }
-        return;
-    }
-    vector<vector<int>> subsets(vector<int>& nums) {
-        vector<int> path;
-        vector<vector<int>> ret;
-        helper(nums, 0, path,ret);
-        return ret;
-
-    }
-};
 ````
 
 
 
-## leetcode79
-
-[单词搜索](https://leetcode.cn/problems/word-search/)
-
-> 深度优先遍历+条件终止
-
-```c++
-输入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
-输出：true
-```
-
-
-
-```c++
-class Solution {
-public:
-    bool helper(vector<vector<char>>& board, string word, int x, int y, int index, vector<vector<int>>& record){
-        if (x < 0 or y < 0 or x >= board.size() or y >= board[0].size() or record[x][y] == 1) return false;
-        if (word[index] != board[x][y]) return false;
-        if (word[index] == board[x][y] && index == word.size() - 1) return true;
-
-        record[x][y] = 1;
-        bool up = helper(board,word,x - 1,y,index + 1,record);
-        bool down = helper(board,word,x + 1,y,index + 1,record);
-        bool left = helper(board,word,x,y - 1,index + 1,record);
-        bool right = helper(board,word,x,y + 1,index + 1,record);
-        record[x][y] = 0;
-
-        return up||down||left||right;
-
-    }
-    bool exist(vector<vector<char>>& board, string word) {
-        vector<int> row(board[0].size(), 0);
-        vector<vector<int>> record(board.size(), row);
-
-        for(int i = 0; i < board.size(); i++){
-            for (int j = 0;j < board[0].size();j++){
-                bool res = helper(board,word,i,j,0,record);
-                if(res) return res;
-            }
-        }
-        return false;
-
-    }
-};
 ```
 
 
@@ -2770,44 +1696,56 @@ public:
 
 
 
-## leetcode82
 
-[删除排序链表中的重复元素 II](https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/)
 
-> 链表操作
+
+
+
+
+
+
+
+## leetcode88
+
+[合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
+
+> 双指针，或者逆向双指针
 
 ```c++
-输入：head = [1,2,3,3,4,4,5]
-输出：[1,2,5]
+输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
+输出：[1,2,2,3,5,6]
+解释：需要合并 [1,2,3] 和 [2,5,6] 。
+合并结果是 [1,2,2,3,5,6] ，其中斜体加粗标注的为 nums1 中的元素。
 ```
-
-
 
 ```c++
 class Solution {
 public:
-    ListNode* deleteDuplicates(ListNode* head) {
-        if (!head || !head->next) return head;
-        ListNode* dummy = new ListNode(-1000);
-        dummy->next = head; //创建虚拟头节点
-        ListNode* pre = dummy;
-        ListNode* curr = head;
-        while(curr && curr->next){
-            //边界条件的设置
-            if (curr->val == curr->next->val){
-                int temp = curr->val;
-                while(curr && curr->val == temp){
-                    curr = curr->next;
-                    // 如果存在相同的，一直遍历到最后一个，然后进行更改节点
-                }
-                pre->next = curr;
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        vector<int> res(m + n, 0); //将结果存储到新的表格中
+        int index_m = 0;
+        int index_n = 0;
+        int curr;
+        while(index_m < m || index_n < n){
+            if (index_m == m){
+                curr = nums2[index_n];
+                index_n = index_n + 1;
+            } else if (index_n == n){
+                curr = nums1[index_m];
+                index_m = index_m + 1;
+            } else if (nums1[index_m] > nums2[index_n]){
+                curr = nums2[index_n];
+                index_n = index_n + 1;
             } else {
-                pre = pre->next;
-                curr = curr->next;
-                //不相同的情况的处理
+                curr = nums1[index_m];
+                index_m = index_m + 1;
             }
+            res[index_m + index_n - 1] = curr; 
+            //两个指针遍历不同的数组，判断其大小
         }
-        return dummy->next;
+        for (int i = 0; i < m + n; i++){
+            nums1[i] = res[i];
+        } 
 
     }
 };
@@ -2815,15 +1753,28 @@ public:
 
 
 
-## leetcode83
+## leetcode89
 
-[删除排序链表中的重复元素](https://leetcode.cn/problems/remove-duplicates-from-sorted-list/)
+[格雷编码](https://leetcode.cn/problems/gray-code/)
 
-> 链表操作
+> 位运算题目，考虑n=3的情况；在n=2的情况下，先将n=2的全部左移一位，然后反转；再将n=2的结果左移，末尾加1,二者拼接在一起，就是结果。
+
+
 
 ```c++
-输入：head = [1,1,2,3,3]
-输出：[1,2,3]
+输入：n = 2
+输出：[0,1,3,2]
+解释：
+[0,1,3,2] 的二进制表示是 [00,01,11,10] 。
+- 00 和 01 有一位不同
+- 01 和 11 有一位不同
+- 11 和 10 有一位不同
+- 10 和 00 有一位不同
+[0,2,3,1] 也是一个有效的格雷码序列，其二进制表示是 [00,10,11,01] 。
+- 00 和 10 有一位不同
+- 10 和 11 有一位不同
+- 11 和 01 有一位不同
+- 01 和 00 有一位不同
 ```
 
 
@@ -2831,67 +1782,103 @@ public:
 ```c++
 class Solution {
 public:
-    ListNode* deleteDuplicates(ListNode* head) {
-        if (!head || !head->next) return head;
-        ListNode* pre = head;
-        ListNode* curr = head->next;
-        while(curr){
-            if (pre->val == curr->val){
-                pre->next = curr->next;
-                curr = curr->next;
-            } else {
-                pre = pre->next;
-                curr = curr->next;
-            }
+    vector<int> grayCode(int n) {
+        if (n == 1) {
+            vector<int> ret = {0, 1};
+            return ret;
         }
-        return head;
-        //同上一题，相同做法。
+        vector<int> ret = grayCode(n - 1); //递归
+        vector<int> first(ret.size(), 0);
+        vector<int> second(ret.size(), 0);
+
+        for (int i = 0; i < ret.size(); i++){
+            first[i] = (ret[i] << 1); //左移
+            second[i] = ((ret[i] << 1) + 0x1); //左移+1
+        }
+        reverse(second.begin(), second.end()); 
+        first.insert(first.end(),second.begin(),second.end()); //反转拼接
+        return first;
+
     }
 };
 ```
 
 
 
-## LeetCode86(待完善新的做法)
 
-[分割链表](https://leetcode.cn/problems/partition-list/)
 
-> 链表操作
+
+
+## leetcode91
+
+[解码方法](https://leetcode.cn/problems/decode-ways/)
+
+> 动态规划；dp[i]有两种情况，如果前一位不为0，那么至少有前一位的可能性；如果前一位+当前位<=26，可以组合成新的可能，那么即dp[i-2]的可能性也都在里面。
 
 ```c++
-输入：head = [1,4,3,2,5,2], x = 3
-输出：[1,2,2,4,3,5]
+输入：s = "226"
+输出：3
+解释：它可以解码为 "BZ" (2 26), "VF" (22 6), 或者 "BBF" (2 2 6) 。
 ```
+
+
 
 ```c++
 class Solution {
 public:
-    ListNode* partition(ListNode* head, int x) {
-        if (!head || !head->next) return head;
-        ListNode* dummy = new ListNode(-1);
-        dummy->next = head; //虚拟头结点设置
-        ListNode* pre = dummy;
-        ListNode* next = pre->next; //先后节点设置
-        while(next && next->val < x){
-            next = next->next;
-            pre = pre->next;
-        } //找到第一个大于x的链表节点
-        if (!next) return head;
-        while(next->next){
-            if (next->next->val >= x){
-                next = next->next;
-            }else {
-                ListNode* temp1 = next->next;
-                next->next = temp1->next;
-                ListNode* temp2 = pre->next;
-                pre->next = temp1;
-                temp1->next = temp2;
-                pre = pre->next;
+    int numDecodings(string s) {
+        int n = s.size();
+        vector<int> ret(n + 1, 0);
+        ret[0] = 1; //此处，注意多设置前头1的情况。
+        for (int i = 1; i <= n; i++){
+            if (s[i - 1] != '0'){
+                ret[i] += ret[i - 1];
+            }
+            if (i > 1 && s[i - 2] != '0' && (s[i - 2] - '0') *10 + (s[i - 1] - '0') <= 26){
+                ret[i] += ret[i - 2];
             }
         }
-        return dummy->next;
+        return ret[n];
 
     }
 };
 ```
+
+
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

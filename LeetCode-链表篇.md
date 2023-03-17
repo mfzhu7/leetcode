@@ -1,0 +1,431 @@
+# LeetCode-链表篇
+
+[toc]
+
+
+
+leetcode2 
+
+[两数相加](https://leetcode.cn/problems/add-two-numbers/)
+
+题干信息
+
+```c++
+输入：l1 = [2,4,3], l2 = [5,6,4]
+输出：[7,0,8]
+解释：342 + 465 = 807.
+```
+
+题解如下：
+
+```c++
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* n1 = l1;
+        ListNode* n2 = l2;
+        ListNode* dummy = new ListNode(-1); //虚拟头节点的处理
+        ListNode* temp = dummy;
+        int carry = 0;
+        int l1_val = 0;
+        int l2_val = 0;
+        while(n1 || n2){
+            l1_val = n1?n1->val:0;
+            l2_val = n2?n2->val:0;
+            ListNode* tmp = new ListNode((l1_val+l2_val+carry) % 10);
+            carry = (l1_val+l2_val+carry) / 10; //进位的处理
+            temp->next = tmp;
+            temp = temp->next;
+            n1 = n1?n1->next:n1;
+            n2 = n2?n2->next:n2;
+        }
+        if (carry){
+            ListNode* tmp = new ListNode(1);
+            temp->next = tmp;
+            return dummy->next;
+        }else {
+            return dummy->next; //最后是否进位的判断
+        }
+    
+    }
+};
+```
+
+
+
+
+
+leetcode19
+
+[删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/)
+
+快慢指针
+
+```cpp
+输入：head = [1,2,3,4,5], n = 2
+输出：[1,2,3,5]
+```
+
+```c++
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* dummy = new ListNode(-1);
+        dummy->next = head;
+        ListNode* first = dummy;
+        ListNode* second = dummy->next;
+        //注意虚拟节点的设置
+        while(n - 1 > 0){
+            second = second->next;
+            n = n - 1;
+        } //快慢指针写法，快指针先走n-1步
+        while(second->next){
+            second = second->next;
+            first = first->next;
+        }//快慢指针同时走，直到快指针到对尾巴
+        first->next = first->next->next;
+        //改变节点连接
+        return dummy->next;
+        //返回头结点
+
+    }
+};
+```
+
+
+
+
+
+leetcode21 
+
+[合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/)
+
+```c++
+输入：l1 = [1,2,4], l2 = [1,3,4]
+输出：[1,1,2,3,4,4]
+```
+
+```cpp
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        if (!list1 || !list2) return list1?list1:list2; //判空处理
+        ListNode* res = list1->val > list2->val ? list2 : list1;
+        //保存头结点，把数据保存在头结点较小的链表中
+        ListNode* curr1 = res; 
+        ListNode* curr2 = list1->val > list2->val ? list1:list2;
+		//遍历过程的2个链表的指针
+        while(curr1 && curr1->next && curr2){
+            //保证curr1和curr1的下一个节点不为空
+            if (curr1->next->val >= curr2->val){
+                //如果curr1的下一个节点的数值较大，即curr2要插入其中
+                ListNode* temp = curr1->next;
+                //记录curr1的下一个节点
+                curr1->next = curr2;
+                //重新指向curr1->next
+                curr2 = curr2->next;
+               	//curr2进行移动
+                curr1->next->next = temp;
+                //curr1的next的next节点进行移动
+                curr1 = curr1->next;
+                //curr1移动
+            } else {
+                curr1 = curr1->next;
+            }
+        }
+        if (curr2){
+            curr1->next = curr2; //需要判断curr2是否已经结束
+        }
+        return res;
+    }
+};
+
+//递归写法
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if (l1 == nullptr) {
+            return l2;
+        } else if (l2 == nullptr) {
+            return l1;
+        } else if (l1->val < l2->val) {
+            l1->next = mergeTwoLists(l1->next, l2);
+            return l1;
+        } else {
+            l2->next = mergeTwoLists(l1, l2->next);
+            return l2;
+        }
+    }
+};
+
+
+```
+
+
+
+leetcode24
+
+[两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/)
+
+```c++
+输入：head = [1,2,3,4]
+输出：[2,1,4,3]
+```
+
+```cpp
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        if(!head || !head->next) return head;//判空处理
+        ListNode* dummy = new ListNode(-1);
+        dummy->next = head; //虚拟节点设置
+        ListNode* pre = dummy;
+        ListNode* curr = dummy->next; //设置先后节点
+
+        while(curr && curr->next) {
+            ListNode* temp = curr->next;
+            curr->next = curr->next->next;
+            pre->next = temp;
+            temp->next = curr;
+            pre = curr; //节点变更操作，主要在于要有prev节点的记录，便于链表进行操作
+            curr = curr->next;
+        }
+        return dummy->next;
+    }
+};
+
+//递归的官方解法
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        if (head == nullptr || head->next == nullptr) {
+            return head;
+        }
+        ListNode* newHead = head->next;
+        head->next = swapPairs(newHead->next);
+        newHead->next = head;
+        return newHead;
+    }
+};
+
+```
+
+## leetcode61 
+
+[旋转链表](https://leetcode.cn/problems/rotate-list/)
+
+> 链表操作
+
+```c++
+输入：head = [1,2,3,4,5], k = 2
+输出：[4,5,1,2,3]
+```
+
+
+
+```c++
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if (!head||!head->next) return head;
+        ListNode* curr = head;
+        int length = 1;
+        while(curr->next){
+            length += 1;
+            curr = curr->next;
+        } // 计算链表长度，为了求余k
+        curr->next = head; //链表末尾连接头部
+        k = length -  k % length;
+        curr = head;
+        while(k > 1){
+            curr = curr->next;
+            k = k - 1;
+        }  //找到位置断开
+        ListNode* res = curr->next;
+        curr->next = nullptr;
+        return res;
+
+    }
+};
+```
+
+## leetcode82
+
+[删除排序链表中的重复元素 II](https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/)
+
+> 链表操作
+
+```c++
+输入：head = [1,2,3,3,4,4,5]
+输出：[1,2,5]
+```
+
+
+
+```c++
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        if (!head || !head->next) return head;
+        ListNode* dummy = new ListNode(-1000);
+        dummy->next = head; //创建虚拟头节点
+        ListNode* pre = dummy;
+        ListNode* curr = head;
+        while(curr && curr->next){
+            //边界条件的设置
+            if (curr->val == curr->next->val){
+                int temp = curr->val;
+                while(curr && curr->val == temp){
+                    curr = curr->next;
+                    // 如果存在相同的，一直遍历到最后一个，然后进行更改节点
+                }
+                pre->next = curr;
+            } else {
+                pre = pre->next;
+                curr = curr->next;
+                //不相同的情况的处理
+            }
+        }
+        return dummy->next;
+
+    }
+};
+```
+
+
+
+## leetcode83
+
+[删除排序链表中的重复元素](https://leetcode.cn/problems/remove-duplicates-from-sorted-list/)
+
+> 链表操作
+
+```c++
+输入：head = [1,1,2,3,3]
+输出：[1,2,3]
+```
+
+
+
+```c++
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        if (!head || !head->next) return head;
+        ListNode* pre = head;
+        ListNode* curr = head->next;
+        while(curr){
+            if (pre->val == curr->val){
+                pre->next = curr->next;
+                curr = curr->next;
+            } else {
+                pre = pre->next;
+                curr = curr->next;
+            }
+        }
+        return head;
+        //同上一题，相同做法。
+    }
+};
+```
+
+## LeetCode86(待完善新的做法)
+
+[分割链表](https://leetcode.cn/problems/partition-list/)
+
+> 链表操作
+
+```c++
+输入：head = [1,4,3,2,5,2], x = 3
+输出：[1,2,2,4,3,5]
+```
+
+```c++
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        if (!head || !head->next) return head;
+        ListNode* dummy = new ListNode(-1);
+        dummy->next = head; //虚拟头结点设置
+        ListNode* pre = dummy;
+        ListNode* next = pre->next; //先后节点设置
+        while(next && next->val < x){
+            next = next->next;
+            pre = pre->next;
+        } //找到第一个大于x的链表节点
+        if (!next) return head;
+        while(next->next){
+            if (next->next->val >= x){
+                next = next->next;
+            }else {
+                ListNode* temp1 = next->next;
+                next->next = temp1->next;
+                ListNode* temp2 = pre->next;
+                pre->next = temp1;
+                temp1->next = temp2;
+                pre = pre->next;
+            }
+        }
+        return dummy->next;
+
+    }
+};
+```
+
+## leetcode92(还有头插法待实现)
+
+[反转链表 II](https://leetcode.cn/problems/reverse-linked-list-ii/)
+
+> 链表操作
+
+```c++
+输入：head = [1,2,3,4,5], left = 2, right = 4
+输出：[1,4,3,2,5]
+```
+
+
+
+```c++
+class Solution {
+public:
+    void reverseList(ListNode* head){
+        ListNode* pre = nullptr;
+        ListNode* curr = head;
+        while(curr){
+            ListNode* next = curr->next;
+            curr->next = pre;
+            pre = curr;
+            curr = next;
+        }
+    } // 反转链表
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        ListNode* dummy = new ListNode(-1);
+        dummy->next = head;
+        
+        ListNode* curr = dummy;
+        ListNode* leftNode = nullptr;
+        ListNode* rightNode = nullptr;
+        for (int i = 1;i < left; i++){
+            curr = curr->next;
+        }
+        leftNode = curr; //找到左节点
+        for (int j = 0; j < right - left + 1; j++){
+            curr = curr->next;
+        }
+        rightNode = curr; //找到右节点
+
+        ListNode* r_left = leftNode->next;
+        ListNode* r_right = rightNode->next;
+
+        leftNode->next = nullptr;
+        rightNode->next = nullptr;
+		//记录节点并且断开
+        
+        reverseList(r_left); // 反转链表
+
+        leftNode->next = rightNode;
+        r_left->next = r_right;
+        return dummy->next; // 重新连接
+    }
+};
+```
