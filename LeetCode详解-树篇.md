@@ -1,12 +1,10 @@
 # LeetCode详解-树篇
 
-
-
 [toc]
 
 
 
-## leetcode94(迭代法待实现)
+## LeetCode94(迭代法待实现)
 
 [二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/)
 
@@ -34,7 +32,7 @@ public:
     }
 ```
 
-## leetcode95
+## LeetCode95
 
 [ 不同的二叉搜索树 II](https://leetcode.cn/problems/unique-binary-search-trees-ii/)
 
@@ -75,7 +73,7 @@ public:
     }
 ```
 
-## leetcode96
+## LeetCode96
 
 [不同的二叉搜索树](不同的二叉搜索树)
 
@@ -105,7 +103,7 @@ public:
 };
 ```
 
-## leetcode98(中序遍历待实现)
+## LeetCode98(中序遍历待实现)
 
 [验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)
 
@@ -132,7 +130,7 @@ public:
 };
 ```
 
-## leetcode99(待完善)
+## LeetCode99(待完善)
 
 [恢复二叉搜索树](https://leetcode.cn/problems/recover-binary-search-tree/)
 
@@ -175,7 +173,7 @@ public:
     }
 ```
 
-## leetcode100
+## LeetCode100
 
 [相同的树](https://leetcode.cn/problems/same-tree/description/)
 
@@ -201,3 +199,428 @@ public:
     }
 };
 ```
+
+
+
+
+
+## LeetCode101(迭代待实现)
+
+[对称二叉树](https://leetcode.cn/problems/symmetric-tree/)
+
+> 递归+树结构
+
+```c++
+输入：root = [1,2,2,3,4,4,3]
+输出：true
+```
+
+
+
+```c++
+class Solution {
+public:
+    bool help(TreeNode* left, TreeNode* right){
+            if (!left && !right) return true;
+            if (!left || !right) return false;
+            if (left->val != right->val) return false;
+
+            return  help(left->right, right->left) && help(left->left, right->right);
+
+    }
+    bool isSymmetric(TreeNode* root) {
+            return help(root->left, root->right);
+    }
+```
+
+
+
+## LeetCode102
+
+[ 二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/)
+
+> 树结构+队列解答(广度优先遍历)
+
+```c++
+输入：root = [3,9,20,null,null,15,7]
+输出：[[3],[9,20],[15,7]]
+```
+
+
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if (!root) return res;
+        queue<TreeNode*> old_q;
+        queue<TreeNode*> new_q;
+        vector<int> level;
+        old_q.push(root);
+        level.push_back(root->val);
+        res.push_back(level);
+        level.clear();
+        while(!old_q.empty() || !new_q.empty()){
+            if (old_q.empty()){
+                res.push_back(level);
+                level.clear();
+                old_q = new_q;
+                queue<TreeNode*> temp;
+                new_q = temp;
+            } else {
+                TreeNode* node = old_q.front();
+                if (node->left) {
+                    new_q.push(node->left);
+                    level.push_back(node->left->val);
+                    }
+                if (node->right) {
+                    new_q.push(node->right);
+                    level.push_back(node->right->val);
+                }
+                old_q.pop();
+            }
+        }
+        return res;
+
+    }
+};
+```
+
+
+
+## LeetCode103
+
+[ 二叉树的锯齿形层序遍历](https://leetcode.cn/problems/binary-tree-zigzag-level-order-traversal/)
+
+> 树结构+堆栈遍历
+
+```c++
+输入：root = [3,9,20,null,null,15,7]
+输出：[[3],[20,9],[15,7]]
+```
+
+
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if (!root) return res;
+        stack<TreeNode*> stk1;
+        stack<TreeNode*> stk2;
+        stk1.push(root);
+        vector<int> level;
+        bool flag = true;
+        while(!stk1.empty() || !stk2.empty()){
+            if (!stk1.empty()){
+                while(!stk1.empty() && flag){
+                    level.push_back(stk1.top()->val);
+                    if (stk1.top()->left)  {stk2.push(stk1.top()->left);}
+                    if (stk1.top()->right) {stk2.push(stk1.top()->right);}
+                    stk1.pop();
+                }
+                while(!stk1.empty() && !flag){
+                    level.push_back(stk1.top()->val);
+                    if (stk1.top()->right)  {stk2.push(stk1.top()->right);}
+                    if (stk1.top()->left) {stk2.push(stk1.top()->left);}
+                    stk1.pop();
+                }
+                flag = !flag;
+                res.push_back(level);
+                level.clear();       
+            } else {
+                stack<TreeNode*> temp = stk2;
+                stk2 = stk1;
+                stk1 = temp;
+            }
+        }
+        return res;
+
+    }
+};
+```
+
+
+
+## LeetCode104
+
+[ 二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
+
+> 树+递归
+
+```c++
+给定一个二叉树，找出其最大深度。
+
+二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
+
+说明: 叶子节点是指没有子节点的节点。
+```
+
+
+
+```c++
+class Solution {
+public: 
+    int help(TreeNode* node){
+            if (!node) return 0;
+            return max(help(node->left) + 1, help(node->right) + 1);
+    }
+    int maxDepth(TreeNode* root) {
+            return help(root);
+    }
+};
+```
+
+
+
+## LeetCode105(迭代待实现)
+
+[从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+
+> 树结构+递归
+
+```c++
+输入: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+输出: [3,9,20,null,null,15,7]
+```
+
+
+
+```c++
+class Solution {
+public:
+    TreeNode* help(vector<int>& preorder, vector<int>& inorder,int& curr, int start, int end){
+        if (start > end) return {nullptr};
+        TreeNode* node = new TreeNode(preorder[curr]);
+        if (start == end) {
+            curr = curr + 1;
+            return node;
+        }
+        int place = -1;
+        for (int i = start; start <= end; i++){
+            if (inorder[i] == preorder[curr]){
+                place = i;
+                break;
+            }
+        }
+        curr = curr + 1;
+        node->left = help(preorder,inorder,curr,start,place - 1);
+        node->right = help(preorder,inorder,curr, place + 1, end);
+        return node;
+
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        int start = 0;
+        int end = preorder.size() - 1;
+        int curr = 0;
+        return help(preorder,inorder,curr,start,end);
+
+    }
+};
+```
+
+
+
+## LeetCode106
+
+[从中序与后序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
+
+> 树结构+递归
+
+```c++
+输入：inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
+输出：[3,9,20,null,null,15,7]
+```
+
+
+
+```c++
+class Solution {
+public: 
+    TreeNode* help(vector<int>& inorder, vector<int>& postorder, int& curr, int start, int end){
+        if (start > end) return {nullptr};
+        TreeNode* node = new TreeNode(postorder[curr]);
+        if (start == end){
+            curr = curr - 1;
+            return node;
+        }
+        int place = -1;
+        for (int i = start; start <= end; i++){
+            if (inorder[i] == postorder[curr]){
+                place = i;
+                break;
+            }
+        }
+        curr = curr - 1;
+        node->right = help(inorder,postorder,curr,place + 1, end);
+        node->left = help(inorder,postorder,curr,start, place - 1);
+        return node;
+
+    }
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        int curr = postorder.size() - 1;
+        int start = 0 ;
+        int end = postorder.size() - 1;
+        TreeNode* res = help(inorder,postorder,curr,start, end);
+        return res;
+    }
+};
+```
+
+
+
+## LeetCode107
+
+[二叉树的层序遍历 II](https://leetcode.cn/problems/binary-tree-level-order-traversal-ii/)
+
+> 树结构+队列
+
+
+
+```c++
+输入：root = [3,9,20,null,null,15,7]
+输出：[[15,7],[9,20],[3]]
+```
+
+
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        vector<vector<int>> res;
+        if (!root) return res;
+        queue<TreeNode*> q;
+        q.push(root);
+        vector<int> level;
+        int size = 1;
+        while(!q.empty()){
+            int temp = 0;
+            for (int i = 0; i < size; i++){
+                level.push_back(q.front()->val);
+                if(q.front()->left) { q.push(q.front()->left); temp += 1;}
+                if(q.front()->right) {q.push(q.front()->right); temp += 1;}
+                q.pop();
+            }
+            res.push_back(level);
+            level.clear();
+            size = temp;
+        }
+        reverse(res.begin(),res.end());
+        return res;
+
+    }
+};
+```
+
+
+
+## LeetCode108
+
+[将有序数组转换为二叉搜索树](https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/)
+
+> 树结构+递归
+
+```c++
+输入：nums = [-10,-3,0,5,9]
+输出：[0,-3,9,-10,null,5]
+解释：[0,-10,5,null,-3,null,9] 也将被视为正确答案：
+```
+
+
+
+```c++
+class Solution {
+    public:
+    TreeNode* help(vector<int>& nums, int start, int end){
+        if (start > end) return {nullptr};
+        if(start == end) {
+            TreeNode* res = new TreeNode(nums[end]);
+            return res;
+        }
+        int index = (start + end) / 2;
+        TreeNode* res = new TreeNode(nums[index]);
+        res->left = help(nums, start, index - 1);
+        res->right = help(nums, index + 1, end);
+        return res;
+    }
+    TreeNode* sortedArrayToBST(vector<int>& nums){
+        return help(nums,0, nums.size() - 1);
+    }
+} ;
+```
+
+
+
+## LeetCode109(待完善)
+
+[有序链表转换二叉搜索树](https://leetcode.cn/problems/convert-sorted-list-to-binary-search-tree/)
+
+> 树结构+递归
+
+```c++
+输入: head = [-10,-3,0,5,9]
+输出: [0,-3,9,-10,null,5]
+解释: 一个可能的答案是[0，-3,9，-10,null,5]，它表示所示的高度平衡的二叉搜索树。
+```
+
+
+
+```c++
+class Solution {
+public:
+    TreeNode* help(vector<int>& nums, int start, int end) {
+        if (start > end) return {nullptr};
+        if (start == end){
+            TreeNode* res = new TreeNode(nums[start]);
+            return res;
+        }
+        int index = (start + end) / 2;
+        TreeNode* res = new TreeNode(nums[index]);
+        res->left = help(nums,start, index - 1);
+        res->right = help(nums, index + 1, end);
+        return res;
+    }
+    TreeNode* sortedListToBST(ListNode* head) {
+        if (!head) return {nullptr};
+        vector<int> nums;
+        while(head){
+            nums.push_back(head->val);
+            head = head->next;
+        }
+        return help(nums,0,nums.size() - 1);
+    }
+};
+```
+
+
+
+## LeetCode110
+
+[平衡二叉树](https://leetcode.cn/problems/balanced-binary-tree/)
+
+> 树结构+递归
+
+```c++
+输入：root = [3,9,20,null,null,15,7]
+输出：true
+```
+
+
+
+```c++
+class Solution {
+public:
+    int height(TreeNode* root){
+        if (!root) return 0;
+        return max(height(root->left), height(root->right)) + 1;
+    }
+    bool isBalanced(TreeNode* root) {
+        if (!root) return true;
+        return abs(height(root->left) - height(root->right)) <= 1 && isBalanced(root->left) && isBalanced(root->right);
+    }
+};
+```
+
