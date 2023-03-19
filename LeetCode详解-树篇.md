@@ -624,3 +624,254 @@ public:
 };
 ```
 
+
+
+## LeetCode 111(广度优先搜索待实现)
+
+[二叉树的最小深度](https://leetcode.cn/problems/minimum-depth-of-binary-tree/)
+
+> 树结构+递归解法
+
+```c++
+输入：root = [3,9,20,null,null,15,7]
+输出：2
+```
+
+```c++
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if (!root) return 0;
+
+        if (!root->left && !root->right) return 1;
+
+        int min_depth = INT_MAX;
+        if (root->left){
+            min_depth = min(minDepth(root->left), min_depth);
+        }
+        if (root->right){
+            min_depth = min(minDepth(root->right), min_depth);
+        }
+        return min_depth + 1;
+
+    }
+};
+```
+
+
+
+## LeetCode112(广度优先搜索)
+
+[路径总和](https://leetcode.cn/problems/path-sum/)
+
+> 树结构+递归
+
+```c++
+输入：root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
+输出：true
+解释：等于目标和的根节点到叶节点路径如上图所示。
+```
+
+
+
+```c++
+class Solution {
+public:
+    bool help(TreeNode* node, int curr, int target){
+        if (!node) return false;
+        if (!node->left && !node->right && curr + node->val == target) return true;
+        if (!node->left && !node->right && curr + node->val != target) return false;
+
+        return help(node->left,curr + node->val, target) || help(node->right, curr + node->val, target);
+
+    }
+    bool hasPathSum(TreeNode* root, int targetSum) {
+        if (!root) return false;
+        int curr = 0;
+        return help(root,curr,targetSum);
+
+    }
+};
+```
+
+
+
+
+
+## LeetCode113
+
+[路径总和 II](https://leetcode.cn/problems/path-sum-ii/description/)
+
+> 树结构+递归
+
+```c++
+输入：root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
+输出：[[5,4,11,2],[5,8,4,5]]
+```
+
+
+
+```c++
+class Solution {
+public:
+    void help(TreeNode* node, int targetSum,int curr,vector<int>& path, vector<vector<int>>& res){
+            if (!node) return;
+            path.push_back(node->val);
+            if (!node->left && !node->right && curr + node->val == targetSum){
+                    res.push_back(path);
+                    path.pop_back();
+                    return;
+            }
+            help(node->left,targetSum,curr + node->val,path,res);
+            help(node->right,targetSum,curr + node->val, path, res);
+            path.pop_back();
+            return;
+    }
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+            vector<vector<int>> res;
+            vector<int> path;
+            int curr = 0;
+            help(root,targetSum,curr,path,res);
+            return res;
+        
+
+    }
+};
+```
+
+
+
+
+
+## LeetCode114(待完善)
+
+[ 二叉树展开为链表](https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/)
+
+> 树结构+递归
+
+```c++
+输入：root = [1,2,5,3,4,null,6]
+输出：[1,null,2,null,3,null,4,null,5,null,6]
+```
+
+
+
+```c++
+class Solution {
+public:
+    void help(TreeNode* root, vector<TreeNode*>& vec){
+        if (!root) return;
+        vec.push_back(root);
+        help(root->left, vec);
+        help(root->right,vec);
+        return;
+    }
+    void flatten(TreeNode* root) {
+        if (!root) return;
+        vector<TreeNode*> res;
+        help(root,res);
+        for (int i = 0; i < res.size() - 1; i++){
+            res[i]->left = nullptr;
+            res[i]->right = res[i + 1];
+        }
+        res.back()->left = nullptr;
+        res.back()->right= nullptr;
+        return ;
+
+    }
+};
+```
+
+
+
+## LeetCode116
+
+[填充每个节点的下一个右侧节点指针](https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/)
+
+> 树结构+层序遍历变形
+
+
+
+```c++
+输入：root = [1,2,3,4,5,6,7]
+输出：[1,#,2,3,#,4,5,6,7,#]
+解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，如图 B 所示。序列化的输出按层序遍历排列，同一层节点由 next 指针连接，'#' 标志着每一层的结束。
+```
+
+
+
+```c++
+class Solution {
+    public:
+    Node* connect(Node* root){
+        if (!root) return root;
+        queue<Node*> q;
+        vector<Node*> level;
+        int size = 1;
+        q.push(root);
+        while(!q.empty()){
+            int temp = 0;
+            for(int i = 0; i < size; i++){
+                level.push_back(q.front());
+                if(q.front()->left) { q.push(q.front()->left); temp += 1;}
+                if(q.front()->right) { q.push(q.front()->right); temp += 1;}
+                q.pop();
+            }
+            for (int i = 0; i < level.size() - 1; i++){
+                level[i]->next = level[i + 1];
+            }
+            size = temp;
+            level.clear();
+        }
+        return root;
+    }
+} ;
+```
+
+
+
+## LeetCode117
+
+[填充每个节点的下一个右侧节点指针 II](https://leetcode.cn/problems/populating-next-right-pointers-in-each-node-ii/)
+
+> 树结构+层序遍历
+
+
+
+```c++
+输入：root = [1,2,3,4,5,null,7]
+输出：[1,#,2,3,#,4,5,7,#]
+解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，如图 B 所示。序列化输出按层序遍历顺序（由 next 指针连接），'#' 表示每层的末尾。
+```
+
+
+
+```c++
+class Solution {
+    public:
+    Node* connect(Node* root){
+        if (!root) return root;
+        queue<Node*> q;
+        vector<Node*> level;
+        int size = 1;
+        q.push(root);
+        while(!q.empty()){
+            int temp = 0;
+            for(int i = 0; i < size; i++){
+                level.push_back(q.front());
+                if(q.front()->left) { q.push(q.front()->left); temp += 1;}
+                if(q.front()->right) { q.push(q.front()->right); temp += 1;}
+                q.pop();
+            }
+            for (int i = 0; i < level.size() - 1; i++){
+                level[i]->next = level[i + 1];
+            }
+            level.back()->next = nullptr;
+            size = temp;
+            level.clear();
+        }
+        return root;
+    }
+} ;
+```
+
