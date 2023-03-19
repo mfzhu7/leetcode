@@ -2,11 +2,7 @@
 
 [toc]
 
-
-
-
-
-leetcode45 
+## LeetCode45
 
 [跳跃游戏 II](https://leetcode.cn/problems/jump-game-ii/)
 
@@ -49,7 +45,7 @@ public:
 
 
 
-leetcode53
+## LeetCode53
 
 [最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
 
@@ -84,7 +80,7 @@ public:
 
 
 
-leetcode 55
+## LeetCode55
 
 [跳跃游戏](https://leetcode.cn/problems/jump-game/)
 
@@ -156,7 +152,7 @@ public:
     }
 ```
 
-## leetcode63 
+## LeetCode63 
 
 [不同路径 II](https://leetcode.cn/problems/unique-paths-ii/)
 
@@ -271,7 +267,7 @@ public:
 };
 ```
 
-##  leetcode97
+##  LeetCode97
 
 [交错字符串](https://leetcode.cn/problems/interleaving-string/)
 
@@ -313,3 +309,159 @@ public:
     }
 };
 ```
+
+
+
+## LeetCode120
+
+[三角形最小路径和](https://leetcode.cn/problems/triangle/)
+
+> 数组+动态规划
+
+
+
+```c++
+输入：triangle = [[2],[3,4],[6,5,7],[4,1,8,3]]
+输出：11
+解释：如下面简图所示：
+   2
+  3 4
+ 6 5 7
+4 1 8 3
+自顶向下的最小路径和为 11（即，2 + 3 + 5 + 1 = 11）。
+```
+
+
+
+```c++
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        int num = triangle.size();
+        vector<int> row(num, 0);
+        vector<vector<int>> dp(num, row);
+        dp[0][0] = triangle[0][0];
+        for (int i = 1; i < num; i++){
+            for (int j = 0; j <= i; j++){
+                if (j == 0) {
+                    dp[i][j] = dp[i - 1][j] + triangle[i][j];
+                }
+                else if (j == i) {
+                    dp[i][j] = dp[i - 1][j - 1] + triangle[i][j];
+                }
+                else {
+                    dp[i][j] = triangle[i][j] + min(dp[i - 1][j - 1], dp[i - 1][j]);
+                }
+            } //每一层保存当前点的最小路径和，则最后一层中的最小值就是目标值
+        }
+        int ret = INT_MAX;
+        for (auto i: dp[num-1]){
+            ret = min(ret, i);
+        }
+        return ret;
+    }
+};
+```
+
+
+
+## LeetCode121
+
+
+
+[买卖股票的最佳时机](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/)
+
+> 数组+动态规划
+
+```c++
+输入：[7,1,5,3,6,4]
+输出：5
+解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+     注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。
+```
+
+
+
+```c++
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int min_price = INT_MAX;
+        int max_profit = 0;
+        for (int i = 0; i <= prices.size() - 1; i++){
+            max_profit = ((prices[i] - min_price) > max_profit) ? (prices[i] - min_price): max_profit;
+            min_price = prices[i] > min_price ?  min_price : prices[i];
+            //维护一个到当前为止的最小值，遍历数组的过程来得到每个位置上的最大获利值
+        }
+        return max_profit;
+    }
+};
+```
+
+
+
+
+
+## LeetCode122(贪心算法待实现)
+
+[ 买卖股票的最佳时机 II](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/)
+
+> 数组+动态规划
+
+
+
+```c++
+输入：prices = [7,1,5,3,6,4]
+输出：7
+解释：在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5 - 1 = 4 。
+     随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6 - 3 = 3 。
+     总利润为 4 + 3 = 7 。
+```
+
+
+
+```c++
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int length = prices.size();
+        vector<vector<int>> dp(length, vector<int>(2,0));
+
+        dp[0][0] = 0;
+        dp[0][1] = -1 * prices[0];
+
+        for (int i = 1; i < length; i++){
+            dp[i][0] = max(dp[i - 1][0], dp[i - 1][1] + prices[i]);
+            dp[i][1] = max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
+        }   
+		//因为每一个时间刻都有可能是买入和卖出两个动作；
+        //所以维护一个数组，然后每个时刻包含两个值，表示买入和卖出的获利值
+        return dp[length - 1][0];
+    }
+};
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
