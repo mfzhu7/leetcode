@@ -875,3 +875,52 @@ class Solution {
 } ;
 ```
 
+
+
+## LeetCode129
+
+[求根节点到叶节点数字之和](https://leetcode.cn/problems/sum-root-to-leaf-numbers/description/)
+
+> 树的结构+深度优先搜索
+
+```c++
+输入：root = [1,2,3]
+输出：25
+解释：
+从根到叶子节点路径 1->2 代表数字 12
+从根到叶子节点路径 1->3 代表数字 13
+因此，数字总和 = 12 + 13 = 25
+```
+
+
+
+```c++
+class Solution {
+public:
+    void help(TreeNode* root, int& curr, vector<int>& pathSum){
+        if(!root) return;
+        if(!root->left && !root->right){
+            pathSum.push_back(curr * 10 + root->val);
+            return;
+        }
+        curr = curr * 10 + root->val;
+        help(root->left, curr, pathSum);
+        help(root->right, curr, pathSum);
+        curr = (curr - root->val) / 10;
+        return;
+
+    }
+    int sumNumbers(TreeNode* root) {
+        int curr = 0;
+        vector<int> res;
+        if(!root) return 0;
+        help(root, curr, res);
+        int total = 0;
+        for (auto &i: res){
+            total += i;
+        }
+        return total;
+    }
+};
+```
+

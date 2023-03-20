@@ -75,3 +75,46 @@ public:
 };
 ```
 
+
+
+## LeetCode128(待研究)
+
+[最长连续序列](https://leetcode.cn/problems/longest-consecutive-sequence/)
+
+> 
+
+```c++
+输入：nums = [100,4,200,1,3,2]
+输出：4
+解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。
+```
+
+
+
+```c++
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        int ret = 0;
+        for (int i = 0; i < nums.size(); i++){
+            int curr = nums[i] + 1;
+            while(true){
+                bool flag = false;
+                for (int j = 0;j < nums.size();j++){          
+                    if (nums[j] == curr){
+                        flag = true;
+                        break;
+                    }
+                }
+                curr = curr + 1;
+                if (!flag) break;
+            }
+            
+            ret = max(ret, curr - nums[i] - 1);
+        }
+        return ret;
+
+    }
+};
+```
+

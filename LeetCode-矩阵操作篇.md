@@ -1,6 +1,10 @@
 # LeetCode-矩阵操作篇
 
-leetcode36 
+
+
+[toc]
+
+## LeetCode36 
 
 [有效的数独](https://leetcode.cn/problems/valid-sudoku/)
 
@@ -48,7 +52,7 @@ public:
 };
 ```
 
-leetcode 48 
+## LeetCode48 
 
 [旋转图像](https://leetcode.cn/problems/rotate-image/)
 
@@ -77,7 +81,7 @@ public:
 };
 ```
 
-leetcode 54 
+## LeetCode 54 
 
 [螺旋矩阵](https://leetcode.cn/problems/spiral-matrix/)
 
@@ -131,7 +135,7 @@ void helper(vector<vector<int>>& matrix, int x1, int y1, int x2, int y2, vector<
 };
 ```
 
-## leetcode59 
+## LeetCode59 
 
 [螺旋矩阵 II](https://leetcode.cn/problems/spiral-matrix-ii/)
 
@@ -183,7 +187,7 @@ void helper(vector<vector<int>>& matrix, int x1, int y1, int x2, int y2, int& cu
 };
 ```
 
-## leetcode73
+## LeetCode73
 
 [矩阵置零](https://leetcode.cn/problems/set-matrix-zeroes/)
 
@@ -262,3 +266,64 @@ public:
     }
 };
 ```
+
+
+
+## LeetCode130
+
+[被围绕的区域](https://leetcode.cn/problems/surrounded-regions/)
+
+> 矩阵+深度优先搜索；从边界开始深度优先搜素，和边界相联通的，必定不会被包围；标记所有此类的节点；剩余的节点即全为'X'。
+
+![img](https://assets.leetcode.com/uploads/2021/02/19/xogrid.jpg)
+
+```c++
+输入：board = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
+输出：[["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]]
+解释：被围绕的区间不会存在于边界上，换句话说，任何边界上的 'O' 都不会被填充为 'X'。 任何不在边界上，或不与边界上的 'O' 相连的 'O' 最终都会被填充为 'X'。如果两个元素在水平或垂直方向相邻，则称它们是“相连”的。
+```
+
+
+
+```c++
+class Solution {
+public:
+    void dfs(vector<vector<char>>& board, int x, int y){
+        if (x < 0 || y < 0 || x >= board.size() || y >= board[0].size() || board[x][y] != 'O'){
+            return;
+        }
+        board[x][y] = 'A';
+        dfs(board,x - 1, y);
+        dfs(board,x + 1, y);
+        dfs(board,x, y + 1);
+        dfs(board,x, y - 1);
+        return;
+
+    }
+    void solve(vector<vector<char>>& board) {
+        int row = board.size();
+        int col = board[0].size();
+
+        for (int i = 0; i < col; i = i + 1){
+                dfs(board,0,i);
+                dfs(board,row - 1, i);
+        }
+        for (int i = 1; i < row - 1; i = i + 1){
+            dfs(board,i, 0);
+            dfs(board,i, col - 1);
+        }
+        for (int i = 0; i < row; i++){
+            for (int j = 0; j < col;j++){
+                if (board[i][j] == 'A'){
+                    board[i][j] = 'O';
+                } else if (board[i][j] == 'O'){
+                    board[i][j] = 'X';
+                 }
+            }
+        }
+        return;
+
+    }
+};
+```
+
