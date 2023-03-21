@@ -445,11 +445,44 @@ public:
 
 
 
+## LeetCode139(待研究)
+
+[单词拆分](https://leetcode.cn/problems/word-break/)
+
+> 动态规划
+
+```c++
+输入: s = "applepenapple", wordDict = ["apple", "pen"]
+输出: true
+解释: 返回 true 因为 "applepenapple" 可以由 "apple" "pen" "apple" 拼接成。
+     注意，你可以重复使用字典中的单词。
+```
 
 
 
+```c++
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string>wordDictSet(wordDict.begin(), wordDict.end());
+
+        auto dp = vector <bool> (s.size() + 1);
+        dp[0] = true;
+        for (int i = 1; i <= s.size(); ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (dp[j] && wordDictSet.find(s.substr(j, i - j)) != wordDictSet.end()) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+
+        return dp[s.size()];
+    }
+};
 
 
+```
 
 
 

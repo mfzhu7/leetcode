@@ -1,8 +1,10 @@
 ## Leetcode详解
 
+[toc]
 
 
-leetcode1
+
+## LeetCode1
 
 [两数之和](https://leetcode.cn/problems/two-sum/description/)
 
@@ -47,8 +49,9 @@ public:
 
 
 
+##  LeetCode3  
 
-leetcode3 
+
 
 [无重复字符的最长子串](https://leetcode.cn/problems/longest-substring-without-repeating-characters/description/)
 
@@ -86,7 +89,7 @@ public:
 
 
 
-leetcode5
+## LeetCode5
 
 [最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring/description/)
 
@@ -131,7 +134,7 @@ public:
 };
 ```
 
-leetcode6 
+## LeetCode6 
 
 [N字形变换](https://leetcode.cn/problems/zigzag-conversion/description/)
 
@@ -174,7 +177,9 @@ public:
 };
 ```
 
-leetcode7 
+## LeetCode7 
+
+
 
 [整数反转](https://leetcode.cn/problems/reverse-integer/description/)
 
@@ -229,7 +234,9 @@ public:
 
 [证明的细节](https://leetcode.cn/problems/reverse-integer/solutions/755611/zheng-shu-fan-zhuan-by-leetcode-solution-bccn/)
 
-leetcode8
+## LeetCode8
+
+
 
 [字符串转换整数](https://leetcode.cn/problems/string-to-integer-atoi/)
 
@@ -280,7 +287,9 @@ public:
 
 
 
-leetcode9
+## LeetCode9
+
+
 
 [回文数](https://leetcode.cn/problems/palindrome-number/)
 
@@ -335,7 +344,7 @@ public:
 };
 ```
 
-leetcode11
+## LeetCode11
 
 [盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/)
 
@@ -373,7 +382,9 @@ public:
 
 [贪心的正确性证明](https://leetcode.cn/problems/container-with-most-water/solutions/11491/container-with-most-water-shuang-zhi-zhen-fa-yi-do/)
 
-leetcode12
+## LeetCode12
+
+
 
 [整数转罗马数字](https://leetcode.cn/problems/integer-to-roman/)
 
@@ -408,7 +419,9 @@ public:
 
 
 
-leetcode13
+## LeetCode13
+
+
 
 [罗马数字转整数](https://leetcode.cn/problems/roman-to-integer/)
 
@@ -495,7 +508,9 @@ public:
 
 
 
-leetcode14
+## LeetCode14
+
+
 
 [最长公共前缀](https://leetcode.cn/problems/longest-common-prefix/description/)
 
@@ -524,7 +539,7 @@ public:
 //垂直扫描，暴力解法
 ```
 
-leetcode15
+## LeetCode15
 
 [三数之和](https://leetcode.cn/problems/3sum/)
 
@@ -583,7 +598,7 @@ public:
 };
 ```
 
-leetcode16
+## LeetCode16
 
 [最接近的三数之和](https://leetcode.cn/problems/3sum-closest/)
 
@@ -630,7 +645,7 @@ public:
 
 ​                        
 
-leetcode18
+## LeetCode18
 
 [四数之和](https://leetcode.cn/problems/4sum/)
 
@@ -680,7 +695,7 @@ public:
 
 
 
-leetcode20
+## LeetCode20
 
 [有效的括号](https://leetcode.cn/problems/valid-parentheses/)
 
@@ -717,7 +732,7 @@ class Solution {
 
 
 
-leetcode22
+## LeetCode22
 
 [括号生成](https://leetcode.cn/problems/generate-parentheses/)
 
@@ -752,7 +767,7 @@ public:
 
 
 
-leetcode26
+## LeetCode26
 
 [删除有序数组中的重复项](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/)
 
@@ -783,7 +798,7 @@ public:
 };
 ```
 
-leetcode27
+## LeetCode27
 
 [移除元素](https://leetcode.cn/problems/remove-element/)
 
@@ -812,7 +827,7 @@ public:
 
 
 
-leetcode28
+## LeetCode28
 
 [找出字符串中第一个匹配项的下标](https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/)
 
@@ -846,7 +861,7 @@ public:
 };
 ```
 
-leetcode29
+## LeetCode29
 
 [两数相除](https://leetcode.cn/problems/divide-two-integers/)
 
@@ -910,7 +925,7 @@ public:
 };
 ```
 
-## leecode 31
+## LeetCode 31
 
 [下一个排列](https://leetcode.cn/problems/next-permutation/)
 
@@ -947,7 +962,7 @@ public:
 };
 ```
 
-leetcode33
+## LeetCode33
 
 [搜索旋转排序数组](https://leetcode.cn/problems/search-in-rotated-sorted-array/)
 
@@ -986,7 +1001,7 @@ public:
 };
 ```
 
-leetcode34
+## LeetCode34
 
 [在排序数组中查找元素的第一个和最后一个位置](https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/)
 
@@ -1034,7 +1049,7 @@ public:
 };
 ```
 
-leetcode35 
+## LeetCode35 
 
 [搜索插入位置](https://leetcode.cn/problems/search-insert-position/description/)
 
@@ -1065,8 +1080,7 @@ public:
 };
 ```
 
-
-leetcode38
+## LeetCode38
 
 [外观数列](https://leetcode.cn/problems/count-and-say/)
 
@@ -1117,8 +1131,7 @@ public:
 
 
 
-
-leetcode 43 
+## LeetCode43 
 
 [字符串相乘](https://leetcode.cn/problems/multiply-strings/)
 
@@ -1189,7 +1202,7 @@ public:
 
 
 
-leetcode49 
+## LeetCode49 
 
 [字母异位词分组](https://leetcode.cn/problems/group-anagrams/)
 
@@ -1221,7 +1234,7 @@ public:
 };
 ```
 
-leetcode50
+## LeetCode50
 
 > 位运算相关题目
 
@@ -1263,8 +1276,7 @@ public:
 
 
 
-
-leetcode 56
+## LeetCode56
 
 [合并区间](https://leetcode.cn/problems/merge-intervals/)
 
@@ -1302,7 +1314,7 @@ public:
 };
 ```
 
-## leetcode57
+## LeetCode57
 
 [插入区间](https://leetcode.cn/problems/insert-interval/solutions/)
 
@@ -1346,7 +1358,7 @@ public:
 
 
 
-## leetcode58
+## LeetCode58
 
 [最后一个单词长度](https://leetcode.cn/problems/length-of-last-word/description/)
 
@@ -1389,7 +1401,7 @@ public:
 
 
 
-## Leetcode66
+## LeetCode66
 
 [ 加一](https://leetcode.cn/problems/plus-one/)
 
@@ -1422,7 +1434,7 @@ public:
 
 
 
-## leetcode67
+## LeetCode67
 
 [二进制求和](https://leetcode.cn/problems/add-binary/)
 
@@ -1465,7 +1477,7 @@ public:
 
 
 
-## leetcode69 
+## LeetCode69 
 
 [ x 的平方根](https://leetcode.cn/problems/sqrtx/)
 
@@ -1500,7 +1512,7 @@ public:
 
 
 
-## leetcode71
+## LeetCode71
 
 [简化路径](https://leetcode.cn/problems/simplify-path/)
 
@@ -1543,13 +1555,12 @@ public:
 
 
 
+## LeetCode75
 
-```
 
-
-## leetcode75 (没看懂)
 
 [颜色分类](https://leetcode.cn/problems/sort-colors/)
+
 
 
 
@@ -1647,7 +1658,7 @@ public:
 
 
 
-## leetcode81
+## LeetCode81
 
 [搜索旋转排序数组 II](https://leetcode.cn/problems/search-in-rotated-sorted-array-ii/)
 
@@ -1705,7 +1716,7 @@ public:
 
 
 
-## leetcode88
+## LeetCode88
 
 [合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
 
@@ -1753,7 +1764,7 @@ public:
 
 
 
-## leetcode89
+## LeetCode89
 
 [格雷编码](https://leetcode.cn/problems/gray-code/)
 
@@ -1809,7 +1820,7 @@ public:
 
 
 
-## leetcode91
+## LeetCode91
 
 [解码方法](https://leetcode.cn/problems/decode-ways/)
 
@@ -1848,37 +1859,56 @@ public:
 
 
 
+## LeetCode133
 
+
+
+[克隆图](https://leetcode.cn/problems/clone-graph/)
+
+> 图+广度优先遍历
+
+![img](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2020/02/01/133_clone_graph_question.png)
+
+```c++
+输入：adjList = [[2,4],[1,3],[2,4],[1,3]]
+输出：[[2,4],[1,3],[2,4],[1,3]]
+解释：
+图中有 4 个节点。
+节点 1 的值是 1，它有两个邻居：节点 2 和 4 。
+节点 2 的值是 2，它有两个邻居：节点 1 和 3 。
+节点 3 的值是 3，它有两个邻居：节点 2 和 4 。
+节点 4 的值是 4，它有两个邻居：节点 1 和 3 。
 ```
 
 
 
+```c++
+class Solution {
+public:
+    Node* cloneGraph(Node* node) {
+        if(!node) return node;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        unordered_map<Node*, Node*> visited;
+        visited[node] = new Node(node->val);
+        queue<Node*> q;
+        q.push(node);
+        
+        while(!q.empty()){
+            Node* front = q.front();
+            q.pop();
+            vector<Node*> nbr = front->neighbors;
+            //利用队列进行广度优先遍历
+            for (auto &n : nbr){
+                if (visited.find(n) == visited.end()){
+                    visited[n] = new Node(n->val);
+                    q.push(n);
+                }
+                visited[front]->neighbors.emplace_back(visited[n]);
+            }
+        }
+        return visited[node];
+        
+    }
+};
+```
 

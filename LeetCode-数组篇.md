@@ -1,5 +1,7 @@
 # LeetCode-数组篇
 
+[toc]
+
 
 
 ## LeetCode118
@@ -114,6 +116,60 @@ public:
         }
         return ret;
 
+    }
+};
+```
+
+
+
+## Leetcode134(待研究)
+
+
+
+[加油站](https://leetcode.cn/problems/gas-station/)
+
+> 数组+贪心算法
+
+```c++
+输入: gas = [1,2,3,4,5], cost = [3,4,5,1,2]
+输出: 3
+解释:
+从 3 号加油站(索引为 3 处)出发，可获得 4 升汽油。此时油箱有 = 0 + 4 = 4 升汽油
+开往 4 号加油站，此时油箱有 4 - 1 + 5 = 8 升汽油
+开往 0 号加油站，此时油箱有 8 - 2 + 1 = 7 升汽油
+开往 1 号加油站，此时油箱有 7 - 3 + 2 = 6 升汽油
+开往 2 号加油站，此时油箱有 6 - 4 + 3 = 5 升汽油
+开往 3 号加油站，你需要消耗 5 升汽油，正好足够你返回到 3 号加油站。
+因此，3 可为起始索引。
+```
+
+
+
+```c++
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        int n = gas.size();
+        int idx = 0;
+
+        while(idx < n){
+            int sumGas = 0;
+            int sumCost = 0;
+            int cnt = 0;
+            while(cnt < n){
+                int j = (idx + cnt) % n;
+                sumCost += cost[j];
+                sumGas += gas[j];
+                if (sumCost > sumGas) break;
+                cnt = cnt + 1;
+            }
+            if (cnt == n) return idx;
+            else {
+                idx = idx + cnt + 1;
+            }
+        }
+        return -1;
+        
     }
 };
 ```

@@ -429,3 +429,126 @@ public:
     }
 };
 ```
+
+
+
+## LeetCode138 
+
+[复制带随机指针的链表](https://leetcode.cn/problems/copy-list-with-random-pointer/)
+
+![img](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2020/01/09/e1.png)
+
+```c++
+输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
+```
+
+
+
+```c++
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        Node* h1 = head;
+        unordered_map<Node*, Node*> hash;
+        while(h1){
+            Node* temp = new Node(h1->val);
+            hash.insert({h1,temp});
+            h1 = h1->next;
+            //将新老节点之间的关系设定为字典，方便查询和链表重连接
+        }
+        h1 = head;
+        while(h1){
+            hash[h1]->next = hash[h1->next];
+            hash[h1]->random = hash[h1->random];
+            h1 = h1->next;
+        }
+        return hash[head];
+    }
+};
+```
+
+
+
+## LeetCode141
+
+[环形链表](https://leetcode.cn/problems/linked-list-cycle/)
+
+> 快慢指针判断是否存在环
+
+```c++
+输入：head = [3,2,0,-4], pos = 1
+输出：true
+解释：链表中有一个环，其尾部连接到第二个节点。
+```
+
+```cpp
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        if(!head || !head->next) return false;
+        ListNode* fast = head->next;
+        ListNode* slow = head;
+        while(fast && fast->next&& slow){
+            if (fast == slow) {return true;}
+            else {
+                fast = fast->next;
+                fast = fast->next;
+                slow = slow->next;
+            }
+        }
+        return false;
+        
+    }
+};
+```
+
+
+
+## LeetCode142
+
+[环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/)
+
+> 快慢指针定位入环位置
+
+
+
+```c++
+输入：head = [3,2,0,-4], pos = 1
+输出：返回索引为 1 的链表节点
+解释：链表中有一个环，其尾部连接到第二个节点。
+```
+
+
+
+```c++
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if(!head || !head->next) return nullptr;
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        while(fast){
+            slow = slow->next;
+            if (!fast->next){
+                return nullptr;
+            }
+            fast = fast->next->next;
+
+            if (slow == fast){
+                ListNode* ptr = head;
+                while(ptr != fast){
+                    ptr = ptr->next;
+                    fast = fast->next;
+                }
+                return ptr;
+            }
+
+        }
+        return nullptr;
+        
+    }
+};
+```
+
