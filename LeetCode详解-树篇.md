@@ -924,3 +924,61 @@ public:
 };
 ```
 
+
+
+## LeetCode144
+
+[二叉树的前序遍历](https://leetcode.cn/problems/binary-tree-preorder-traversal/)
+
+> 树+递归题
+
+
+
+```c++
+class Solution {
+public:
+    void help(TreeNode* root, vector<int>& path){
+        if(!root) return;
+        path.push_back(root->val);
+        help(root->left, path);
+        help(root->right,path);
+        return;
+    }
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int>res;
+        help(root,res);
+        return res;
+    }
+};
+```
+
+
+
+
+
+## LeetCode145
+
+[ 二叉树的后序遍历](https://leetcode.cn/problems/binary-tree-postorder-traversal/)
+
+> 树+递归解法
+
+
+
+```c++
+class Solution {
+public:
+    void help(TreeNode* root, vector<int>& path){
+        if(!root) return;
+        help(root->left,path);
+        help(root->right,path);
+        path.push_back(root->val);
+        return;
+    }
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> res;
+        help(root,res);
+        return res;
+    }
+};
+```
+

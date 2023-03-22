@@ -4,7 +4,7 @@
 
 
 
-leetcode2 
+## LeetCode2 
 
 [两数相加](https://leetcode.cn/problems/add-two-numbers/)
 
@@ -55,7 +55,7 @@ public:
 
 
 
-leetcode19
+## LeetCode19
 
 [删除链表的倒数第 N 个结点](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/)
 
@@ -96,7 +96,9 @@ public:
 
 
 
-leetcode21 
+## LeetCode21 
+
+
 
 [合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/)
 
@@ -163,7 +165,9 @@ public:
 
 
 
-leetcode24
+## LeetCode24
+
+
 
 [两两交换链表中的节点](https://leetcode.cn/problems/swap-nodes-in-pairs/)
 
@@ -210,7 +214,7 @@ public:
 
 ```
 
-## leetcode61 
+## LeetCode61 
 
 [旋转链表](https://leetcode.cn/problems/rotate-list/)
 
@@ -249,7 +253,7 @@ public:
 };
 ```
 
-## leetcode82
+## LeetCode82
 
 [删除排序链表中的重复元素 II](https://leetcode.cn/problems/remove-duplicates-from-sorted-list-ii/)
 
@@ -294,7 +298,7 @@ public:
 
 
 
-## leetcode83
+## LeetCode83
 
 [删除排序链表中的重复元素](https://leetcode.cn/problems/remove-duplicates-from-sorted-list/)
 
@@ -372,7 +376,7 @@ public:
 };
 ```
 
-## leetcode92(还有头插法待实现)
+## LeetCode(还有头插法待实现)
 
 [反转链表 II](https://leetcode.cn/problems/reverse-linked-list-ii/)
 
@@ -544,10 +548,144 @@ public:
                 }
                 return ptr;
             }
-
         }
         return nullptr;
         
+    }
+};
+```
+
+
+
+## LeetCode143
+
+[重排链表](https://leetcode.cn/problems/reorder-list/description/)
+
+给定一个单链表 `L` 的头节点 `head` ，单链表 `L` 表示为：
+
+```
+L0 → L1 → … → Ln - 1 → Ln
+```
+
+请将其重新排列后变为：
+
+```
+L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
+```
+
+不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+
+
+```c++
+class Solution {
+public:
+    ListNode* reverse(ListNode* head){
+        ListNode* pre = nullptr;
+        ListNode* curr = head;
+        while(curr){
+            ListNode* next = curr->next;
+            curr->next = pre;
+            pre = curr;
+            curr = next;
+        } 
+        return pre;
+        //辅助函数，用来反转链表
+    }
+    void reorderList(ListNode* head) {
+        ListNode* curr = head;
+        int length = 1;
+        while(curr){
+            length += 1;
+            curr = curr->next;
+        }
+        int mid = length / 2;
+        curr = head;
+        while(mid > 1){
+            curr = curr->next;
+            mid = mid - 1;
+        }   //找到中间节点
+        ListNode* leftHead = curr->next;
+        curr->next = nullptr;
+        leftHead = reverse(leftHead);
+        //断开连接，反转后半部分链表
+
+        curr = head;
+        while(leftHead){
+            ListNode* next1 = curr->next; 
+            ListNode* next2 = leftHead->next;
+            curr->next = leftHead;
+            leftHead->next = next1;
+            curr = next1;
+            leftHead = next2;
+        } //链表重新连接
+        return;
+
+
+    }
+};
+```
+
+
+
+## LeetCode148（o1写法待完善）
+
+[排序链表](https://leetcode.cn/problems/sort-list/)
+
+> 链表+排序
+
+给你链表的头结点 `head` ，请将其按 **升序** 排列并返回 **排序后的链表** 。
+
+```c++
+输入：head = [4,2,1,3]
+输出：[1,2,3,4]
+```
+
+```c++
+class Solution {
+public:
+    ListNode* sortList(ListNode* head, ListNode* tail){
+        if(!head) return head;
+        if (head->next == tail){
+            head->next = nullptr;
+            return head;
+        }
+        ListNode* fast = head, *slow = head;
+        while(fast != tail){
+            fast = fast->next;
+            slow = slow->next;
+            if (fast != tail){
+                fast = fast->next;
+            }
+        }
+        ListNode* mid = slow;
+        return merge(sortList(head,mid), sortList(mid,tail));
+
+    }
+    ListNode* merge(ListNode* left, ListNode* right){
+        ListNode* dummy = new ListNode(-1);
+        ListNode* temp = dummy;
+        ListNode* temp1 = left;
+        ListNode* temp2 = right;
+        while(temp1 && temp2){
+            if (temp1->val < temp2->val){
+                temp->next = temp1;
+                temp1 = temp1->next;
+            } else {
+                temp->next = temp2;
+                temp2 = temp2->next;
+            }
+            temp = temp->next;
+        }
+        if (temp1){
+            temp->next = temp1;
+        } else if (temp2){
+            temp->next = temp2;
+        }
+        return dummy->next;
+    }
+    ListNode* sortList(ListNode* head) {
+        return sortList(head,nullptr);
     }
 };
 ```

@@ -1,5 +1,9 @@
 # LeetCode-字符串篇
 
+[toc]
+
+
+
 ## LeetCode125 
 
 [验证回文串](https://leetcode.cn/problems/valid-palindrome/)
@@ -80,4 +84,97 @@ public:
 ```
 
 
+
+## LeetCode150 
+
+[逆波兰表达式求值](https://leetcode.cn/problems/evaluate-reverse-polish-notation/)
+
+> 字符串求值+堆栈
+
+
+
+```c++
+输入：tokens = ["2","1","+","3","*"]
+输出：9
+解释：该算式转化为常见的中缀算术表达式为：((2 + 1) * 3) = 9
+```
+
+
+
+```c++
+class Solution {
+public:
+    bool isNumber(string s){
+        return !(s == "+" || s == "-" || s == "*"  || s == "/" );
+    }
+    int evalRPN(vector<string>& tokens) {
+        stack<int> stk;
+
+        for (int i = 0; i < tokens.size(); i++){
+            string& token = tokens[i];
+            if (isNumber(token)){
+                stk.push(stoi(token));
+            } else {
+                int num2 = stk.top();
+                stk.pop();
+                int num1 = stk.top();
+                stk.pop();
+                switch(token[0]){
+                    case '+':
+                        stk.push(num1 + num2);
+                        break;
+                    case '-':
+                        stk.push(num1 - num2);
+                        break;
+                    case '*':
+                        stk.push(num1 * num2);
+                        break;
+                    case '/':
+                        stk.push(num1 / num2);
+                        break;
+                }
+            }
+        }
+        return stk.top();
+
+    }
+};
+```
+
+
+
+## LeetCode151
+
+> 字符串操作
+
+```c++
+输入：s = "the sky is blue"
+输出："blue is sky the"
+```
+
+
+
+```c++
+class Solution {
+public:
+    string reverseWords(string s) {
+        stack<string> stk;
+        string temp, res;
+         istringstream ss(s);  
+
+         while(ss >> temp){
+             stk.push(temp);
+             stk.push(" "); //主要在于用stream对字符串进行空格切割
+         }
+         if (!stk.empty()) stk.pop(); //将栈顶空元素弹出
+
+         while(!stk.empty()){
+             res += stk.top();
+             stk.pop(); //进行连接
+         }
+         return res;
+
+    }
+};
+```
 
