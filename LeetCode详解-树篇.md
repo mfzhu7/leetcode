@@ -982,3 +982,47 @@ public:
 };
 ```
 
+
+
+## LeetCode199
+
+[二叉树的右视图](https://leetcode.cn/problems/binary-tree-right-side-view/)
+
+> 二叉树+层序遍历
+
+![img](https://assets.leetcode.com/uploads/2021/02/14/tree.jpg)
+
+```c++
+输入: [1,2,3,null,5,null,4]
+输出: [1,3,4]
+```
+
+
+
+```c++
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        vector<int> res;
+        if(!root) return res;
+        queue<TreeNode*> q;
+        vector<int> level;
+        int size = 1;
+        q.push(root);
+        while(!q.empty()){
+            int temp = 0;
+            for (int i = 0; i < size; i++){
+                level.push_back(q.front()->val);
+                if(q.front()->left) { q.push(q.front()->left); temp += 1;}
+                if(q.front()->right) { q.push(q.front()->right); temp += 1;}
+                q.pop();
+            }
+            res.push_back(level[level.size() - 1]);
+            level.clear();
+            size = temp;
+        }
+        return res;
+    }
+};
+```
+

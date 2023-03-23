@@ -178,3 +178,151 @@ public:
 };
 ```
 
+
+
+## LeetCode165
+
+[比较版本号](https://leetcode.cn/problems/compare-version-numbers/)
+
+> 字符串切割
+
+
+
+```c++
+输入：version1 = "1.01", version2 = "1.001"
+输出：0
+解释：忽略前导零，"01" 和 "001" 都表示相同的整数 "1"
+```
+
+
+
+```c++
+class Solution {
+public:
+    int compareVersion(string version1, string version2) {
+        vector<int> v1;
+        vector<int> v2;
+        stringstream  ss;
+        string s;
+        ss << version1;
+        while(getline(ss, s, '.')){
+            v1.push_back(stoi(s));
+        }
+        ss.clear();
+
+        ss << version2;
+        while(getline(ss, s, '.')){
+            v2.push_back(stoi(s));
+        }
+        //用stringstream来进行固定分割
+        while(v1.size() < v2.size()) v1.push_back(0);
+        while(v2.size() < v1.size()) v2.push_back(0);
+		//先判断长短
+        for (int i = 0; i < v1.size(); i++){
+            if (v1[i] > v2[i]) return 1;
+            else if (v1[i] < v2[i]) return -1;
+        }//判断版本号
+        return 0;
+
+
+    }
+};
+```
+
+
+
+## LeetCode168
+
+[ Excel表列名称](https://leetcode.cn/problems/excel-sheet-column-title/)
+
+> 字符串操作
+
+```c++
+输入：columnNumber = 28
+输出："AB"
+```
+
+
+
+```c++
+class Solution {
+public:
+    string convertToTitle(int columnNumber) {
+        string res = "";
+        while(columnNumber > 0){
+            --columnNumber; //因为从1开始，所以需要减一操作
+            char ans = columnNumber % 26 + 'A';
+            res = ans + res; //字符串+字符操作
+            columnNumber = columnNumber / 26; 
+        }
+        return res;
+
+    }
+};
+```
+
+
+
+## LeetCode171
+
+[Excel 表列序号](https://leetcode.cn/problems/excel-sheet-column-number/)
+
+```c++
+输入: columnTitle = "AB"
+输出: 28
+```
+
+```c++
+class Solution {
+public:
+    int titleToNumber(string columnTitle) {
+        long  add = 1;
+        int res = 0;
+        int index = columnTitle.size() - 1;
+        while(index >= 0){
+            int tmp = columnTitle[index] - 64;
+            res = res + tmp * add;
+            add = add * 26;
+            index = index - 1;
+        }
+        return res;
+
+    }
+};
+```
+
+
+
+## LeetCode187(其他方法待研究)
+
+[重复的DNA序列](https://leetcode.cn/problems/repeated-dna-sequences/)
+
+> 字符串+哈希表
+
+```c++
+输入：s = "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT"
+输出：["AAAAACCCCC","CCCCCAAAAA"]
+```
+
+```c++
+class Solution {
+public:
+    vector<string> findRepeatedDnaSequences(string s) {
+        unordered_map<string, int> hash;
+        int length = s.size();
+        vector<string> ret;
+
+        for (int i = 0; i <= length - 10; i++){
+            hash[s.substr(i, 10)]++;
+        }
+        for (auto it: hash){
+            if (it.second >= 2){
+                ret.push_back(it.first);
+            }
+        }
+        return ret;
+
+    }
+};
+```
+

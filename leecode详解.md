@@ -1912,3 +1912,34 @@ public:
 };
 ```
 
+
+
+## LeetCode172
+
+[阶乘后的零](https://leetcode.cn/problems/factorial-trailing-zeroes/)
+
+> 计算5的个数，即为0的个数
+
+
+
+```c++
+输入：n = 5
+输出：1
+解释：5! = 120 ，有一个尾随 0
+```
+
+```c++
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        int ret = 0;
+        for (int i = 5; i <= n; i = i + 5){
+            for (int j = i; j % 5 == 0; j = j / 5){
+                ret = ret + 1;
+            }
+        }
+        return ret;
+    }
+};
+```
+

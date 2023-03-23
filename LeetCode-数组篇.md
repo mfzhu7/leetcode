@@ -174,3 +174,305 @@ public:
 };
 ```
 
+
+
+## LeetCode152 
+
+[乘积最大的子数组](https://leetcode.cn/problems/maximum-product-subarray/)
+
+> 数组+动态规划
+
+```c++
+输入: nums = [2,3,-2,4]
+输出: 6
+解释: 子数组 [2,3] 有最大乘积 6。
+```
+
+
+
+```c++
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        if(nums.size() == 0) return 0;
+        if (nums.size() == 1) return nums[0];
+        int currMax = nums[0];
+        int max_p = nums[0];
+        int min_p = nums[0];
+		//核心点在于，在每一步都算好当前的最大值和最小值；
+        //在遍历新一步的时候，计算最大值和最小值和新的值的结果，找到最大值
+        //计算最小值的原因是因为有可能存在负数，乘积负数得到最大
+        for (int i = 1; i < nums.size(); i++){
+            int temp = max_p;
+            max_p = max(max(max_p * nums[i], nums[i]), min_p * nums[i]);
+            min_p = min(min(temp * nums[i], nums[i]), min_p * nums[i]);
+            currMax = max(currMax, max_p);
+        }
+        return currMax;
+    }
+};
+```
+
+
+
+## LeetCode153 
+
+[寻找旋转排序数组中的最小值](https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array/)
+
+> 数据+变形二分查找
+
+
+
+```c++
+输入：nums = [4,5,6,7,0,1,2]
+输出：0
+解释：原数组为 [0,1,2,4,5,6,7] ，旋转 4 次得到输入数组。
+```
+
+
+
+```c++
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int ret = INT_MAX;
+        int l = 0;
+        int r = nums.size() - 1;
+        while(l <= r){
+            int mid = l + (r - l) / 2;
+            if (nums[mid] >= nums[0]){
+                ret = min(ret, nums[0]);
+                l = mid + 1; //[3,4,5,6,7,8,1,2]
+            } else {
+                ret = min(ret, nums[mid]); //[7,8,1,2,3,4,5,6]
+                r = mid - 1;
+            }
+        }
+        return ret;
+    }
+};
+```
+
+
+
+## LeetCode162(待添加二分版本)
+
+[寻找峰值](https://leetcode.cn/problems/find-peak-element/)
+
+> 数组+二分查找
+
+
+
+```c++
+输入：nums = [1,2,1,3,5,6,4]
+输出：1 或 5 
+解释：你的函数可以返回索引 1，其峰值元素为 2；
+     或者返回索引 5， 其峰值元素为 6。
+```
+
+
+
+```cpp
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        int idx = 0;
+        for (int i = 0; i < nums.size(); i++){
+            int left = (i - 1 >= 0) ? nums[i - 1] : INT_MIN;
+            int right= (i + 1 < nums.size()) ? nums[i + 1]: INT_MIN;
+            if (nums[i] > left && nums[i] > right) {
+                idx = i;
+                break;
+            }
+        }
+        return idx;
+    }
+};
+```
+
+
+
+## LeetCode167
+
+[ 两数之和 II - 输入有序数组](https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted/)
+
+> 数组+二分查找
+
+```c++
+输入：numbers = [2,7,11,15], target = 9
+输出：[1,2]
+解释：2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。返回 [1, 2] 。
+```
+
+
+
+```c++
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        int left = 0;
+        int right = numbers.size() - 1;
+        vector<int> ret(2);
+        while(left <= right){
+            if (numbers[left] + numbers[right] == target){
+                ret[0] = left + 1;
+                ret[1] = right + 1;
+                break;
+            } else if (numbers[left] + numbers[right] > target) {
+                right = right - 1;
+            } else {
+                left = left + 1;
+            }
+        }
+        return ret;
+    }
+};
+```
+
+
+
+## LeetCode169(其他方法待实现)
+
+[多数元素](https://leetcode.cn/problems/majority-element/)
+
+> 数组+二分查找
+
+```c++
+输入：nums = [2,2,1,1,1,2,2]
+输出：2
+```
+
+```c++
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        unordered_map<int, int> hash;
+        for (auto i: nums){
+            if (hash.find(i) == hash.end()){
+                hash[i] = 1;
+            } else {
+                hash[i] = hash[i] + 1;
+            }
+        }
+        int res;
+        for (auto it: hash){
+            if (it.second > nums.size() / 2){
+                res = it.first;
+            }
+        }
+        return res;
+
+    }
+};
+```
+
+
+
+## LeetCode179(待研究)
+
+[ 最大数](https://leetcode.cn/problems/largest-number/)
+
+```c++
+输入：nums = [3,30,34,5,9]
+输出："9534330"
+```
+
+
+
+```c++
+class Solution {
+public:
+    static bool compare(int num1, int num2){
+        string str1 = to_string(num1) + to_string(num2);
+        string str2 = to_string(num2) + to_string(num1);
+
+        double val1 = stod(str1);
+        double val2 = stod(str2);
+
+        return (val1 > val2);
+    }
+    string largestNumber(vector<int>& nums) {
+        int n = nums.size();
+        sort(nums.begin(), nums.end(), compare);
+        if (nums[0] == 0) return "0";
+        string ans = "";
+        for (int i = 0; i < n; i++){
+            ans = ans + to_string(nums[i]);
+        }
+        return ans;
+    }
+};
+```
+
+
+
+## LeetCode189(其他解法待完善)
+
+[轮转数组](https://leetcode.cn/problems/rotate-array/)
+
+> 数组+双指针
+
+```c++
+输入: nums = [1,2,3,4,5,6,7], k = 3
+输出: [5,6,7,1,2,3,4]
+解释:
+向右轮转 1 步: [7,1,2,3,4,5,6]
+向右轮转 2 步: [6,7,1,2,3,4,5]
+向右轮转 3 步: [5,6,7,1,2,3,4]
+```
+
+
+
+```c++
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        int length = nums.size(); 
+        k = k % length;
+        vector<int> array(length);
+        for (int i = 0; i < length; i++){
+            array[(i + k) % length] = nums[i];
+        }
+
+        nums.assign(array.begin(), array.end());
+        return;
+    }
+};
+```
+
+
+
+## LeetCode198
+
+[打家劫舍](https://leetcode.cn/problems/house-robber/)
+
+> 数组+动态规划
+
+
+
+```c++
+输入：[1,2,3,1]
+输出：4
+解释：偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
+     偷窃到的最高金额 = 1 + 3 = 4 。
+```
+
+
+
+```c++
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        if(nums.size() == 1) return nums[0];
+        vector<int>dp(nums.size(),0);
+        dp[0] = nums[0];
+        dp[1] = max(nums[0],nums[1]);
+
+        for (int i = 2; i < nums.size(); i++){
+            dp[i] = max(dp[i - 2] + nums[i], dp[i - 1]);
+        }
+        return dp[nums.size() - 1];
+    }
+};
+```
+

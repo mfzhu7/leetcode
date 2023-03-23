@@ -690,3 +690,66 @@ public:
 };
 ```
 
+
+
+## LeetCode160
+
+[相交链表](https://leetcode.cn/problems/intersection-of-two-linked-lists/)
+
+> 链表+指针
+
+
+
+![img](https://assets.leetcode.com/uploads/2021/03/05/160_example_1_1.png)
+
+```c++
+输入：intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3
+输出：Intersected at '8'
+解释：相交节点的值为 8 （注意，如果两个链表相交则不能为 0）。
+从各自的表头开始算起，链表 A 为 [4,1,8,4,5]，链表 B 为 [5,6,1,8,4,5]。
+在 A 中，相交节点前有 2 个节点；在 B 中，相交节点前有 3 个节点。
+— 请注意相交节点的值不为 1，因为在链表 A 和链表 B 之中值为 1 的节点 (A 中第二个节点和 B 中第三个节点) 是不同的节点。换句话说，它们在内存中指向两个不同的位置，而链表 A 和链表 B 中值为 8 的节点 (A 中第三个节点，B 中第四个节点) 在内存中指向相同的位置。
+```
+
+
+
+```c++
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        int lengthA = 0;
+        int lengthB = 0;
+        ListNode* curr = headA;
+        while(curr){
+            lengthA += 1;
+            curr = curr->next;
+        } //计算a的长度
+        curr = headB;
+        while(curr){
+            lengthB += 1;
+            curr = curr->next;
+        } //计算b的长度
+        int diff = lengthA > lengthB ? lengthA - lengthB : lengthB - lengthA;
+		//找到diff
+        curr = lengthA > lengthB ? headA : headB;
+        ListNode* other = (lengthA > lengthB) ? headB: headA;
+		//找到较长的那个头节点
+        while(diff){
+            curr = curr->next;
+            diff = diff - 1;
+        } //让其中一个指针先走diff步
+        while(curr){
+            if (curr == other){
+                return curr;
+                //相遇了即为相交节点
+            } else {
+                curr = curr->next;
+                other = other->next;
+            }
+        }
+        return nullptr;
+        
+    }
+};
+```
+
