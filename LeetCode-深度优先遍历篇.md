@@ -462,3 +462,116 @@ public:
 };
 ```
 
+
+
+## LeetCode207
+
+[课程表](https://leetcode.cn/problems/course-schedule/)
+
+> 拓扑排序
+
+```c++
+输入：numCourses = 2, prerequisites = [[1,0]]
+输出：true
+解释：总共有 2 门课程。学习课程 1 之前，你需要完成课程 0 。这是可能的。
+```
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> edges;
+    vector<int> inedg;
+    vector<int> result;
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+
+        edges.resize(numCourses);
+        inedg.resize(numCourses);
+
+        for(auto info: prerequisites){
+            edges[info[1]].push_back(info[0]);
+            inedg[info[0]]++;
+        }
+        queue<int> q;
+        for (int i = 0; i < numCourses; i++){
+            if(inedg[i] == 0){
+                q.push(i);
+            }
+        }
+        while(!q.empty()){
+            int u = q.front();
+            q.pop();
+            result.push_back(u);
+
+            for (auto v: edges[u]){
+                --inedg[v];
+                if(inedg[v] == 0){
+                    q.push(v);
+                }
+            }
+        }
+        if (result.size() != numCourses){
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+};
+```
+
+
+
+## LeetCode210
+
+[课程表 II](https://leetcode.cn/problems/course-schedule-ii/)
+
+```c++
+输入：numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
+输出：[0,2,1,3]
+解释：总共有 4 门课程。要学习课程 3，你应该先完成课程 1 和课程 2。并且课程 1 和课程 2 都应该排在课程 0 之后。
+因此，一个正确的课程顺序是 [0,1,2,3] 。另一个正确的排序是 [0,2,1,3] 。
+```
+
+
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> edges;
+    vector<int> inedg;
+    vector<int> result;
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        edges.resize(numCourses);
+        inedg.resize(numCourses);
+
+        for(auto info : prerequisites){
+            edges[info[1]].push_back(info[0]);
+            ++inedg[info[0]];
+        }
+        queue<int> q;
+        for (int i = 0; i < numCourses; i++){
+            if(inedg[i] == 0){
+                q.push(i);
+            }
+        }
+        while(!q.empty()){
+            int u = q.front();
+            q.pop();
+            result.push_back(u);
+
+            for(auto v: edges[u]){
+                --inedg[v];
+                if(inedg[v] == 0){
+                    q.push(v);
+                }
+            }
+        }
+        if(result.size() != numCourses){
+            return {};
+        } else {
+            return result;
+        }
+    }
+};
+```
+

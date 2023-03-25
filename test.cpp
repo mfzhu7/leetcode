@@ -21,9 +21,10 @@ int main() {
     std::string name1;
     int age1;
     std::tie(name1, age1) = createPerson();
+    std::cout << "hello world" << std::endl;
 
-    auto [name, age] = createPerson();
-    std::cout << name << age << std::endl;
+    // auto [name, age] = createPerson();
+    // std::cout << name << age << std::endl;
 
 }
 ;

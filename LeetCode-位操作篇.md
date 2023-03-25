@@ -130,3 +130,32 @@ public:
 };
 ```
 
+
+
+## LeetCode201(没看懂)
+
+[[数字范围按位与](https://leetcode.cn/problems/bitwise-and-of-numbers-range/)]
+
+> 数组+位操作
+
+```c++
+输入：left = 5, right = 7
+输出：4
+```
+
+```c++
+class Solution {
+public:
+    int rangeBitwiseAnd(int left, int right) {
+        int shift = 0;
+        while(left < right){
+            left >>= 1;
+            right >>= 1;
+            shift = shift + 1;
+        }
+        return left << shift;
+
+    }
+};
+```
+

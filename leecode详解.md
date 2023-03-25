@@ -1943,3 +1943,93 @@ public:
 };
 ```
 
+
+
+## LeetCode202
+
+[快乐数](https://leetcode.cn/problems/happy-number/)
+
+
+
+> 直接实现过程
+
+```c++
+输入：n = 19
+输出：true
+解释：
+12 + 92 = 82
+82 + 22 = 68
+62 + 82 = 100
+12 + 02 + 02 = 1
+```
+
+
+
+
+
+```c++
+class Solution {
+public:
+    int helper(int n){
+        int ret = 0;
+        while(n){
+            ret = ret + (n % 10) * (n % 10) ;
+            n = (n - n % 10) / 10;
+        } //求出每一位的平方和
+        return ret;
+    }
+    bool isHappy(int n) {
+        unordered_set<int> hash;
+        while(n){
+            int temp = helper(n);
+            if (temp == 1) return true;
+            if (hash.find(temp) != hash.end()) return false;
+            hash.insert(temp);
+            n = temp;
+        }
+        return true;
+
+    }
+};
+```
+
+
+
+## LeetCode204(待完善)
+
+[计数质数](https://leetcode.cn/problems/count-primes/)
+
+> 存储已有的质数，并且在平方根内进行寻找即可
+
+
+
+```c++
+输入：n = 10
+输出：4
+解释：小于 10 的质数一共有 4 个, 它们是 2, 3, 5, 7 。
+```
+
+
+
+```c++
+class Solution {
+public:
+    int countPrimes(int n) {
+        vector<int> isPrime(n, 1);
+        int ans = 0;
+        for (int i = 2; i < n; ++i) {
+            if (isPrime[i]) {
+                ans += 1;
+                if ((long long)i * i < n) {
+                    for (int j = i * i; j < n; j += i) {
+                        isPrime[j] = 0;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+```
+

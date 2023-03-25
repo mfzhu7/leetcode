@@ -753,3 +753,78 @@ public:
 };
 ```
 
+
+
+## LeetCode203
+
+> 链表注意虚拟头节点的创建
+
+![img](https://assets.leetcode.com/uploads/2021/03/06/removelinked-list.jpg)
+
+```c++
+输入：head = [1,2,6,3,4,5,6], val = 6
+输出：[1,2,3,4,5]
+```
+
+```c++
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        if (head == nullptr) {return head;}
+        ListNode* dummy = new ListNode(-1);
+        dummy->next = head;
+
+        ListNode* temp = dummy;
+        while(temp->next != nullptr){
+            if(temp->next->val == val){
+                temp->next = temp->next->next;
+            } else{
+                temp = temp->next;
+            }
+        }
+        return dummy->next;
+
+    }
+};
+```
+
+
+
+## LeetCode206
+
+[反转链表](https://leetcode.cn/problems/reverse-linked-list/)
+
+
+
+
+
+![img](https://assets.leetcode.com/uploads/2021/02/19/rev1ex1.jpg)
+
+
+
+```c++
+输入：head = [1,2,3,4,5]
+输出：[5,4,3,2,1]
+```
+
+
+
+```c++
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if (!head) return head;
+        ListNode* prev(0);
+        ListNode* curr = head;
+        while(curr){
+            ListNode* temp = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = temp;
+        }
+        return prev;
+
+    }
+};
+```
+
