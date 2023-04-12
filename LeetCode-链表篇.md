@@ -828,3 +828,74 @@ public:
 };
 ```
 
+
+
+## LeetCode234
+
+[回文链表](https://leetcode.cn/problems/palindrome-linked-list/)
+
+
+
+```c++
+输入：head = [1,2,2,1]
+输出：true
+```
+
+
+
+```c++
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        vector<int> vec;
+        while(head){
+            vec.push_back(head->val);
+            head = head->next;
+        }
+        int left = 0;
+        int right = vec.size() - 1;
+        while(left < right){
+            if (vec[left] != vec[right]) return false;
+            left = left + 1;
+            right = right - 1;
+        }
+        return true;
+
+    }
+};
+```
+
+
+
+## LeetCode237
+
+[ 删除链表中的节点](https://leetcode.cn/problems/delete-node-in-a-linked-list/)
+
+```c++
+输入：head = [4,5,1,9], node = 5
+输出：[4,1,9]
+解释：指定链表中值为 5 的第二个节点，那么在调用了你的函数之后，该链表应变为 4 -> 1 -> 9
+```
+
+
+
+```c++
+class Solution {
+public:
+    void deleteNode(ListNode* node) {
+        while(node->next){
+            if (node->next->next == nullptr){
+                node->val = node->next->val;
+                node->next = nullptr;
+                break;
+
+            } else {
+                node->val = node->next->val;
+                node = node->next;
+            }
+        }
+        return;
+    }
+};
+```
+

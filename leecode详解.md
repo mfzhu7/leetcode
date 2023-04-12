@@ -2033,3 +2033,335 @@ public:
 
 ```
 
+
+
+## LeetCode223
+
+[矩形面积](https://leetcode.cn/problems/rectangle-area/)
+
+
+
+```c++
+输入：ax1 = -3, ay1 = 0, ax2 = 3, ay2 = 4, bx1 = 0, by1 = -1, bx2 = 9, by2 = 2
+输出：45
+```
+
+
+
+```c++
+class Solution {
+public:
+    int computeArea(int ax1, int ay1, int ax2, int ay2, int bx1, int by1, int bx2, int by2) {
+        int area1 = (ax2 - ax1 ) * (ay2 - ay1);
+        int area2 = (bx2 - bx1) * (by2 - by1);
+
+        int overlapWidth = min(bx2, ax2) - max(bx1, ax1);
+        int overlapHeight = min(by2, ay2) - max(by1, ay1);
+
+        int overlapArea = max(overlapHeight, 0) * max(overlapWidth, 0);
+        return (area1 + area2) - overlapArea;
+    }
+};
+```
+
+
+
+## LeetCode227
+
+[基本计算器 II](https://leetcode.cn/problems/basic-calculator-ii/)
+
+```c++
+输入：s = "3+2*2"
+输出：7
+```
+
+
+
+```c++
+class Solution {
+public:
+    int calculate(string s) {
+        vector<int> stk;
+        char preSign = '+';
+        int n = s.size();
+        int num = 0;
+        for (int i = 0; i < n; i++){
+            if(isdigit(s[i])){
+                num = num * 10 + int(s[i] - '0');
+            }
+            if(!isdigit(s[i]) && s[i] != ' ' || i == n - 1){
+                switch(preSign){
+                    case '+':
+                        stk.push_back(num);
+                        break;
+                    case '-':
+                        stk.push_back(-num);
+                        break;
+                    case '*':
+                        stk.back() *= num;
+                        break;
+                    default:
+                        stk.back() /= num;
+                        break;
+                }
+                num = 0;
+                preSign = s[i];
+            }
+        }
+
+        return accumulate(stk.begin(), stk.end(), 0);
+    }
+};
+```
+
+
+
+## LeetCode258
+
+[各位相加](https://leetcode.cn/problems/add-digits/)
+
+```c++
+输入: num = 38
+输出: 2 
+解释: 各位相加的过程为：
+38 --> 3 + 8 --> 11
+11 --> 1 + 1 --> 2
+由于 2 是一位数，所以返回 2。
+```
+
+
+
+```c++
+class Solution {
+public:
+    int addDigits(int num) {
+        
+        while(num >= 10){
+            int sum = 0;
+            while(num){
+                sum += num % 10;
+                num = num / 10;
+            }
+            num = sum;
+        }
+        return num;
+
+    }
+};
+```
+
+
+
+## LeetCode263
+
+[丑数](https://leetcode.cn/problems/ugly-number/)
+
+```c++
+输入：n = 6
+输出：true
+解释：6 = 2 × 3
+```
+
+```c++
+class Solution {
+public:
+    bool isUgly(int n) {
+        if (n <= 0) return false;
+        while(n){
+            if (n % 2 == 0) n = n / 2;
+            else if  (n % 3 == 0){
+                n = n / 3;
+            } else if (n % 5 == 0){
+                n = n / 5;
+            } else {
+                if (n == 1) return true;
+                else return false;
+            }
+        }
+        return true;
+
+    }
+};
+```
+
+
+
+
+
+## LeetCode264
+
+[丑数 II](https://leetcode.cn/problems/ugly-number-ii/)
+
+```c++
+输入：n = 10
+输出：12
+解释：[1, 2, 3, 4, 5, 6, 8, 9, 10, 12] 是由前 10 个丑数组成的序列。
+```
+
+```c++
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        vector<int> dp(n+1);
+        dp[1] = 1;
+        int p2 = 1;
+        int p3 = 1;
+        int p5 = 1;
+        for (int i = 2;i <= n; i++){
+            int num2 = dp[p2] * 2;
+            int num3 = dp[p3] * 3;
+            int num5 = dp[p5] * 5;
+            dp[i] = min(min(num2, num3), num5);
+            if(dp[i] == num2){
+                p2++;
+            }
+            if(dp[i] == num3){
+                p3++;
+            }
+            if(dp[i] == num5){
+                p5++;
+            }
+        }
+        return dp[n];
+
+    }
+};
+```
+
+
+
+## LeetCode278
+
+[第一个错误的版本](https://leetcode.cn/problems/first-bad-version/)
+
+```c++
+输入：n = 5, bad = 4
+输出：4
+解释：
+调用 isBadVersion(3) -> false 
+调用 isBadVersion(5) -> true 
+调用 isBadVersion(4) -> true
+所以，4 是第一个错误的版本。
+```
+
+```c++
+class Solution {
+public:
+    int firstBadVersion(int n) {
+        int left = 1;
+        int right = n;
+        while(left <= right){
+            int mid = left + (right - left) / 2;
+            if (isBadVersion(mid)) right = mid - 1;
+            else left = mid + 1;
+        }
+        return left;
+        
+    }
+};
+```
+
+
+
+## LeetCode279
+
+[完全平方数](https://leetcode.cn/problems/perfect-squares/)
+
+```c++
+输入：n = 12
+输出：3 
+解释：12 = 4 + 4 + 4
+```
+
+```c++
+class Solution {
+public:
+    int numSquares(int n) {
+        vector<int> dp(n+1);
+        dp[0] = 0;
+
+        for (int i = 1; i <= n; i++){
+            int minn = INT_MAX;
+            for(int j = 1; j * j <= i; j++){
+                minn = min(minn, dp[i - j*j]);
+            }
+            dp[i] = minn + 1;
+        }
+        return dp[n];
+
+    }
+};
+```
+
+
+
+## LeetCode292
+
+[Nim 游戏](https://leetcode.cn/problems/nim-game/)
+
+```c++
+输入：n = 4
+输出：false 
+解释：以下是可能的结果:
+1. 移除1颗石头。你的朋友移走了3块石头，包括最后一块。你的朋友赢了。
+2. 移除2个石子。你的朋友移走2块石头，包括最后一块。你的朋友赢了。
+3.你移走3颗石子。你的朋友移走了最后一块石头。你的朋友赢了。
+在所有结果中，你的朋友是赢家。
+```
+
+```c++
+class Solution {
+public:
+    bool canWinNim(int n) {
+        return n % 4 != 0;
+
+    }
+};
+```
+
+
+
+## LeetCode299
+
+[猜数字游戏](https://leetcode.cn/problems/bulls-and-cows/)
+
+```c++
+输入：secret = "1807", guess = "7810"
+输出："1A3B"
+解释：数字和位置都对（公牛）用 '|' 连接，数字猜对位置不对（奶牛）的采用斜体加粗标识。
+"1807"
+  |
+"7810"
+```
+
+```c++
+class Solution {
+public:
+    string getHint(string secret, string guess) {
+        map<int, int> hash;
+        vector<int> pos1(10,0);
+        vector<int> pos2(10,0);
+        int bull = 0;
+        int cow = 0;
+
+        for (int i = 0; i < secret.size(); i++){
+            pos1[secret[i] - '0']++;
+            pos2[guess[i] - '0']++;
+            if(secret[i] == guess[i]){
+                hash[secret[i] - '0']++;
+                bull++;
+            }
+        }
+        for(int i = 0; i < 10; i++){
+            if(pos1[i] == 0){
+                continue;
+            } else{
+                cow = cow + min(pos1[i] - hash[i], pos2[i] - hash[i]);
+            }
+        }
+        string ans = to_string(bull) + "A" + to_string(cow) + "B";
+        return ans; 
+    }
+};
+```
+

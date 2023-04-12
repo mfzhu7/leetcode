@@ -1,5 +1,7 @@
 # LeetCode-位操作篇
 
+[toc]
+
 
 
 ## LeetCode136
@@ -154,6 +156,97 @@ public:
             shift = shift + 1;
         }
         return left << shift;
+
+    }
+};
+```
+
+
+
+## LeetCode231
+
+[2 的幂](https://leetcode.cn/problems/power-of-two/)
+
+```c++
+输入：n = 1
+输出：true
+解释：20 = 1
+```
+
+
+
+```c++
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        return n > 0 && (n & (n - 1)) == 0;
+    }
+};
+```
+
+
+
+## LeetCode260
+
+[只出现一次的数字 III](https://leetcode.cn/problems/single-number-iii/)
+
+```c++
+输入：nums = [1,2,1,3,2,5]
+输出：[3,5]
+解释：[5, 3] 也是有效的答案。
+```
+
+
+
+```c++
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        int xorsum = 0;
+        for (auto i :nums){
+            xorsum ^= i;
+        }
+
+        xorsum = (xorsum == INT_MIN) ? xorsum : xorsum & (-1 * xorsum);
+        int type1 = 0;
+        int type2 = 0;
+        for (auto i : nums){
+            if (xorsum & i){
+                type1 ^= i;
+            } else {
+                type2 ^= i; 
+            }
+        }
+        return {type1,type2};
+
+    }
+};
+```
+
+
+
+## LeetCode268
+
+[丢失的数字](https://leetcode.cn/problems/missing-number/)
+
+```c++
+输入：nums = [0,1]
+输出：2
+解释：n = 2，因为有 2 个数字，所以所有的数字都在范围 [0,2] 内。2 是丢失的数字，因为它没有出现在 nums 中。
+```
+
+```c++
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        int ans = nums[0];
+        for (int i = 1; i < nums.size(); i++){
+            ans ^= nums[i];
+        }
+        for (int i = 0; i <= nums.size(); i++){
+            ans ^= i;
+        }
+        return ans;
 
     }
 };

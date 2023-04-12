@@ -1026,3 +1026,262 @@ public:
 };
 ```
 
+
+
+## LeetCode222
+
+[完全二叉树的节点个数](https://leetcode.cn/problems/count-complete-tree-nodes/)
+
+> 递归+位运算
+
+```c++
+输入：root = [1,2,3,4,5,6]
+输出：6
+```
+
+
+
+```c++
+class Solution {
+public:
+    int countLevel(TreeNode* root){
+        int level = 0;
+        while(root){
+            level = level + 1;
+            root = root->left;
+        }
+        return level;
+    }
+    int countNodes(TreeNode* root) {
+        if (!root) return 0;
+
+        int left = countLevel(root->left);
+        int right = countLevel(root->right);
+
+        if (left == right){
+            return countNodes(root->right) + (1 << left);
+        } else {
+            return countNodes(root->left) + (1 << right);
+        }
+    }
+};
+```
+
+
+
+## LeetCode226 
+
+[翻转二叉树](https://leetcode.cn/problems/invert-binary-tree/)
+
+> 递归
+
+```c++
+输入：root = [4,2,7,1,3,6,9]
+输出：[4,7,2,9,6,3,1]
+```
+
+
+
+```c++
+class Solution {
+public:
+
+    TreeNode* invertTree(TreeNode* root) {
+        if(!root) return root;
+        TreeNode* tmp = root->left;
+        root->left = root->right;
+        root->right = tmp;
+        invertTree(root->left);
+        invertTree(root->right);
+        return root;
+    }
+};
+```
+
+
+
+## LeetCode228
+
+[汇总区间](https://leetcode.cn/problems/summary-ranges/)
+
+```c++
+输入：nums = [0,1,2,4,5,7]
+输出：["0->2","4->5","7"]
+解释：区间范围是：
+[0,2] --> "0->2"
+[4,5] --> "4->5"
+[7,7] --> "7"
+```
+
+
+
+```c++
+class Solution {
+public:
+    vector<string> summaryRanges(vector<int>& nums) {
+        vector<string> ret;
+        int n = nums.size();
+        int idx = 0;
+        while(idx < n){
+            if ((idx == n - 1) || (idx + 1 < n && nums[idx] + 1 != nums[idx + 1])){
+                ret.push_back(to_string(nums[idx]));
+                idx = idx + 1;
+            } else {
+                int start = idx;
+                while(idx + 1 < n && nums[idx] + 1 == nums[idx + 1]){
+                    idx = idx + 1;
+                }
+                ret.push_back(to_string(nums[start]) + "->" + to_string(nums[idx]));
+                idx = idx + 1;
+            }
+        }
+        return ret;
+
+    }
+};
+```
+
+
+
+## LeetCode230 
+
+[二叉搜索树中第K小的元素](https://leetcode.cn/problems/kth-smallest-element-in-a-bst/)
+
+```c++
+输入：root = [3,1,4,null,2], k = 1
+输出：1
+```
+
+```c++
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        stack<TreeNode*> stk;
+
+        while(root != nullptr || !stk.empty()){
+            while(root != nullptr){
+                stk.push(root);
+                root = root->left;
+            }
+            root = stk.top();
+            stk.pop();
+            k--;
+            if (k == 0) break;
+            root = root->right;
+        }
+        return root->val;
+
+    }
+};
+```
+
+
+
+## LeetCode235
+
+[二叉搜索树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/)
+
+```c++
+输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+输出: 6 
+解释: 节点 2 和节点 8 的最近公共祖先是 6。
+```
+
+```c++
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        TreeNode* ancestor;
+        while(root){
+            if(root->val > p->val && root->val > q->val){
+                root = root->left;
+            } else if (root->val < p->val && root->val < q->val){
+                root = root->right;
+            } else {
+                ancestor = root;
+                break;
+            }
+        }
+        return ancestor;
+        
+    }
+};
+```
+
+
+
+
+
+## LeetCode236
+
+[二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/)
+
+```c++
+输入：root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+输出：3
+解释：节点 5 和节点 1 的最近公共祖先是节点 3 。
+```
+
+```c++
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(root == nullptr || p == root || q == root){
+            return root;
+        }
+        TreeNode* left = lowestCommonAncestor(root->left, p, q);
+        TreeNode* right = lowestCommonAncestor(root->right, p, q);
+
+        if(left == nullptr && right == nullptr){
+            return nullptr;
+        }
+        if(left == nullptr){
+            return right;
+        }
+        if(right == nullptr){
+            return left;
+        }
+        return root;
+        
+    }
+};
+```
+
+
+
+## LeetCode257
+
+[二叉树的所有路径](https://leetcode.cn/problems/binary-tree-paths/)
+
+```c++
+输入：root = [1,2,3,null,5]
+输出：["1->2->5","1->3"]
+```
+
+
+
+```c++
+class Solution {
+public:
+    void helper(TreeNode* root, vector<string>& ret, string path){
+        if (!root) return;
+        if (!root->left && !root->right){
+            path = path + to_string(root->val);
+            ret.push_back(path);
+            return;
+        }
+        path = path + to_string(root->val);
+        path = path + "->";
+        helper(root->left, ret, path);
+        helper(root->right, ret, path);
+        return;
+    }
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<string> ret;
+        string path;
+        helper(root, ret, path);
+        return ret;
+    }
+};
+```
+

@@ -374,3 +374,96 @@ public:
 };
 ```
 
+
+
+## LeetCode240
+
+[搜索二维矩阵 II](https://leetcode.cn/problems/search-a-2d-matrix-ii/)
+
+```c++
+输入：matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 5
+输出：true
+```
+
+```c++
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int row = matrix.size();
+        int col = matrix[0].size();
+
+        int s_x = row - 1;
+        int s_y = 0;
+        while(s_x >= 0 && s_y < col){
+            if (matrix[s_x][s_y] == target) return true;
+            if (matrix[s_x][s_y] < target) s_y += 1;
+            else s_x -= 1;
+        }
+        return false;
+        
+    }
+};
+```
+
+
+
+
+
+## LeetCode289
+
+[生命游戏](https://leetcode.cn/problems/game-of-life/)
+
+```c++
+输入：board = [[0,1,0],[0,0,1],[1,1,1],[0,0,0]]
+输出：[[0,0,0],[1,0,1],[0,1,1],[0,1,0]]
+```
+
+
+
+```c++
+class Solution {
+public:
+    void gameOfLife(vector<vector<int>>& board) {
+        int neighbors[3] = {-1, 0, 1};
+        int rows = board.size();
+        int cols = board[0].size();
+
+        for (int row = 0; row < rows; row++){
+            for (int col = 0; col < cols; col++){
+                int livenei = 0;
+                for (int i = 0; i < 3; i++){
+                    for (int j = 0; j < 3; j++){
+                        if (!(neighbors[i] == 0 && neighbors[j] == 0)){
+                            int r = row + neighbors[i];
+                            int c = col + neighbors[j];
+
+                            if (r >= 0 && c >= 0 && r < rows && c < cols && abs(board[r][c]) == 1){
+                                livenei += 1;
+                            }
+                        }
+                    }
+                }
+
+                if (board[row][col] == 1 && (livenei < 2 || livenei > 3)){
+                    board[row][col] = -1;
+                }
+                if (board[row][col] == 0 && livenei == 3){
+                    board[row][col] = 2;
+                }
+            }
+        }
+        for (int i = 0; i < rows; i++){
+            for (int j = 0; j < cols; j++){
+                if (board[i][j] > 0){
+                    board[i][j] = 1;
+                } else {
+                    board[i][j] = 0;
+                }
+            }
+        }
+        return;
+
+    }
+};
+```
+

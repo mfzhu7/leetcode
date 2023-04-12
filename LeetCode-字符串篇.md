@@ -363,3 +363,79 @@ public:
 };
 ```
 
+
+
+## LeetCode242
+
+[有效的字母异位词](https://leetcode.cn/problems/valid-anagram/)
+
+```c++
+输入: s = "anagram", t = "nagaram"
+输出: true
+```
+
+
+
+```c++
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        if (s.size() != t.size()) return false;
+        int vec1[26] = {};
+        int vec2[26] = {};
+
+        for (int i = 0; i < s.size(); i++){
+            vec1[s[i] - 'a'] += 1;
+        }
+        for (int i = 0; i < t.size(); i++){
+            vec2[t[i] - 'a'] += 1;
+        }
+
+        for (int i = 0; i < 26; i++){
+            if (vec1[i] != vec2[i]) return false;
+        }
+        return true;
+    }
+};
+```
+
+
+
+## LeetCode290
+
+[单词规律](https://leetcode.cn/problems/word-pattern/)
+
+```c++
+输入:pattern = "abba", s = "dog cat cat fish"
+输出: false
+```
+
+```c++
+class Solution {
+public:
+    bool wordPattern(string pattern, string s) {
+        vector<string> vec;
+        stringstream ss;
+        string str;
+        ss << s;
+        unordered_map<char, string> hash1;
+        unordered_map<string, char> hash2;
+
+        while(getline(ss, str, ' ')){
+            vec.push_back(str);
+        }
+        if (pattern.size() != vec.size()) return false;
+        for (int i = 0; i < vec.size(); i++){
+            if (hash1.find(pattern[i]) == hash1.end()){
+                if (hash2.find(vec[i]) != hash2.end()) return false;
+                hash1[pattern[i]] = vec[i];
+                hash2[vec[i]] = pattern[i];
+            } else {
+                if (hash1[pattern[i]] != vec[i]) return false;
+            }
+        }
+        return true;
+    }
+};
+```
+

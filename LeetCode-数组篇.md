@@ -605,3 +605,249 @@ public:
 };
 ```
 
+
+
+## LeetCode229
+
+[ 多数元素 II](https://leetcode.cn/problems/majority-element-ii/)
+
+```c++
+输入：nums = [3,2,3]
+输出：[3]
+```
+
+```c++
+class Solution {
+public:
+    vector<int> majorityElement(vector<int>& nums) {
+        int element1 = 0;
+        int element2 = 0;
+        int vote1 = 0;
+        int vote2 = 0;
+        for (auto num: nums){
+            if (vote1 > 0 && element1 == num){
+                vote1++;
+            } else if (vote2 > 0 && element2 == num){
+                vote2++;
+            } else if (vote1 == 0){
+                vote1++;
+                element1 = num;
+            } else if (vote2 == 0){
+                vote2++;
+                element2 = num;
+            } else {
+                vote1--;
+                vote2--;
+            }
+        }
+        int cnt1 = 0;
+        int cnt2 = 0;
+        for (auto num: nums){
+            if (vote1 > 0 && num == element1) cnt1++;
+            if (vote2 > 0 && num == element2) cnt2++;
+        }
+        vector<int> ret;
+        if (vote1 > 0 && cnt1 > nums.size() / 3) ret.push_back(element1);
+        if (vote2 > 0 && cnt2 > nums.size() / 3) ret.push_back(element2);
+        return ret;
+    }
+};
+```
+
+
+
+## LeetCode238
+
+[除自身以外数组的乘积](https://leetcode.cn/problems/product-of-array-except-self/)
+
+```c++
+输入: nums = [1,2,3,4]
+输出: [24,12,8,6]
+```
+
+```c++
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int n = nums.size();
+        vector<int>L(n, 1);
+        for (int i = 1; i < n; i++){
+            L[i] = L[i - 1] * nums[i - 1];
+        }
+        int right = 1;
+        vector<int> ret(n, 0);
+        for(int i = n - 1; i >= 0; i--){
+            ret[i] = L[i] * right;
+            right = right * nums[i];
+        }
+        return ret;
+
+
+    }
+};
+```
+
+
+
+## LeetCode274
+
+[ H 指数](https://leetcode.cn/problems/h-index/)
+
+```c++
+输入：citations = [3,0,6,1,5]
+输出：3 
+解释：给定数组表示研究者总共有 5 篇论文，每篇论文相应的被引用了 3, 0, 6, 1, 5 次。
+     由于研究者有 3 篇论文每篇 至少 被引用了 3 次，其余两篇论文每篇被引用 不多于 3 次，所以她的 h 指数是 3。
+```
+
+```c++
+class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+        sort(citations.begin(), citations.end());
+        int h = 0;
+        int i = citations.size() - 1;
+        while(i >= 0 && citations[i] > h){
+            h++;
+            i--;
+        }
+        return h;
+    }
+};
+```
+
+
+
+## LeetCode275 
+
+[ H 指数 II](https://leetcode.cn/problems/h-index-ii/)
+
+```c++
+输入：citations = [0,1,3,5,6]
+输出：3 
+解释：给定数组表示研究者总共有 5 篇论文，每篇论文相应的被引用了 0, 1, 3, 5, 6 次。
+     由于研究者有 3 篇论文每篇 至少 被引用了 3 次，其余两篇论文每篇被引用 不多于 3 次，所以她的 h 指数是 3 。
+```
+
+```c++
+ class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+        int size = citations.size();
+        int left = 0;
+        int right = citations.size() - 1;
+        int h = 0;
+        while(left <= right){
+            int mid = left + (right - left) / 2;
+            if (citations[mid] >= size - mid){
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return size - left;
+
+    }
+};
+```
+
+
+
+## LeetCode283
+
+[ 移动零](https://leetcode.cn/problems/move-zeroes/)
+
+```c++
+输入: nums = [0,1,0,3,12]
+输出: [1,3,12,0,0]
+```
+
+```c++
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int j = 0;
+        for (int i = 0; i < nums.size(); i++){
+            if (nums[i] != 0){
+                int tmp = nums[j];
+                nums[j] = nums[i];
+                nums[i] = tmp;
+                j++;
+            }
+        }
+        return;
+
+    }
+};
+```
+
+
+
+## LeetCode287
+
+[寻找重复数](https://leetcode.cn/problems/find-the-duplicate-number/)
+
+
+
+```
+输入：nums = [1,3,4,2,2]
+输出：2
+```
+
+
+
+```
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) {
+        int ans = 0;
+        unordered_map<int, int> hash;
+        for (auto i : nums){
+            if (hash.find(i) == hash.end()){
+                hash[i] = 1;
+            } else {
+                ans = i;
+                break;
+            }
+        }
+        return ans;
+
+    }
+};
+```
+
+
+
+## LeetCode300
+
+[最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/)
+
+```c++
+输入：nums = [10,9,2,5,3,7,101,18]
+输出：4
+解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。
+```
+
+```c++
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> dp(n, 0);
+        dp[0] = 1;
+        int ans = 1;
+        for (int i = 1; i < n; i++){
+            int temp = 1;
+            for (int j = 0; j < i; j++){
+                if(nums[i] > nums[j]){
+                    temp = max(temp, dp[j] + 1);
+                }
+            }
+            dp[i] = temp;
+            ans = max(ans, dp[i]);
+        }
+        return ans;
+    }
+};
+```
+
