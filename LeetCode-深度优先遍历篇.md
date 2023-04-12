@@ -1,6 +1,10 @@
 # LeetCode-深度优先遍历篇
 
-leetcode17
+[toc]
+
+
+
+## Leetcode17
 
 [电话号码的字母组合](https://leetcode.cn/problems/letter-combinations-of-a-phone-number/)
 
@@ -47,7 +51,7 @@ public:
 };
 ```
 
-leetcode 39 
+## Leetcode 39 
 
 > 深度优先搜索+回溯+剪枝
 
@@ -97,7 +101,7 @@ public:
 
 
 
-leetcode40 
+## Leetcode40 
 
 [组合总和 II](https://leetcode.cn/problems/combination-sum-ii/)
 
@@ -152,7 +156,7 @@ public:
 };
 ```
 
-leetcode46 
+## Leetcode46 
 
 [全排列](https://leetcode.cn/problems/permutations/description/)
 
@@ -191,7 +195,7 @@ public:
 };
 ```
 
-leetcode47 
+## Leetcode47 
 
 [全排列 II](https://leetcode.cn/problems/permutations-ii/)
 
@@ -231,7 +235,7 @@ public:
     }
 ```
 
-## leetcode77
+## Leetcode77
 
 [组合](https://leetcode.cn/problems/combinations/)
 
@@ -279,7 +283,7 @@ public:
 };
 ```
 
-## leetcode78
+## Leetcode78
 
 [子集](https://leetcode.cn/problems/subsets/)
 
@@ -315,7 +319,7 @@ public:
 };
 ````
 
-## leetcode79
+## Leetcode79
 
 [单词搜索](https://leetcode.cn/problems/word-search/)
 
@@ -362,7 +366,7 @@ public:
 };
 ```
 
-## leetcode90
+## Leetcode90
 
 [子集II](https://leetcode.cn/problems/subsets-ii/)
 
@@ -574,4 +578,60 @@ public:
     }
 };
 ```
+
+
+
+## LeetCode216
+
+[组合总和 III](https://leetcode.cn/problems/combination-sum-iii/)
+
+> 深度优先遍历+剪枝
+
+
+
+```c++
+输入: k = 3, n = 9
+输出: [[1,2,6], [1,3,5], [2,3,4]]
+解释:
+1 + 2 + 6 = 9
+1 + 3 + 5 = 9
+2 + 3 + 4 = 9
+没有其他符合的组合了。
+```
+
+
+
+```c++
+class Solution {
+public:
+    void helper(int k, int n, int layer, int begin, vector<int>& path, int pathSum, vector<vector<int>>& res){
+        if (pathSum == n && layer == k){
+            res.push_back(path);
+            return; //return条件的设置
+        }
+        for (int i = begin; i <= 9; i++){ //for循环从begin开始
+            if (layer <= k && ((pathSum + i) <= n)){ //判断是否符合进入下一层的要求
+                pathSum = pathSum + i;
+                path.push_back(i);
+                helper(k,n,layer + 1,i + 1,path,pathSum,res);
+                pathSum = pathSum - i;
+                path.pop_back();
+            }
+        }
+        return;
+    }
+    vector<vector<int>> combinationSum3(int k, int n) {
+        vector<vector<int>> res;
+        vector<int> path;
+        helper(k,n,0,1,path,0,res);
+        return res;
+    }
+};
+```
+
+
+
+
+
+
 

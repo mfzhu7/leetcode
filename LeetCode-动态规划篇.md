@@ -486,7 +486,43 @@ public:
 
 
 
+## Leetcode213
 
+[ 打家劫舍 II](https://leetcode.cn/problems/house-robber-ii/)
+
+> 首尾相连的情况下，考虑不抢最后一间和不抢第一间来求得最大值
+
+```c++
+输入：nums = [1,2,3,1]
+输出：4
+解释：你可以先偷窃 1 号房屋（金额 = 1），然后偷窃 3 号房屋（金额 = 3）。
+     偷窃到的最高金额 = 1 + 3 = 4 。
+```
+
+
+
+```c++
+class Solution {
+public:
+    int helper(vector<int>& nums, int start, int end){
+        int first = nums[start];
+        int second = max(nums[start], nums[start + 1]);
+
+        for (int i = start + 2;i <= end; i++){
+            int  temp = max(first + nums[i], second);
+            first = second;
+            second = temp;
+        }
+        return second;
+    }
+    int rob(vector<int>& nums) {
+        if(nums.size() == 1) return nums[0];
+        if(nums.size() == 2) return max(nums[0], nums[1]);
+        return max(helper(nums, 0, nums.size() - 2), helper(nums, 1, nums.size() -1));
+
+    }
+};
+```
 
 
 

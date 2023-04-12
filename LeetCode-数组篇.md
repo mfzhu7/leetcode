@@ -519,3 +519,89 @@ public:
 };
 ```
 
+
+
+## Leetcode215(待完善)
+
+[数组中的第K个最大元素](https://leetcode.cn/problems/kth-largest-element-in-an-array/)
+
+> 基于快排的实现
+
+```c++
+输入: [3,2,3,1,2,4,5,5,6], k = 4
+输出: 4
+```
+
+```c++
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        sort(nums.begin(), nums.end());
+        return nums[nums.size() - k];
+        
+    }
+};
+```
+
+
+
+## LeetCode217
+
+[存在重复元素](https://leetcode.cn/problems/contains-duplicate/)
+
+> 排序或者哈希表
+
+```c++
+输入：nums = [1,1,1,3,3,4,3,2,4,2]
+输出：true
+```
+
+
+
+```c++
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        if (nums.size() == 1) return false;
+        sort(nums.begin(), nums.end());
+        for (int i = 1; i < nums.size(); i++){
+            if (nums[i] == nums[i - 1]) return true;
+        }
+        return false;
+
+    }
+};
+```
+
+
+
+## LeetCode219
+
+[存在重复元素 II](https://leetcode.cn/problems/contains-duplicate-ii/)
+
+> 滑动窗口+哈希表
+
+```c++
+输入：nums = [1,2,3,1,2,3], k = 2
+输出：false
+```
+
+
+
+```c++
+class Solution {
+public:
+    bool containsNearbyDuplicate(vector<int>& nums, int k) {
+        unordered_set<int> hash;
+        for (int i = 0; i < nums.size(); i++){
+            if (i > k){
+                hash.erase(nums[i - k - 1]);
+            }
+            if (hash.count(nums[i])) return true;
+            hash.emplace(nums[i]);
+        }
+        return false;
+    }
+};
+```
+
