@@ -439,3 +439,150 @@ public:
 };
 ```
 
+
+
+## LeetCode344
+
+[反转字符串](https://leetcode.cn/problems/reverse-string/)
+
+```c++
+输入：s = ["h","e","l","l","o"]
+输出：["o","l","l","e","h"]
+```
+
+```c++
+class Solution {
+public:
+    void reverseString(vector<char>& s) {
+        int left = 0;
+        int right = s.size() - 1;
+        while(left < right){
+            char c = s[left];
+            s[left] = s[right];
+            s[right] = c;
+            left++;
+            right--;
+        }
+        return;
+
+    }
+};
+```
+
+
+
+## LeetCode389
+
+[ 找不同](https://leetcode.cn/problems/find-the-difference/)
+
+```c++
+输入：s = "abcd", t = "abcde"
+输出："e"
+解释：'e' 是那个被添加的字母。
+```
+
+```c++
+class Solution {
+public:
+    char findTheDifference(string s, string t) {
+        vector<int> hash1(26, 0);
+        vector<int> hash2(26, 0);
+
+        for (int i = 0; i < s.size(); i++){
+            hash1[s[i] - 'a'] += 1;
+            hash2[t[i] - 'a'] += 1;
+        }
+        hash2[t.back() - 'a'] += 1;
+
+        char ans = 'a';
+        for (int i = 0; i < 26; i++){
+            if(hash1[i] != hash2[i]){
+                ans += i;
+                break;
+            }
+        }
+        return ans;
+
+    }
+};
+```
+
+
+
+## LeetCode415
+
+[字符串相加](https://leetcode.cn/problems/add-strings/)
+
+```c++
+输入：num1 = "11", num2 = "123"
+输出："134"
+```
+
+```c++
+class Solution {
+public:
+    string addStrings(string num1, string num2) {
+        reverse(num1.begin(), num1.end());
+        reverse(num2.begin(), num2.end());
+
+        int id1 = 0;
+        int id2 = 0;
+        int add = 0;
+        string ret = "";
+        while(id1 < num1.size() || id2 < num2.size()){
+            int n1 = (id1 >= num1.size()) ? 0 : num1[id1] - '0';
+            int n2 = (id2 >= num2.size()) ? 0 : num2[id2] - '0';
+            int ans = (n1 + n2 + add);
+            add = (ans > 9) ? 1 : 0;
+            ans = ans % 10;
+            ret.push_back(ans + '0');
+            id1 = id1 + 1;
+            id2 = id2 + 1;
+        }
+        if (add) ret.push_back('1');
+        reverse(ret.begin(), ret.end());
+        return ret;
+
+
+    }
+};
+```
+
+
+
+## LeetCode520
+
+[ 检测大写字母](https://leetcode.cn/problems/detect-capital/)
+
+```c++
+输入：word = "USA"
+输出：true
+```
+
+```c++
+class Solution {
+public:
+    bool detectCapitalUse(string word) {
+        bool ans = true;
+        int b_cnt = 0;
+        int l_cnt = 0;
+        int place = 0;
+
+        for (int i = 0;i < word.size(); i++){
+            if(word[i] - 'a' >= 0 && word[i]  - 'a' <= 25){
+                l_cnt++;
+                
+            } else {
+                b_cnt++;
+                place = i;
+            }
+        }
+        if(b_cnt == word.size()) return true;
+        if (l_cnt == word.size()) return true;
+        if (b_cnt >= 2) return false;
+        if (place != 0) return false;
+        return ans;
+    }
+};
+```
+

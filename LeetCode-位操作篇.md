@@ -252,3 +252,43 @@ public:
 };
 ```
 
+## LeetCode338
+
+[比特位计数](https://leetcode.cn/problems/counting-bits/)
+
+```c++
+输入：n = 5
+输出：[0,1,1,2,1,2]
+解释：
+0 --> 0
+1 --> 1
+2 --> 10
+3 --> 11
+4 --> 100
+5 --> 101
+```
+
+
+
+```c++
+class Solution {
+public:
+    int count(int num){
+        int ans = 0;
+        while(num){
+            num = (num & (num - 1));
+            ans++;
+        }
+        return ans;
+    }
+    vector<int> countBits(int n) {
+        vector<int> res;
+        for (int i = 0; i <= n; i++){
+            int cnt = count(i);
+            res.push_back(cnt);
+        }
+        return res;
+    }
+};
+```
+

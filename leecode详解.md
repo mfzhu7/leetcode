@@ -2365,3 +2365,209 @@ public:
 };
 ```
 
+
+
+## LeetCode319
+
+[灯泡开关](https://leetcode.cn/problems/bulb-switcher/)
+
+```c++
+输入：n = 3
+输出：1 
+解释：
+初始时, 灯泡状态 [关闭, 关闭, 关闭].
+第一轮后, 灯泡状态 [开启, 开启, 开启].
+第二轮后, 灯泡状态 [开启, 关闭, 开启].
+第三轮后, 灯泡状态 [开启, 关闭, 关闭]. 
+
+你应该返回 1，因为只有一个灯泡还亮着。
+```
+
+```c++
+class Solution {
+public:
+    int bulbSwitch(int n) {
+        return sqrt(n);
+    }
+};
+```
+
+
+
+## LeetCode357
+
+[统计各位数字都不同的数字个数](https://leetcode.cn/problems/count-numbers-with-unique-digits/)
+
+```c++
+输入：n = 2
+输出：91
+解释：答案应为除去 11、22、33、44、55、66、77、88、99 外，在 0 ≤ x < 100 范围内的所有数字。 
+```
+
+
+
+```c++
+class Solution {
+public:
+    int countNumbersWithUniqueDigits(int n) {
+        if (n == 0) return 1;
+        vector<int> dp(n+1,0);
+        dp[0] = 1;
+        dp[1] = 10;
+
+        for(int i = 2; i <= n; i++){
+            dp[i] = dp[i - 1] + (dp[i - 1] - dp[i - 2]) * (10 -(i - 1));
+        }
+        return dp[n];
+
+    }
+};
+```
+
+
+
+## LeetCode495
+
+[提莫攻击](https://leetcode.cn/problems/teemo-attacking/)
+
+```c++
+输入：timeSeries = [1,4], duration = 2
+输出：4
+解释：提莫攻击对艾希的影响如下：
+- 第 1 秒，提莫攻击艾希并使其立即中毒。中毒状态会维持 2 秒，即第 1 秒和第 2 秒。
+- 第 4 秒，提莫再次攻击艾希，艾希中毒状态又持续 2 秒，即第 4 秒和第 5 秒。
+艾希在第 1、2、4、5 秒处于中毒状态，所以总中毒秒数是 4 。
+```
+
+```c++
+using namespace std;
+class Solution {
+public:
+    int findPoisonedDuration(vector<int>& timeSeries, int duration) {
+        if (timeSeries.size() == 0) return 0;
+        int Sum = duration;
+        int current = timeSeries[0] + duration;
+        for (int i = 1; i < timeSeries.size(); i++){
+            if (timeSeries[i] >= current) { Sum = Sum + duration;}
+            else {Sum = Sum + (timeSeries[i] - timeSeries[i-1]);}
+            
+            current = timeSeries[i] + duration;
+        }
+        return Sum;
+
+    }
+};
+```
+
+
+
+## LeetCode739
+
+[每日温度](https://leetcode.cn/problems/daily-temperatures/)
+
+```c++
+输入: temperatures = [73,74,75,71,69,72,76,73]
+输出: [1,1,4,2,1,1,0,0]
+```
+
+```c++
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& T) {
+        vector<int> ans(T.size(), 0);
+        stack<int> stk;
+
+        for (int i = 0; i < T.size(); i++){
+            if (stk.empty()){
+                stk.push(i);
+            }else {
+                while(!stk.empty() && T[stk.top()] < T[i] ){
+                    ans[stk.top()] = i - stk.top();
+                    stk.pop();
+                }
+                stk.push(i);
+            }
+        }
+        return ans;
+
+    }
+};
+```
+
+
+
+## LeetCode784
+
+[字母大小写全排列](https://leetcode.cn/problems/letter-case-permutation/)
+
+```c++
+输入：s = "a1b2"
+输出：["a1b2", "a1B2", "A1b2", "A1B2"]
+```
+
+```c++
+class Solution {
+public:
+    void helper(string s, vector<string>& ret, int pos){
+        while(pos < s.size() && isdigit(s[pos])){
+            pos++;
+        }
+        if (s.size() == pos){
+            ret.push_back(s);
+            return;
+        }
+        s[pos] = tolower(s[pos]);
+        helper(s, ret, pos + 1);
+        s[pos] = toupper(s[pos]);
+        helper(s, ret, pos + 1);
+        return ;
+    }
+    vector<string> letterCasePermutation(string s) {
+        vector<string> ret;
+        helper(s, ret, 0);
+        return ret;
+    }
+};
+```
+
+
+
+## LeetCode989
+
+[数组形式的整数加法](https://leetcode.cn/problems/add-to-array-form-of-integer/)
+
+```c++
+输入：num = [1,2,0,0], k = 34
+输出：[1,2,3,4]
+解释：1200 + 34 = 1234
+```
+
+
+
+```c++
+class Solution {
+public:
+    vector<int> addToArrayForm(vector<int>& num, int k) {
+        reverse(num.begin(), num.end());
+        int add = 0;
+        int idx = 0;
+        while(idx < num.size() || k){
+            int temp = k % 10;
+            int n = (idx < num.size()) ? num[idx] : 0;
+            int ans = n + temp + add;
+            add = (ans > 9) ? 1 : 0;
+            k = (k - temp) / 10;
+            if (idx < num.size()){
+                num[idx] = (ans % 10);
+            } else {
+                num.push_back(ans % 10);
+            }
+            idx = idx + 1;
+        }
+        if (add) num.push_back(1);
+        reverse(num.begin(), num.end());
+        return num;
+    }
+};
+```
+

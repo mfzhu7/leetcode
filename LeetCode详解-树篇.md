@@ -1285,3 +1285,122 @@ public:
 };
 ```
 
+
+
+
+
+## LeetCode331
+
+[验证二叉树的前序序列化](https://leetcode.cn/problems/verify-preorder-serialization-of-a-binary-tree/)
+
+```c++
+输入: preorder = "9,3,4,#,#,1,#,#,2,#,6,#,#"
+输出: true
+```
+
+```c++
+class Solution {
+public:
+    bool isValidSerialization(string preorder) 
+    {
+        vector<string> stk;         // 使用一个数组模拟栈
+        stringstream ss(preorder);  // 使用 stringstream与getline 分割字符串
+        string temp;
+        // getline（输入流，暂存从流中读取的字符串，读取终止符）
+        while (getline(ss, temp, ','))
+        {
+            stk.push_back(temp);
+            int len = stk.size();
+            // 用「#」替换 「数字##」
+            while (len >= 3 && stk[len - 1] == "#" && stk[len - 2] == "#" && stk[len - 3] != "#")
+            {
+                stk.pop_back();
+                stk.pop_back();
+                stk.pop_back();
+                stk.push_back("#");
+                len = stk.size();
+            }
+        }
+        // 如果最后模拟栈中只剩一个#，说明是合法的序列
+        return stk.size() == 1 && stk[0] == "#";
+    }
+};
+```
+
+
+
+## LeetCode404
+
+[左叶子之和](https://leetcode.cn/problems/sum-of-left-leaves/)
+
+```c++
+输入: root = [3,9,20,null,null,15,7] 
+输出: 24 
+解释: 在这个二叉树中，有两个左叶子，分别是 9 和 15，所以返回 24
+```
+
+```c++
+class Solution {
+public:
+    void helper(TreeNode* root, int& sum, bool pos){
+        if(!root){
+            return;
+        }
+        if(pos && !root->left && !root->right){
+            sum += root->val;
+            return;
+        }
+        helper(root->left, sum, true);
+        helper(root->right, sum, false);
+
+        return;
+
+    }
+    int sumOfLeftLeaves(TreeNode* root) {
+        int ans = 0;
+        helper(root, ans, false);
+        return ans;
+    }
+};
+```
+
+
+
+## LeetCode429
+
+[N 叉树的层序遍历](https://leetcode.cn/problems/n-ary-tree-level-order-traversal/)
+
+```c++
+输入：root = [1,null,3,2,4,null,5,6]
+输出：[[1],[3,2,4],[5,6]]
+```
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> levelOrder(Node* root) {
+        if(!root){
+            return {};
+        }
+        vector<vector<int>> ans;
+        queue<Node*> q;
+        q.push(root);
+        while(!q.empty()){
+            int cnt = q.size();
+            vector<int> level;
+            for (int i = 0; i < cnt; i++){
+                Node* curr = q.front();
+                q.pop();
+                level.push_back(curr->val);
+                for (auto it: curr->children){
+                    q.push(it);
+                }
+            }
+            ans.push_back(move(level));
+        }
+        return ans;
+        
+    }
+};
+```
+

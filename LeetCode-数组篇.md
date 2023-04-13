@@ -851,3 +851,121 @@ public:
 };
 ```
 
+
+
+## LeetCode303
+
+[区域和检索 - 数组不可变](https://leetcode.cn/problems/range-sum-query-immutable/)
+
+```c++
+输入：
+["NumArray", "sumRange", "sumRange", "sumRange"]
+[[[-2, 0, 3, -5, 2, -1]], [0, 2], [2, 5], [0, 5]]
+输出：
+[null, 1, -1, -3]
+
+解释：
+NumArray numArray = new NumArray([-2, 0, 3, -5, 2, -1]);
+numArray.sumRange(0, 2); // return 1 ((-2) + 0 + 3)
+numArray.sumRange(2, 5); // return -1 (3 + (-5) + 2 + (-1)) 
+numArray.sumRange(0, 5); // return -3 ((-2) + 0 + 3 + (-5) + 2 + (-1))
+```
+
+
+
+```c++
+class NumArray {
+public:
+    vector<int> sum;
+    NumArray(vector<int>& nums) {
+        int n = nums.size();
+        sum.resize(n + 1);
+        for (int i = 0; i < n; i++){
+            sum[i + 1] = sum[i] + nums[i];
+        }
+
+    }
+    
+    int sumRange(int left, int right) {
+        return sum[right + 1] - sum[left];
+    }
+};
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray* obj = new NumArray(nums);
+ * int param_1 = obj->sumRange(left,right);
+ */
+```
+
+
+
+## LeetCode322
+
+[零钱兑换](https://leetcode.cn/problems/coin-change/)
+
+```c++
+输入：coins = [1, 2, 5], amount = 11
+输出：3 
+解释：11 = 5 + 5 + 1
+```
+
+
+
+```c++
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+            // sort(coins.begin(), coins.end());
+            int MAX = amount + 1;
+            vector<int> dp(amount + 1, MAX);
+            dp[0] = 0;
+            for (int i = 1;i <= amount; i++){
+                for (int j = 0; j < (int)coins.size(); j++){
+                    if(i >= coins[j]){
+                        dp[i] = min(dp[i - coins[j]] + 1, dp[i]);
+                    }
+                }
+            }
+
+            return dp[amount] > amount? -1: dp[amount]; 
+
+    }
+};
+```
+
+
+
+
+
+## LeetCode349
+
+[两个数组的交集](https://leetcode.cn/problems/intersection-of-two-arrays/)
+
+```c++
+输入：nums1 = [1,2,2,1], nums2 = [2,2]
+输出：[2]
+```
+
+```c++
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+
+        vector<int> ans;     
+        unordered_set<int> hash1{nums1.begin(), nums1.end()};
+        unordered_set<int> hash2{nums2.begin(), nums2.end()};
+
+        for(auto it = hash1.begin(); it != hash1.end(); it++){
+            if (hash2.find(*it) != hash1.end()){
+                ans.push_back(*it);
+            }
+        }
+        return ans;
+
+    }
+};
+```
+
+
+

@@ -631,7 +631,44 @@ public:
 
 
 
+## LeetCode377
+
+[组合总和 Ⅳ](https://leetcode.cn/problems/combination-sum-iv/)
 
 
 
+```c++
+输入：nums = [1,2,3], target = 4
+输出：7
+解释：
+所有可能的组合为：
+(1, 1, 1, 1)
+(1, 1, 2)
+(1, 2, 1)
+(1, 3)
+(2, 1, 1)
+(2, 2)
+(3, 1)
+请注意，顺序不同的序列被视作不同的组合。
+```
+
+```c++
+class Solution {
+public:
+    int combinationSum4(vector<int>& nums, int target) {
+
+        vector<unsigned int> dp(target + 1);
+        dp[0] = 1;
+        for (int j = 1; j <= target; j++){
+        for (auto num: nums){
+            if (j - num >= 0){
+                dp[j] = dp[j] + dp[j - num];
+            }
+        }
+        }
+        return *(dp.end() - 1);
+ 
+    }
+};
+```
 

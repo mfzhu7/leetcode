@@ -899,3 +899,37 @@ public:
 };
 ```
 
+
+
+## LeetCode328
+
+[奇偶链表](https://leetcode.cn/problems/odd-even-linked-list/)
+
+```c++
+输入: head = [2,1,3,5,6,4,7]
+输出: [2,3,6,7,1,5,4]
+```
+
+
+
+```c++
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        if (!head) return head;
+        ListNode* odd = head;
+        ListNode* even = head->next;
+        ListNode* eventHead = even;
+        while(even && even->next){
+            odd->next = even->next;
+            odd = odd->next;
+            even->next = odd->next;
+            even = even->next;
+        }
+        odd->next = eventHead;
+        return head;
+
+    }
+};
+```
+
