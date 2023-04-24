@@ -8,12 +8,26 @@
 
 [二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/)
 
-> 树相关，中序遍历，递归。
+**题干**
+
+给定一个二叉树的根节点 `root` ，返回 *它的 **中序** 遍历*
+
+![img](https://assets.leetcode.com/uploads/2020/09/15/inorder_1.jpg)
+
+**样例**
 
 ```c++
 输入：root = [1,null,2,3]
 输出：[1,3,2]
 ```
+
+
+
+**解题思路**
+
+- 树的中序遍历，使用递归
+- 先左再中后右
+- 非递归的做法，在于维护一个栈来实现，迭代实现
 
 ```c++
 class Solution {
@@ -30,18 +44,56 @@ public:
             help(root, res);
             return res;
     }
+}
+//非递归写法
+  class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> res;
+        stack<TreeNode*> stk;
+        while(root != nullptr || !stk.empty()){
+            while(root != nullptr){
+                stk.push(root);
+                root = root->left;
+            }
+            root = stk.top();
+            stk.pop();
+            res.push_back(root->val);
+            root = root->right;
+        }
+        return res;
+
+    }
+};
 ```
 
 ## LeetCode95
 
 [ 不同的二叉搜索树 II](https://leetcode.cn/problems/unique-binary-search-trees-ii/)
 
-> 递归+树结构
+**题干**
+
+给你一个整数 `n` ，请你生成并返回所有由 `n` 个节点组成且节点值从 `1` 到 `n` 互不相同的不同 **二叉搜索树** 。可以按 **任意顺序** 返回答案。
+
+
+
+![img](https://assets.leetcode.com/uploads/2021/01/18/uniquebstn3.jpg)
+
+
+
+**样例**
 
 ```c++
 输入：n = 3
 输出：[[1,null,2,null,3],[1,null,3,2],[2,1,3],[3,1,null,null,2],[3,2,null,1]]
 ```
+
+**解题思路**
+
+- 使用递归的思路来解这个题
+- 遍历[1,n]之间的所有切分点，每个切分点作为根节点
+- 则[1,j]为左子树的节点，j节点为根节点，[j + 1, n]为右子树的节点
+- 递归保证左子树的节点和右子树的节点也是二叉搜索树即可
 
 
 
@@ -75,14 +127,37 @@ public:
 
 ## LeetCode96
 
-[不同的二叉搜索树](不同的二叉搜索树)
+[不同的二叉搜索树](https://leetcode.cn/problems/unique-binary-search-trees/)
 
-> 树+动态规划
+**题干**
+
+给你一个整数 `n` ，求恰由 `n` 个节点组成且节点值从 `1` 到 `n` 互不相同的 **二叉搜索树** 有多少种？返回满足题意的二叉搜索树的种数。
+
+![img](https://assets.leetcode.com/uploads/2021/01/18/uniquebstn3.jpg)
+
+**样例**
 
 ```c++
 输入：n = 3
 输出：5
 ```
+
+**解题思路**
+$$
+我们定义如下：\\
+1.G(n):\\
+2.F(i,n):\\
+$$
+
+
+
+
+
+
+
+
+
+
 
 ```c++
 class Solution {
