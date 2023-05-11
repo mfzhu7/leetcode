@@ -182,14 +182,33 @@ public:
 
 [验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)
 
-> 树+递归
+**题干**
+
+给你一个二叉树的根节点 `root` ，判断其是否是一个有效的二叉搜索树。
+
+**有效** 二叉搜索树定义如下：
+
+- 节点的左子树只包含 **小于** 当前节点的数。
+- 节点的右子树只包含 **大于** 当前节点的数。
+- 所有左子树和右子树自身必须也是二叉搜索树。
+
+
+
+![img](https://assets.leetcode.com/uploads/2020/12/01/tree2.jpg)
+
+**示例**
 
 ```c++
-输入：root = [2,1,3]
-输出：true
+输入：root = [5,1,4,null,null,3,6]
+输出：false
+解释：根节点的值是 5 ，但是右子节点的值是 4 。
 ```
 
+**解题思路**
 
+- 新建一个辅助函数，辅助函数中包含左右节点上下边界
+- 不断递归的判断左右节点是否符合搜索树的要求
+- 当然也可以进行中序遍历，在遍历过程中，判断存储的遍历路径是否是递增的
 
 ```c++
 class Solution {
@@ -205,17 +224,30 @@ public:
 };
 ```
 
+
+
 ## LeetCode99(待完善)
 
 [恢复二叉搜索树](https://leetcode.cn/problems/recover-binary-search-tree/)
 
-> 递归+树
+**题干**
+
+给你二叉搜索树的根节点 `root` ，该树中的 **恰好** 两个节点的值被错误地交换。*请在不改变其结构的情况下，恢复这棵树* 。
+
+![img](https://assets.leetcode.com/uploads/2020/10/28/recover1.jpg)
+
+**示例**
 
 ```c++
 输入：root = [1,3,null,null,2]
 输出：[3,1,null,null,2]
 解释：3 不能是 1 的左孩子，因为 3 > 1 。交换 1 和 3 使二叉搜索树有效。
 ```
+
+**解题思路**
+
+- 二叉搜索树在中序遍历的情况下是递增的；如果存在两个节点交换，即不符合递增规律
+- 因此可以进行中序遍历，而后找到不符合规律的节点进行交换
 
 
 
@@ -252,14 +284,29 @@ public:
 
 [相同的树](https://leetcode.cn/problems/same-tree/description/)
 
-> 树+递归
+**题干**
+
+给你两棵二叉树的根节点 `p` 和 `q` ，编写一个函数来检验这两棵树是否相同。
+
+如果两个树在结构上相同，并且节点具有相同的值，则认为它们是相同的。
+
+![img](https://assets.leetcode.com/uploads/2020/12/20/ex1.jpg)
+
+
+
+**示例**
 
 ```c++
 输入：p = [1,2,3], q = [1,2,3]
 输出：true
 ```
 
+**解题思路**
 
+- 递归的判断两个树对应的节点是否相同即可
+- 首先进行判空处理，同时为空即为TRUE；只有一个为空为FALSE
+- 而后递归调用判断当前节点和左右子节点即可
+- 也可以同步进行广度优先遍历，遍历过程中判断二者是否是相同的
 
 ```c++
 class Solution {
@@ -283,14 +330,24 @@ public:
 
 [对称二叉树](https://leetcode.cn/problems/symmetric-tree/)
 
-> 递归+树结构
+**题干**
+
+给你一个二叉树的根节点 `root` ， 检查它是否轴对称。
+
+![img](https://assets.leetcode.com/uploads/2021/02/19/symtree1.jpg)
+
+**示例**
 
 ```c++
 输入：root = [1,2,2,3,4,4,3]
 输出：true
 ```
 
+**解题思路**
 
+- 和判断是否相同树的思路类似；
+- 差别在于递归判断左右节点的时候，左侧选用右节点和右侧的左节点进行判断即可
+- 迭代的方式待实现
 
 ```c++
 class Solution {
@@ -314,14 +371,26 @@ public:
 
 [ 二叉树的层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/)
 
-> 树结构+队列解答(广度优先遍历)
+**题干**
+
+给你二叉树的根节点 `root` ，返回其节点值的 **层序遍历** 。 （即逐层地，从左到右访问所有节点）。
+
+![img](https://assets.leetcode.com/uploads/2021/02/19/tree1.jpg)
+
+
+
+**示例**
 
 ```c++
 输入：root = [3,9,20,null,null,15,7]
 输出：[[3],[9,20],[15,7]]
 ```
 
+**解题思路**
 
+- 利用队列来进行层序遍历
+- 具体做法，将当前层节点的遍历存入队列；而后下一层通过遍历队列节点的每个左右节点来得到
+- 代码中用了2个队列来分别保存上一层的遍历结果和当前层的结果
 
 ```c++
 class Solution {
@@ -368,12 +437,28 @@ public:
 
 [ 二叉树的锯齿形层序遍历](https://leetcode.cn/problems/binary-tree-zigzag-level-order-traversal/)
 
-> 树结构+堆栈遍历
+**题干**
+
+给你二叉树的根节点 `root` ，返回其节点值的 **锯齿形层序遍历** 。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
+
+![img](https://assets.leetcode.com/uploads/2021/02/19/tree1.jpg)
+
+
+
+**示例**
 
 ```c++
 输入：root = [3,9,20,null,null,15,7]
 输出：[[3],[20,9],[15,7]]
 ```
+
+
+
+**解题思路**
+
+* 借鉴层序遍历的方式，用栈存储遍历的结果
+* 新增遍历flag来决定从左到右还是从右到左
+* 可以使用双端队列来进行遍历，降低操作的复杂度
 
 
 
@@ -423,17 +508,31 @@ public:
 
 [ 二叉树的最大深度](https://leetcode.cn/problems/maximum-depth-of-binary-tree/)
 
-> 树+递归
+**题干**
 
-```c++
 给定一个二叉树，找出其最大深度。
 
 二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
 
-说明: 叶子节点是指没有子节点的节点。
+**说明:** 叶子节点是指没有子节点的节点。
+
+**示例：**
+给定二叉树 `[3,9,20,null,null,15,7]`，
+
+```
+    3
+   / \
+  9  20
+    /  \
+   15   7
 ```
 
+返回它的最大深度 3 。
 
+**解题思路** 
+
+- 递归求解
+- 层序遍历，层的遍历次数即为最大深度
 
 ```c++
 class Solution {
@@ -454,14 +553,27 @@ public:
 
 [从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
 
-> 树结构+递归
+**题干**
+
+给定两个整数数组 `preorder` 和 `inorder` ，其中 `preorder` 是二叉树的**先序遍历**， `inorder` 是同一棵树的**中序遍历**，请构造二叉树并返回其根节点。
+
+![img](https://assets.leetcode.com/uploads/2021/02/19/tree.jpg)
+
+
+
+**示例**
 
 ```c++
 输入: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
 输出: [3,9,20,null,null,15,7]
 ```
 
+**解题思路**
 
+- 递归的求解方式
+- 先序遍历节点3可以将中序遍历中的节点分为左右两个子树的遍历结果
+- 在左右子树内递归求解即可
+- 迭代的求解方式待实现
 
 ```c++
 class Solution {
@@ -502,12 +614,26 @@ public:
 
 [从中序与后序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
 
-> 树结构+递归
+**题干**
+
+给定两个整数数组 `inorder` 和 `postorder` ，其中 `inorder` 是二叉树的中序遍历， `postorder` 是同一棵树的后序遍历，请你构造并返回这颗 *二叉树* 。
+
+ ![img](https://assets.leetcode.com/uploads/2021/02/19/tree.jpg)
+
+
+
+**示例**
 
 ```c++
 输入：inorder = [9,3,15,20,7], postorder = [9,15,7,20,3]
 输出：[3,9,20,null,null,15,7]
 ```
+
+**解题思路**
+
+- 将后续遍历从尾部开始遍历，即和上一题的先序遍历类似
+- 需要注意左右子树的建立，此处需要先建立右子树，再建立左子树
+- 迭代的方式待实现
 
 
 
