@@ -676,16 +676,25 @@ public:
 
 [二叉树的层序遍历 II](https://leetcode.cn/problems/binary-tree-level-order-traversal-ii/)
 
-> 树结构+队列
+**题干**
+
+给你二叉树的根节点 `root` ，返回其节点值 **自底向上的层序遍历** 。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
+
+![img](https://assets.leetcode.com/uploads/2021/02/19/tree1.jpg)
 
 
+
+**示例**
 
 ```c++
 输入：root = [3,9,20,null,null,15,7]
 输出：[[15,7],[9,20],[3]]
 ```
 
+**解题思路**
 
+- 层序遍历的变种
+- 自顶向下层序遍历完成后，进行反转即可得到答案
 
 ```c++
 class Solution {
@@ -722,13 +731,28 @@ public:
 
 [将有序数组转换为二叉搜索树](https://leetcode.cn/problems/convert-sorted-array-to-binary-search-tree/)
 
-> 树结构+递归
+**题干**
+
+给你一个整数数组 `nums` ，其中元素已经按 **升序** 排列，请你将其转换为一棵 **高度平衡** 二叉搜索树。
+
+**高度平衡** 二叉树是一棵满足「每个节点的左右两个子树的高度差的绝对值不超过 1 」的二叉树。
+
+![img](https://assets.leetcode.com/uploads/2021/02/18/btree1.jpg)
+
+
+
+**示例**
 
 ```c++
 输入：nums = [-10,-3,0,5,9]
 输出：[0,-3,9,-10,null,5]
 解释：[0,-10,5,null,-3,null,9] 也将被视为正确答案：
 ```
+
+**解题思路**
+
+- 每次从数组的中间挑选作为根节点，数组左右两侧的数据即为左右子树
+- 在左右子树数据上按照相同的方式递归建立树
 
 
 
@@ -759,7 +783,15 @@ class Solution {
 
 [有序链表转换二叉搜索树](https://leetcode.cn/problems/convert-sorted-list-to-binary-search-tree/)
 
-> 树结构+递归
+**题干**
+
+给定一个单链表的头节点  `head` ，其中的元素 **按升序排序** ，将其转换为高度平衡的二叉搜索树。
+
+本题中，一个高度平衡二叉树是指一个二叉树*每个节点* 的左右两个子树的高度差不超过 1。
+
+![img](https://assets.leetcode.com/uploads/2020/08/17/linked.jpg)
+
+**示例**
 
 ```c++
 输入: head = [-10,-3,0,5,9]
@@ -767,7 +799,10 @@ class Solution {
 解释: 一个可能的答案是[0，-3,9，-10,null,5]，它表示所示的高度平衡的二叉搜索树。
 ```
 
+**解题思路**
 
+- 取巧的方式是将链表数据存储，使用108题的解题方式即可。
+- 待完善
 
 ```c++
 class Solution {
@@ -802,14 +837,32 @@ public:
 
 [平衡二叉树](https://leetcode.cn/problems/balanced-binary-tree/)
 
-> 树结构+递归
+**题干**
+
+给定一个二叉树，判断它是否是高度平衡的二叉树。
+
+本题中，一棵高度平衡二叉树定义为：
+
+> 一个二叉树*每个节点* 的左右两个子树的高度差的绝对值不超过 1 。
+
+
+
+![img](https://assets.leetcode.com/uploads/2020/10/06/balance_1.jpg)
+
+
+
+**示例**
 
 ```c++
 输入：root = [3,9,20,null,null,15,7]
 输出：true
 ```
 
+**解题思路**
 
+- 开发计算树深度的子函数
+- 判断左右节点高度差是否<=1，并且递归调用判断左右子树是不是平衡二叉树
+- 可以改变子函数调用方式，自底向上调用，避免多次重复调用，降低复杂度
 
 ```c++
 class Solution {
@@ -831,12 +884,29 @@ public:
 
 [二叉树的最小深度](https://leetcode.cn/problems/minimum-depth-of-binary-tree/)
 
-> 树结构+递归解法
+**题干**
+
+给定一个二叉树，找出其最小深度。
+
+最小深度是从根节点到最近叶子节点的最短路径上的节点数量。
+
+**说明：**叶子节点是指没有子节点的节点。
+
+![img](https://assets.leetcode.com/uploads/2020/10/12/ex_depth.jpg)
+
+**示例**
 
 ```c++
 输入：root = [3,9,20,null,null,15,7]
 输出：2
 ```
+
+**解题思路**
+
+- 递归
+- 广度优先搜索
+
+
 
 ```c++
 class Solution {
@@ -865,13 +935,28 @@ public:
 
 [路径总和](https://leetcode.cn/problems/path-sum/)
 
-> 树结构+递归
+**题干**
+
+给你二叉树的根节点 `root` 和一个表示目标和的整数 `targetSum` 。判断该树中是否存在 **根节点到叶子节点** 的路径，这条路径上所有节点值相加等于目标和 `targetSum` 。如果存在，返回 `true` ；否则，返回 `false` 。
+
+**叶子节点** 是指没有子节点的节点。
+
+![img](https://assets.leetcode.com/uploads/2021/01/18/pathsum1.jpg)
+
+
+
+**示例**
 
 ```c++
 输入：root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
 输出：true
 解释：等于目标和的根节点到叶节点路径如上图所示。
 ```
+
+**解题思路**
+
+- 开发辅助函数，记录当前遍历节点和路径和
+- 设置各种递归调用返回的条件，以及进行递归调用
 
 
 
@@ -903,14 +988,28 @@ public:
 
 [路径总和 II](https://leetcode.cn/problems/path-sum-ii/description/)
 
-> 树结构+递归
+**题干**
+
+给你二叉树的根节点 `root` 和一个整数目标和 `targetSum` ，找出所有 **从根节点到叶子节点** 路径总和等于给定目标和的路径。
+
+**叶子节点** 是指没有子节点的节点。
+
+![img](https://assets.leetcode.com/uploads/2021/01/18/pathsumii1.jpg)
+
+
+
+**示例**
 
 ```c++
 输入：root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
 输出：[[5,4,11,2],[5,8,4,5]]
 ```
 
+**解题思路**
 
+- 开发辅助函数，记录当前的遍历路径，和结果路径
+- 如果是目标路径结果，记录到结果路径中
+- 注意的是每次push数据后，也有pop数据
 
 ```c++
 class Solution {
@@ -948,14 +1047,24 @@ public:
 
 [ 二叉树展开为链表](https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/)
 
-> 树结构+递归
+**题干**
+
+给你二叉树的根结点 `root` ，请你将它展开为一个单链表：
+
+- 展开后的单链表应该同样使用 `TreeNode` ，其中 `right` 子指针指向链表中下一个结点，而左子指针始终为 `null` 。
+- 展开后的单链表应该与二叉树 [**先序遍历**](https://baike.baidu.com/item/先序遍历/6442839?fr=aladdin) 顺序相同。
+
+ ![img](https://assets.leetcode.com/uploads/2021/01/14/flaten.jpg)**示例**
 
 ```c++
 输入：root = [1,2,5,3,4,null,6]
 输出：[1,null,2,null,3,null,4,null,5,null,6]
 ```
 
+**解题思路**
 
+- 先序遍历把树进行遍历存储
+- 对于存储的节点进行左右子树的连接变更
 
 ```c++
 class Solution {
