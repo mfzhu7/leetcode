@@ -2571,3 +2571,48 @@ public:
 };
 ```
 
+
+
+
+
+## LeetCode228
+
+[汇总区间](https://leetcode.cn/problems/summary-ranges/)
+
+```c++
+输入：nums = [0,1,2,4,5,7]
+输出：["0->2","4->5","7"]
+解释：区间范围是：
+[0,2] --> "0->2"
+[4,5] --> "4->5"
+[7,7] --> "7"
+```
+
+
+
+```c++
+class Solution {
+public:
+    vector<string> summaryRanges(vector<int>& nums) {
+        vector<string> ret;
+        int n = nums.size();
+        int idx = 0;
+        while(idx < n){
+            if ((idx == n - 1) || (idx + 1 < n && nums[idx] + 1 != nums[idx + 1])){
+                ret.push_back(to_string(nums[idx]));
+                idx = idx + 1;
+            } else {
+                int start = idx;
+                while(idx + 1 < n && nums[idx] + 1 == nums[idx + 1]){
+                    idx = idx + 1;
+                }
+                ret.push_back(to_string(nums[start]) + "->" + to_string(nums[idx]));
+                idx = idx + 1;
+            }
+        }
+        return ret;
+
+    }
+};
+```
+

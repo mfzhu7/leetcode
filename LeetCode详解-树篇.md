@@ -1098,9 +1098,28 @@ public:
 
 [填充每个节点的下一个右侧节点指针](https://leetcode.cn/problems/populating-next-right-pointers-in-each-node/)
 
-> 树结构+层序遍历变形
+**题干**
+
+给定一个 **完美二叉树** ，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：
+
+```
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}
+```
+
+填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 `NULL`。
+
+初始状态下，所有 next 指针都被设置为 `NULL`。
+
+![img](https://assets.leetcode.com/uploads/2019/02/14/116_sample.png)
 
 
+
+**示例**
 
 ```c++
 输入：root = [1,2,3,4,5,6,7]
@@ -1108,7 +1127,11 @@ public:
 解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，如图 B 所示。序列化的输出按层序遍历排列，同一层节点由 next 指针连接，'#' 标志着每一层的结束。
 ```
 
+**解题思路**
 
+- 层序遍历树
+- 每次层序遍历结束，对于同一层的数据进行链接即可
+- 新方法待实现
 
 ```c++
 class Solution {
@@ -1144,9 +1167,28 @@ class Solution {
 
 [填充每个节点的下一个右侧节点指针 II](https://leetcode.cn/problems/populating-next-right-pointers-in-each-node-ii/)
 
-> 树结构+层序遍历
+**题干**
+
+给定一个二叉树：
+
+```
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}
+```
+
+填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 `NULL` 。
+
+初始状态下，所有 next 指针都被设置为 `NULL` 。
+
+ ![img](https://assets.leetcode.com/uploads/2019/02/15/117_sample.png)
 
 
+
+**示例**
 
 ```c++
 输入：root = [1,2,3,4,5,null,7]
@@ -1154,7 +1196,10 @@ class Solution {
 解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，如图 B 所示。序列化输出按层序遍历顺序（由 next 指针连接），'#' 表示每层的末尾。
 ```
 
+**解题思路**
 
+- 层序遍历法同上一题
+- bfs方法待实现
 
 ```c++
 class Solution {
@@ -1191,7 +1236,23 @@ class Solution {
 
 [求根节点到叶节点数字之和](https://leetcode.cn/problems/sum-root-to-leaf-numbers/description/)
 
-> 树的结构+深度优先搜索
+**题干**
+
+给你一个二叉树的根节点 `root` ，树中每个节点都存放有一个 `0` 到 `9` 之间的数字。
+
+每条从根节点到叶节点的路径都代表一个数字：
+
+- 例如，从根节点到叶节点的路径 `1 -> 2 -> 3` 表示数字 `123` 。
+
+计算从根节点到叶节点生成的 **所有数字之和** 。
+
+**叶节点** 是指没有子节点的节点。
+
+![img](https://assets.leetcode.com/uploads/2021/02/19/num1tree.jpg)
+
+
+
+**示例**
 
 ```c++
 输入：root = [1,2,3]
@@ -1202,7 +1263,10 @@ class Solution {
 因此，数字总和 = 12 + 13 = 25
 ```
 
+**解题思路**
 
+- 记录每条从根节点到叶子节点路径形成的数字，最后对所有的数据相加即可
+- 注意在辅助函数中，每加一层，当前值*10+节点值；在左右节点遍历结束后，需要恢复到原始值；
 
 ```c++
 class Solution {
@@ -1240,9 +1304,18 @@ public:
 
 [二叉树的前序遍历](https://leetcode.cn/problems/binary-tree-preorder-traversal/)
 
-> 树+递归题
+**题干**
 
+给你二叉树的根节点 `root` ，返回它节点值的 **前序** 遍历。
 
+![img](https://assets.leetcode.com/uploads/2020/09/15/inorder_1.jpg)
+
+**示例**
+
+```c++
+输入：root = [1,null,2,3]
+输出：[1,2,3]
+```
 
 ```c++
 class Solution {
@@ -1270,7 +1343,18 @@ public:
 
 [ 二叉树的后序遍历](https://leetcode.cn/problems/binary-tree-postorder-traversal/)
 
-> 树+递归解法
+**题干**
+
+给你一棵二叉树的根节点 `root` ，返回其节点值的 **后序遍历** 。
+
+![img](https://assets.leetcode.com/uploads/2020/08/28/pre1.jpg)
+
+**示例**
+
+```c++
+输入：root = [1,null,2,3]
+输出：[3,2,1]
+```
 
 
 
@@ -1298,16 +1382,25 @@ public:
 
 [二叉树的右视图](https://leetcode.cn/problems/binary-tree-right-side-view/)
 
-> 二叉树+层序遍历
+**题干**
+
+给定一个二叉树的 **根节点** `root`，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+
+
 
 ![img](https://assets.leetcode.com/uploads/2021/02/14/tree.jpg)
+
+**示例**
 
 ```c++
 输入: [1,2,3,null,5,null,4]
 输出: [1,3,4]
 ```
 
+**解题思路**
 
+* 层序遍历每次的末尾进行保存即可
+* 广度优先搜索待实现
 
 ```c++
 class Solution {
@@ -1342,14 +1435,24 @@ public:
 
 [完全二叉树的节点个数](https://leetcode.cn/problems/count-complete-tree-nodes/)
 
-> 递归+位运算
+**题干**
+
+给你一棵 **完全二叉树** 的根节点 `root` ，求出该树的节点个数。
+
+[完全二叉树](https://baike.baidu.com/item/完全二叉树/7773232?fr=aladdin) 的定义如下：在完全二叉树中，除了最底层节点可能没填满外，其余每层节点数都达到最大值，并且最下面一层的节点都集中在该层最左边的若干位置。若最底层为第 `h` 层，则该层包含 `1~ 2h` 个节点。
+
+![img](https://assets.leetcode.com/uploads/2021/01/14/complete.jpg)
+
+**示例**
 
 ```c++
 输入：root = [1,2,3,4,5,6]
 输出：6
 ```
 
+**解题思路**
 
+- 待完成
 
 ```c++
 class Solution {
@@ -1383,14 +1486,22 @@ public:
 
 [翻转二叉树](https://leetcode.cn/problems/invert-binary-tree/)
 
-> 递归
+**题干**
+
+给你一棵二叉树的根节点 `root` ，翻转这棵二叉树，并返回其根节点。
+
+![img](https://assets.leetcode.com/uploads/2021/03/14/invert1-tree.jpg)
+
+**示例**
 
 ```c++
 输入：root = [4,2,7,1,3,6,9]
 输出：[4,7,2,9,6,3,1]
 ```
 
+**解题思路**
 
+- 递归求解
 
 ```c++
 class Solution {
@@ -1410,57 +1521,30 @@ public:
 
 
 
-## LeetCode228
-
-[汇总区间](https://leetcode.cn/problems/summary-ranges/)
-
-```c++
-输入：nums = [0,1,2,4,5,7]
-输出：["0->2","4->5","7"]
-解释：区间范围是：
-[0,2] --> "0->2"
-[4,5] --> "4->5"
-[7,7] --> "7"
-```
-
-
-
-```c++
-class Solution {
-public:
-    vector<string> summaryRanges(vector<int>& nums) {
-        vector<string> ret;
-        int n = nums.size();
-        int idx = 0;
-        while(idx < n){
-            if ((idx == n - 1) || (idx + 1 < n && nums[idx] + 1 != nums[idx + 1])){
-                ret.push_back(to_string(nums[idx]));
-                idx = idx + 1;
-            } else {
-                int start = idx;
-                while(idx + 1 < n && nums[idx] + 1 == nums[idx + 1]){
-                    idx = idx + 1;
-                }
-                ret.push_back(to_string(nums[start]) + "->" + to_string(nums[idx]));
-                idx = idx + 1;
-            }
-        }
-        return ret;
-
-    }
-};
-```
-
 
 
 ## LeetCode230 
 
 [二叉搜索树中第K小的元素](https://leetcode.cn/problems/kth-smallest-element-in-a-bst/)
 
+**题干**
+
+给定一个二叉搜索树的根节点 `root` ，和一个整数 `k` ，请你设计一个算法查找其中第 `k` 个最小元素（从 1 开始计数）。
+
+![img](https://assets.leetcode.com/uploads/2021/01/28/kthtree1.jpg)
+
+**示例**
+
 ```c++
 输入：root = [3,1,4,null,2], k = 1
 输出：1
 ```
+
+**解题思路**
+
+- 二叉搜索树，中序遍历是递增的
+- 中序遍历到第k个元素即为目标值
+
 
 ```c++
 class Solution {
@@ -1491,11 +1575,30 @@ public:
 
 [二叉搜索树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/)
 
+**题干**
+
+给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
+
+[百度百科](https://baike.baidu.com/item/最近公共祖先/8918834?fr=aladdin)中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（**一个节点也可以是它自己的祖先**）。”
+
+例如，给定如下二叉搜索树: root = [6,2,8,0,4,7,9,null,null,3,5]
+
+![img](https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/12/14/binarysearchtree_improved.png)
+
+**示例**
+
 ```c++
 输入: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
 输出: 6 
 解释: 节点 2 和节点 8 的最近公共祖先是 6。
 ```
+
+**解题思路**
+
+- 利用二叉搜索树的性质；如果当前节点值均大于p和q，则公共祖先在其左侧
+- 均小于的情况，则在右侧；最后分散两侧，则为目标公共祖先节点
+- 两次遍历解法待实现
+
 
 ```c++
 class Solution {
@@ -1526,11 +1629,28 @@ public:
 
 [二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/)
 
+**题干**
+
+给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+
+[百度百科](https://baike.baidu.com/item/最近公共祖先/8918834?fr=aladdin)中最近公共祖先的定义为：“对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（**一个节点也可以是它自己的祖先**）。”
+
+ 
+
+![img](https://assets.leetcode.com/uploads/2018/12/14/binarytree.png)
+
+**示例**
+
+
 ```c++
 输入：root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
 输出：3
 解释：节点 5 和节点 1 的最近公共祖先是节点 3 。
 ```
+
+**解题思路**
+
+- 待实现
 
 ```c++
 class Solution {
@@ -1563,12 +1683,25 @@ public:
 
 [二叉树的所有路径](https://leetcode.cn/problems/binary-tree-paths/)
 
+**题干**
+
+给你一个二叉树的根节点 `root` ，按 **任意顺序** ，返回所有从根节点到叶子节点的路径。
+
+**叶子节点** 是指没有子节点的节点。
+
+![img](https://assets.leetcode.com/uploads/2021/03/12/paths-tree.jpg)
+
+**示例**
+
 ```c++
 输入：root = [1,2,3,null,5]
 输出：["1->2->5","1->3"]
 ```
 
+**题解**
 
+- 深度优先搜索
+- 广度优先搜索待实现
 
 ```c++
 class Solution {
@@ -1603,10 +1736,36 @@ public:
 
 [验证二叉树的前序序列化](https://leetcode.cn/problems/verify-preorder-serialization-of-a-binary-tree/)
 
+**题干**
+
+序列化二叉树的一种方法是使用 **前序遍历** 。当我们遇到一个非空节点时，我们可以记录下这个节点的值。如果它是一个空节点，我们可以使用一个标记值记录，例如 `#`。
+
+![img](https://assets.leetcode.com/uploads/2021/03/12/pre-tree.jpg)
+
+例如，上面的二叉树可以被序列化为字符串 `"9,3,4,#,#,1,#,#,2,#,6,#,#"`，其中 `#` 代表一个空节点。
+
+给定一串以逗号分隔的序列，验证它是否是正确的二叉树的前序序列化。编写一个在不重构树的条件下的可行算法。
+
+**保证** 每个以逗号分隔的字符或为一个整数或为一个表示 `null` 指针的 `'#'` 。
+
+你可以认为输入格式总是有效的
+
+- 例如它永远不会包含两个连续的逗号，比如 `"1,,3"` 。
+
+**注意：**不允许重建树。
+
+**示例**
+
 ```c++
 输入: preorder = "9,3,4,#,#,1,#,#,2,#,6,#,#"
 输出: true
 ```
+
+**解题思路**
+
+- 待实现
+
+
 
 ```c++
 class Solution {
@@ -1643,11 +1802,23 @@ public:
 
 [左叶子之和](https://leetcode.cn/problems/sum-of-left-leaves/)
 
+**题干**
+
+给定二叉树的根节点 `root` ，返回所有左叶子之和。
+
+![img](https://assets.leetcode.com/uploads/2021/04/08/leftsum-tree.jpg)
+
+**示例**
+
 ```c++
 输入: root = [3,9,20,null,null,15,7] 
 输出: 24 
 解释: 在这个二叉树中，有两个左叶子，分别是 9 和 15，所以返回 24
 ```
+
+**解题思路**
+
+- 待实现
 
 ```c++
 class Solution {
@@ -1680,10 +1851,24 @@ public:
 
 [N 叉树的层序遍历](https://leetcode.cn/problems/n-ary-tree-level-order-traversal/)
 
+**题干**
+
+给定一个 N 叉树，返回其节点值的*层序遍历*。（即从左到右，逐层遍历）。
+
+树的序列化输入是用层序遍历，每组子节点都由 null 值分隔（参见示例）。
+
+![img](https://assets.leetcode.com/uploads/2018/10/12/narytreeexample.png)
+
+**示例**
+
 ```c++
 输入：root = [1,null,3,2,4,null,5,6]
 输出：[[1],[3,2,4],[5,6]]
 ```
+
+**解题思路**
+
+- 参考层序遍历方式
 
 ```c++
 class Solution {
