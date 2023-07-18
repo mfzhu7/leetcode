@@ -1452,7 +1452,9 @@ public:
 
 **解题思路**
 
-- 待完成
+- 借鉴这篇博文的思路。https://leetcode.cn/problems/count-complete-tree-nodes/solutions/181466/c-san-chong-fang-fa-jie-jue-wan-quan-er-cha-shu-de/
+- 如果左右子树的高度一致，则左子树的为满二叉树，计算左子树的节点数量后，继续遍历右子树
+- 如果左子树的高度高于右子树，则右子树为满二叉树，继续遍历左二叉树。
 
 ```c++
 class Solution {
