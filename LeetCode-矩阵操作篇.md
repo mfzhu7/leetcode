@@ -105,9 +105,8 @@ public:
 
 **解题思路**
 
-
-
-
+- 找到旋转的规律，以2->6->8->4->2的角度来看，(i,j)的位置会旋转到(j, n- i-1)的位置
+- 对应的4个数字各自重新复位，所以只需要遍历一半的数据即可。
 
 
 ```c++
@@ -134,12 +133,28 @@ public:
 
 [螺旋矩阵](https://leetcode.cn/problems/spiral-matrix/)
 
-> 矩阵遍历
+**题干**
+
+给你一个 `m` 行 `n` 列的矩阵 `matrix` ，请按照 **顺时针螺旋顺序** ，返回矩阵中的所有元素。
+
+ 
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2020/11/13/spiral1.jpg)
+
+**示例**
 
 ```c++
 输入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
 输出：[1,2,3,6,9,8,7,4,5]
 ```
+
+**解题思路**
+
+- 递归调用实现
+- 主要注意判断 (1)同一行 (2) 同一列 (3) 唯一数等情况特殊处理
+- (x1,y1)和(x2,y2)分别代表矩阵的左上角和右下角
 
 ```c++
 class Solution {
@@ -147,17 +162,17 @@ public:
 void helper(vector<vector<int>>& matrix, int x1, int y1, int x2, int y2, vector<int>& path){
         if (x1 > x2 || y1 > y2) return;
 
-        if (x1 == x2 && y1 != y2){
+        if (x1 == x2 && y1 != y2){ //同一行的情况下的遍历
             for (int i = y1; i <= y2; i++){
             path.push_back(matrix[x1][i]);
-            }
+            } 
         } 
-        else if (x1 != x2 && y1 == y2){
+        else if (x1 != x2 && y1 == y2){ //同一列的情况下遍历
             for (int i = x1; i <= x2; i++){
                 path.push_back(matrix[i][y1]);
                 }   
         } 
-        else if (x1 == x1 && y1 == y2){
+        else if (x1 == x2 && y1 == y2){ //唯一一个数的情况下的遍历
             path.push_back(matrix[x1][y1]);
         } else {
             for (int i = y1; i <= y2; i++){
@@ -171,9 +186,9 @@ void helper(vector<vector<int>>& matrix, int x1, int y1, int x2, int y2, vector<
             }
             for (int i = x2 - 1; i > x1; i--){
                 path.push_back(matrix[i][y1]);
-            }
+            }  //螺旋遍历，注意边界值
         }
-        helper(matrix, x1 + 1,y1 + 1,x2 - 1, y2 - 1, path);
+        helper(matrix, x1 + 1,y1 + 1,x2 - 1, y2 - 1, path);//而后递归调用
         return;
     };
     vector<int> spiralOrder(vector<vector<int>>& matrix) {
@@ -188,7 +203,17 @@ void helper(vector<vector<int>>& matrix, int x1, int y1, int x2, int y2, vector<
 
 [螺旋矩阵 II](https://leetcode.cn/problems/spiral-matrix-ii/)
 
-> 矩阵遍历操作
+**题干**
+
+给你一个正整数 `n` ，生成一个包含 `1` 到 `n2` 所有元素，且元素按顺时针顺序螺旋排列的 `n x n` 正方形矩阵 `matrix` 。
+
+ 
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2020/11/13/spiraln.jpg)
+
+**示例**
 
 ```c++
 输入：n = 3
@@ -201,7 +226,7 @@ public:
 void helper(vector<vector<int>>& matrix, int x1, int y1, int x2, int y2, int& curr){
         if (x1 > x2 || y1 > y2) return;
         
-        if (x1 == x1 && y1 == y2){
+        if (x1 == x2 && y1 == y2){
             matrix[x1][y1] = curr;
             return;
         } else {
@@ -240,14 +265,29 @@ void helper(vector<vector<int>>& matrix, int x1, int y1, int x2, int y2, int& cu
 
 [矩阵置零](https://leetcode.cn/problems/set-matrix-zeroes/)
 
-> 矩阵操作
+**题干**
+
+给定一个 `*m* x *n*` 的矩阵，如果一个元素为 **0** ，则将其所在行和列的所有元素都设为 **0** 。请使用 **[原地](http://baike.baidu.com/item/原地算法)** 算法**。**
+
+
+
+ 
+
+**示例 1：**
+
+![img](https://assets.leetcode.com/uploads/2020/08/17/mat1.jpg)
+
+**示例**
 
 ```c++
 输入：matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
 输出：[[0,0,0,0],[0,4,5,0],[0,3,1,0]]
 ```
 
+**解法**
 
+- 遍历矩阵，找到所有出现过0的行和列的下标值进行保存
+- 而后对矩阵进行遍历，在保存的下标值出现过的行或者列进行置0操作
 
 ```c++
 class Solution {
@@ -279,14 +319,37 @@ public:
 
 [搜索二维矩阵](https://leetcode.cn/problems/search-a-2d-matrix/)
 
-> 矩阵操作
+**题干**
+
+给你一个满足下述两条属性的 m x n 整数矩阵：
+
+每行中的整数从左到右按非递减顺序排列。
+每行的第一个整数大于前一行的最后一个整数。
+给你一个整数 target ，如果 target 在矩阵中，返回 true ；否则，返回 false 。
+
+ 
+
+示例 1：
+
+![img](https://assets.leetcode.com/uploads/2020/10/05/mat.jpg)
+
+
+
+
+
+**示例**
 
 ```c++
 输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13
 输出：false
 ```
 
+**解题思路**
 
+- 解题思路主要在于从左下角开始遍历
+- 如果当前数字比目标值大，则往上遍历
+- 如果当前数字比目标值小，则往右遍历
+- 下面题解是将整个矩阵拉成整个数组，而后进行二分查找即可。主要在于行列值的计算
 
 ```c++
 class Solution {
@@ -322,9 +385,13 @@ public:
 
 [被围绕的区域](https://leetcode.cn/problems/surrounded-regions/)
 
-> 矩阵+深度优先搜索；从边界开始深度优先搜素，和边界相联通的，必定不会被包围；标记所有此类的节点；剩余的节点即全为'X'。
+**题干**
+
+给你一个 `m x n` 的矩阵 `board` ，由若干字符 `'X'` 和 `'O'` ，找到所有被 `'X'` 围绕的区域，并将这些区域里所有的 `'O'` 用 `'X'` 填充。
 
 ![img](https://assets.leetcode.com/uploads/2021/02/19/xogrid.jpg)
+
+**示例**
 
 ```c++
 输入：board = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
@@ -332,7 +399,12 @@ public:
 解释：被围绕的区间不会存在于边界上，换句话说，任何边界上的 'O' 都不会被填充为 'X'。 任何不在边界上，或不与边界上的 'O' 相连的 'O' 最终都会被填充为 'X'。如果两个元素在水平或垂直方向相邻，则称它们是“相连”的。
 ```
 
+**解题思路**
 
+- 这边利用的核心要点在于，只要与边界相接的'O'点就是无法被包围的
+- 因此对于所有的边上的点进行深度优先遍历，将其进行标记
+- 对于被标记过的点，即为和边界相同的'O'点，无法被包围
+- 对于没有被标价的'O'点，即为被'X'包围的点，将其变为'X'
 
 ```c++
 class Solution {
@@ -382,7 +454,15 @@ public:
 
 [岛屿数量](https://leetcode.cn/problems/number-of-islands/)
 
-> 矩阵+深度优先搜索
+**题干**
+
+给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。
+
+岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。
+
+此外，你可以假设该网格的四条边均被水包围。
+
+ **示例**
 
 ```c++
 输入：grid = [
@@ -394,7 +474,11 @@ public:
 输出：3
 ```
 
+**解题思路**
 
+- 用深度优先遍历，如果是和边界相邻或者已经是标记过的或者是和水相邻，即为True
+- 否则用'A'进行标记
+- 遍历整个矩阵，如果是已经被标记过的，则不再进行遍历；每返回一次true即知新增一座岛屿
 
 
 
